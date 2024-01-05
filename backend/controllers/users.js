@@ -63,7 +63,108 @@ const getUserById = async (req, res) => {
   }
 };
 
-// This function creates a new user
+//? updateUserById  /////////////////////////////////
+
+const updateUserById = async (req, res) => {
+  /* 
+    postman params /:id ==>
+    PUT http://localhost:5000/users/6595c80555fc1e4be12e5bcc
+
+    req.body:
+{
+    "firstName": "user edited",
+    "age": 100
+}
+  */
+
+  const { id } = req.params;
+  let {
+    userName,
+    firstName,
+    lastName,
+    age,
+    country,
+    email,
+    // password,
+    // role,
+  } = req.body;
+  try {
+    const findUser = await usersModel.findByIdAndUpdate(id, {
+      userName,
+      firstName,
+      lastName,
+      age,
+      country,
+      email,
+      // password,
+      // role,
+    });
+
+    let updatedUser = {
+      userName: userName ? userName : findUser.userName,
+      firstName: firstName ? firstName : findUser.firstName,
+      lastName: lastName ? lastName : findUser.lastName,
+      age: age ? age : findUser.age,
+      country: country ? country : findUser.country,
+      email: email ? email : findUser.email,
+      // password: password ? password : findUser.password,
+      // role: role ? role : findUser.role,
+    };
+
+    console.log(`Updated user id: ${id}`);
+
+    res.status(200).json({
+      success: true,
+      message: "user updated",
+      user: updatedUser,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+      err,
+    });
+  }
+};
+
+//? deleteUserById  /////////////////////////////////
+
+const deleteUserById = async (req, res) => {
+  /* 
+    postman params /:id ==>
+    DELETE http://localhost:5000/users/65975437a31cc98f9b7c61e2
+  */
+
+  const { id } = req.params;
+  try {
+    const findUser = await usersModel.findByIdAndDelete(id);
+    if (findUser === null) {
+      console.log({ id: `user not found id: ${id}` });
+      return res.status(404).json({
+        success: false,
+        message: "user not found",
+      });
+    }
+    console.log({
+      id: `user deleted id: ${id}`,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "user deleted",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+      err,
+    });
+  }
+};
+
+//? This function creates a new user ////////////////
 const register = (req, res) => {
   const { userName, firstName, lastName, age, country, email, password, role } =
     req.body;
@@ -159,6 +260,8 @@ const login = (req, res) => {
 module.exports = {
   getAllUsers,
   getUserById,
+  updateUserById,
+  deleteUserById,
   register,
   login,
 };
