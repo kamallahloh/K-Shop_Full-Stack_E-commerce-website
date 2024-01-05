@@ -4,8 +4,8 @@ const {
   getUserById,
   updateUserById,
   deleteUserById,
-  register,
-  login,
+  registerUser,
+  loginUser,
 } = require("../controllers/users");
 
 // define router
@@ -15,7 +15,7 @@ usersRouter.get("/", getAllUsers);
 usersRouter.get("/:id", getUserById);
 usersRouter.put("/:id", updateUserById);
 usersRouter.delete("/:id", deleteUserById);
-usersRouter.post("/register", register);
-usersRouter.post("/login", login);
+usersRouter.post("/register", registerUser);
+usersRouter.post("/login", loginUser);
 
 module.exports = usersRouter;

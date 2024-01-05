@@ -165,7 +165,7 @@ const deleteUserById = async (req, res) => {
 };
 
 //? This function creates a new user ////////////////
-const register = (req, res) => {
+const registerUser = (req, res) => {
   const { userName, firstName, lastName, age, country, email, password, role } =
     req.body;
   const user = new usersModel({
@@ -205,7 +205,7 @@ const register = (req, res) => {
 };
 
 // This function checks user login credentials
-const login = (req, res) => {
+const loginUser = (req, res) => {
   const password = req.body.password;
   const email = req.body.email.toLowerCase();
   usersModel
@@ -262,6 +262,6 @@ module.exports = {
   getUserById,
   updateUserById,
   deleteUserById,
-  register,
-  login,
+  registerUser,
+  loginUser,
 };
