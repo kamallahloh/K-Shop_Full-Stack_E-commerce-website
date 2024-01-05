@@ -1,19 +1,18 @@
-const usersModel = require("../models/users");
+const storesModel = require("../models/stores");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-// This function will getAllUsers
-
-const getAllUsers = (req, res) => {
-  usersModel
+//? This function will getAllStores
+const getAllStores = (req, res) => {
+  storesModel
     .find({})
     .populate("role", "-_id -permissions -__v")
     .then((results) => {
-      console.log(`getAllUsers done`);
+      console.log(`getAllStores done`);
       res.status(200).json({
         success: true,
-        message: `getAllUsers done`,
-        users: results,
+        message: `getAllStores done`,
+        stores: results,
       });
     })
     .catch((err) => {
@@ -25,32 +24,32 @@ const getAllUsers = (req, res) => {
     });
 };
 
-//? getUserById  /////////////////////////////////
+//? getStoreById  /////////////////////////////////
 
-const getUserById = async (req, res) => {
+const getStoreById = async (req, res) => {
   /* 
     postman params /:id ==>
-    GET http://localhost:5000/users/6595c80555fc1e4be12e5bcc
+    GET http://localhost:5000/stores/6597610652ee4902379efec3
   */
   const { id } = req.params;
 
   try {
-    const findUser = await usersModel.findOne({ _id: id });
-    console.log("findUser==>", findUser);
-    if (findUser === null) {
-      console.log(`No User found at id: ${id}`);
+    const findStore = await storesModel.findOne({ _id: id });
+    console.log("findStore==>", findStore);
+    if (findStore === null) {
+      console.log(`No store found at id: ${id}`);
       res.status(404).json({
         success: false,
-        message: `No user found at id: ${id}`,
+        message: `No store found at id: ${id}`,
       });
     } else {
       console.log({
-        id: `The user id: ${id}`,
-        user: findUser.userName,
+        id: `The store id: ${id}`,
+        store: findStore.storeName,
       });
       res.status(200).json({
         success: true,
-        message: findUser,
+        message: findStore,
       });
     }
   } catch (err) {
@@ -63,60 +62,54 @@ const getUserById = async (req, res) => {
   }
 };
 
-//? updateUserById  /////////////////////////////////
+//? updateStoreById  /////////////////////////////////
 
-const updateUserById = async (req, res) => {
+const updateStoreById = async (req, res) => {
   /* 
     postman params /:id ==>
-    PUT http://localhost:5000/users/6595c80555fc1e4be12e5bcc
+    PUT http://localhost:5000/stores/6597610652ee4902379efec3
 
     req.body:
 {
-    "firstName": "user edited",
-    "age": 100
+    "storeName": "ss edited",
+    "country": "Jordan"
 }
   */
 
   const { id } = req.params;
-  let {
-    userName,
-    firstName,
-    lastName,
-    age,
+  const {
+    storeName,
     country,
     email,
     // password,
+    // products,
     // role,
   } = req.body;
   try {
-    const findUser = await usersModel.findByIdAndUpdate(id, {
-      userName,
-      firstName,
-      lastName,
-      age,
+    const findStore = await storesModel.findByIdAndUpdate(id, {
+      storeName,
       country,
       email,
       // password,
+      // products,
       // role,
     });
 
-    let updatedUser = {
-      userName: userName ? userName : findUser.userName,
-      firstName: firstName ? firstName : findUser.firstName,
-      lastName: lastName ? lastName : findUser.lastName,
-      age: age ? age : findUser.age,
-      country: country ? country : findUser.country,
-      email: email ? email : findUser.email,
-      // password: password ? password : findUser.password,
-      // role: role ? role : findUser.role,
+    let updatedStore = {
+      storeName: storeName ? storeName : findStore.storeName,
+      country: country ? country : findStore.country,
+      email: email ? email : findStore.email,
+      // password: password ? password : findStore.password,
+      // products: products ? products : findStore.products,
+      // role: role ? role : findStore.role,
     };
 
-    console.log(`Updated user id: ${id}`);
+    console.log(`Updated store id: ${id}`);
 
     res.status(200).json({
       success: true,
-      message: "user updated",
-      user: updatedUser,
+      message: "store updated",
+      store: updatedStore,
     });
   } catch (err) {
     console.log(err);
@@ -128,31 +121,31 @@ const updateUserById = async (req, res) => {
   }
 };
 
-//? deleteUserById  /////////////////////////////////
+//? deleteStoreById  /////////////////////////////////
 
-const deleteUserById = async (req, res) => {
+const deleteStoreById = async (req, res) => {
   /* 
     postman params /:id ==>
-    DELETE http://localhost:5000/users/65975437a31cc98f9b7c61e2
+    DELETE http://localhost:5000/stores/6597610652ee4902379efec3
   */
 
   const { id } = req.params;
   try {
-    const findUser = await usersModel.findByIdAndDelete(id);
-    if (findUser === null) {
-      console.log({ id: `user not found id: ${id}` });
+    const findStore = await storesModel.findByIdAndDelete(id);
+    if (findStore === null) {
+      console.log({ id: `store not found id: ${id}` });
       return res.status(404).json({
         success: false,
-        message: "user not found",
+        message: "store not found",
       });
     }
     console.log({
-      id: `user deleted id: ${id}`,
+      id: `store deleted id: ${id}`,
     });
 
     res.status(200).json({
       success: true,
-      message: "user deleted",
+      message: "store deleted",
     });
   } catch (err) {
     console.log(err);
@@ -164,28 +157,25 @@ const deleteUserById = async (req, res) => {
   }
 };
 
-//? This function creates a new user ////////////////
-const register = (req, res) => {
-  const { userName, firstName, lastName, age, country, email, password, role } =
-    req.body;
-  const user = new usersModel({
-    userName,
-    firstName,
-    lastName,
-    age,
+//? This function creates a new store ////////////////
+const registerStore = (req, res) => {
+  const { storeName, country, email, password, products, role } = req.body;
+  const store = new storesModel({
+    storeName,
     country,
     email,
     password,
+    products,
     role,
   });
 
-  user
+  store
     .save()
     .then((result) => {
       res.status(201).json({
         success: true,
-        message: `User Created Successfully`,
-        user: result,
+        message: `Store Created Successfully`,
+        store: result,
       });
     })
     .catch((err) => {
@@ -204,11 +194,11 @@ const register = (req, res) => {
     });
 };
 
-// This function checks user login credentials
-const login = (req, res) => {
+//? loginStore /////////////
+const loginStore = (req, res) => {
   const password = req.body.password;
   const email = req.body.email.toLowerCase();
-  usersModel
+  storesModel
     .findOne({ email })
     .populate("role", "-_id -__v")
     .then(async (result) => {
@@ -227,8 +217,8 @@ const login = (req, res) => {
           });
         }
         const payload = {
-          userId: result._id,
-          user: result.firstName,
+          storeId: result._id,
+          store: result.storeName,
           role: result.role,
           country: result.country,
         };
@@ -241,8 +231,8 @@ const login = (req, res) => {
           success: true,
           message: `Valid login credentials`,
           token: token,
-          // userId: result._id,
-          // userName: result.firstName,
+          // storeId: result._id,
+          // storeName: result.storeName,
         });
       } catch (error) {
         throw new Error(error.message);
@@ -258,10 +248,10 @@ const login = (req, res) => {
 };
 
 module.exports = {
-  getAllUsers,
-  getUserById,
-  updateUserById,
-  deleteUserById,
-  register,
-  login,
+  getAllStores,
+  getStoreById,
+  updateStoreById,
+  deleteStoreById,
+  registerStore,
+  loginStore,
 };
