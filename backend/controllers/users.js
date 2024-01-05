@@ -7,8 +7,9 @@ const jwt = require("jsonwebtoken");
 const getAllUsers = (req, res) => {
   usersModel
     .find({})
+    .populate("role", "-_id -permissions -__v")
     .then((results) => {
-      console.log(results);
+      console.log(`getAllUsers done`);
       res.status(200).json({
         success: true,
         message: `getAllUsers done`,
@@ -22,6 +23,44 @@ const getAllUsers = (req, res) => {
         err: err.message,
       });
     });
+};
+
+//? getUserById  /////////////////////////////////
+
+const getUserById = async (req, res) => {
+  /* 
+    postman params /:id ==>
+    GET http://localhost:5000/users/6595c80555fc1e4be12e5bcc
+  */
+  const { id } = req.params;
+
+  try {
+    const findUser = await usersModel.findOne({ _id: id });
+    console.log("findUser==>", findUser);
+    if (findUser === null) {
+      console.log(`No User found at id: ${id}`);
+      res.status(404).json({
+        success: false,
+        message: `No user found at id: ${id}`,
+      });
+    } else {
+      console.log({
+        id: `The user id: ${id}`,
+        user: findUser.userName,
+      });
+      res.status(200).json({
+        success: true,
+        message: findUser,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+      err,
+    });
+  }
 };
 
 // This function creates a new user
@@ -119,6 +158,7 @@ const login = (req, res) => {
 
 module.exports = {
   getAllUsers,
+  getUserById,
   register,
   login,
 };

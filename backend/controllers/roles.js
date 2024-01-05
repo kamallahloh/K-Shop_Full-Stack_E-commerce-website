@@ -10,7 +10,11 @@ const getAllRoles = (req, res) => {
         res.status(400).json("No roles added");
       } else {
         console.log("getAllRoles done");
-        res.send(results);
+        res.status(200).json({
+          success: true,
+          message: `getAllRoles done`,
+          users: results,
+        });
       }
     })
     .catch((err) => {
