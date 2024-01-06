@@ -168,7 +168,12 @@ const updateProductById = (req, res) => {
             price: price ? price : findProduct.price,
           };
 
-          console.log(`Updated product id: ${productId}`);
+          console.log(`Updated product id: ${productId}
+          by: ${
+            req.token.role.role
+              ? req.token.role.role
+              : ` the owner id: ${req.token.storeId}`
+          }`);
 
           res.status(200).json({
             success: true,
@@ -203,38 +208,72 @@ const updateProductById = (req, res) => {
 
 //? deleteProductById  /////////////////////////////////
 
-const deleteProductById = async (req, res) => {
+const deleteProductById = (req, res) => {
   /* 
     postman params /:id ==>
     DELETE http://localhost:5000/products/659772f33246f4dc798c9af5
   */
+  //! delete the product from the store also.
 
-  const { id } = req.params;
-  try {
-    const findProduct = await productsModel.findByIdAndDelete(id);
-    if (findProduct === null) {
-      console.log({ id: `product not found id: ${id}` });
-      return res.status(404).json({
+  const productId = req.params.id;
+
+  //* check if the store is the one who post the product that we want to delete.
+  productsModel
+    .findById(productId)
+    .then(async (result) => {
+      if (result === null) {
+        console.log({ productId: `product not found id: ${productId}` });
+        return res.status(404).json({
+          success: false,
+          message: "product not found",
+        });
+      }
+
+      if (
+        result.store.toString() === req.token.storeId ||
+        req.token.role.role === "admin"
+      ) {
+        try {
+          const findProduct = await productsModel.findByIdAndDelete(productId);
+          // if (findProduct === null) {
+          //   console.log({ productId: `product not found id: ${productId}` });
+          //   return res.status(404).json({
+          //     success: false,
+          //     message: "product not found",
+          //   });
+          // }
+          console.log({
+            productId: `product deleted id: ${productId}`,
+          });
+
+          res.status(200).json({
+            success: true,
+            message: "product deleted",
+          });
+        } catch (err) {
+          console.log(err);
+          res.status(500).json({
+            success: false,
+            message: "Server Error",
+            err,
+          });
+        }
+      } else {
+        console.log("You are not the product owner");
+        res.status(500).json({
+          success: false,
+          message: "You are not the product owner",
+        });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
         success: false,
-        message: "product not found",
+        message: "Server Error",
+        err,
       });
-    }
-    console.log({
-      id: `product deleted id: ${id}`,
     });
-
-    res.status(200).json({
-      success: true,
-      message: "product deleted",
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({
-      success: false,
-      message: "Server Error",
-      err,
-    });
-  }
 };
 
 //? 5. getProductsByStore ///////////////////////////
