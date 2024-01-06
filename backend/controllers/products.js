@@ -235,13 +235,6 @@ const deleteProductById = (req, res) => {
       ) {
         try {
           const findProduct = await productsModel.findByIdAndDelete(productId);
-          // if (findProduct === null) {
-          //   console.log({ productId: `product not found id: ${productId}` });
-          //   return res.status(404).json({
-          //     success: false,
-          //     message: "product not found",
-          //   });
-          // }
           console.log({
             productId: `product deleted id: ${productId}`,
           });
@@ -279,9 +272,7 @@ const deleteProductById = (req, res) => {
 //? 5. getProductsByStore ///////////////////////////
 
 const getProductsByStore = async (req, res) => {
-  //* postman GET http://localhost:5000/products/products_by_store?store=6597612052ee4902379efec7
-
-  console.log("req.query", req.query);
+  //* postman GET http://localhost:5000/products/products_by_store?store=65999be449aad7d6418c5166
 
   const { store } = req.query;
 
@@ -289,6 +280,7 @@ const getProductsByStore = async (req, res) => {
     const findProducts = await productsModel.find({ store });
 
     console.log("findProducts==>", findProducts);
+
     if (findProducts.length === 0) {
       console.log(`The store => ${store} has no Products`);
       res.status(404).json({

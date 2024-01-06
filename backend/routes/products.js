@@ -50,7 +50,7 @@ productsRouter.delete(
 );
 
 productsRouter.get(
-  "/products_by_store/:id",
+  "/products_by_store/",
   authentication,
   authorization("SEE-PRODUCTS"),
   getProductsByStore
