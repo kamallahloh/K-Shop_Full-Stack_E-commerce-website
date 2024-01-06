@@ -234,6 +234,7 @@ const loginStore = (req, res) => {
           success: true,
           message: `Valid login credentials`,
           token: token,
+          role: result.role, //! testing
           // storeId: result._id,
           // storeName: result.storeName,
         });

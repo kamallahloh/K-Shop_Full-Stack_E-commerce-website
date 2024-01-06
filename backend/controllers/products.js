@@ -149,10 +149,11 @@ const updateProductById = (req, res) => {
     .findById(productId)
     .then(async (result) => {
       // console.log("result.store", result.store.toString());
+      // console.log("req.token.role.role", req.token.role.role);
 
       if (
-        result.store.toString() === req.token.storeId
-        //! need to give the Admin permission to update the product also
+        result.store.toString() === req.token.storeId ||
+        req.token.role.role === "admin"
       ) {
         try {
           const findProduct = await productsModel.findByIdAndUpdate(productId, {

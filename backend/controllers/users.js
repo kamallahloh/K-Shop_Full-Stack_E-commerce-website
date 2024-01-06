@@ -177,7 +177,7 @@ const registerUser = (req, res) => {
     password,
     role,
   } = req.body;
-  
+
   const user = new usersModel({
     userName,
     firstName,
@@ -252,6 +252,7 @@ const loginUser = (req, res) => {
           success: true,
           message: `Valid login credentials`,
           token: token,
+          role: result.role, //! testing
           // userId: result._id,
           // userName: result.firstName,
         });
