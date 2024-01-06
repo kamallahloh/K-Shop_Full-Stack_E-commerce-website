@@ -31,7 +31,7 @@ const addProduct = (req, res) => {
 const getAllProducts = (req, res) => {
   productsModel
     .find({})
-    .populate("store", "-_id -country -email -password -products -role -__v")
+    // .populate("store", "-_id -country -email -password -products -role -__v")
     .then((results) => {
       console.log(`getAllProducts done`);
       res.status(200).json({
@@ -54,7 +54,7 @@ const getAllProducts = (req, res) => {
 const getProductById = async (req, res) => {
   /* 
     postman params /:id ==>
-    GET http://localhost:5000/products/659772f33246f4dc798c9af5
+    GET http://localhost:5000/products/search_2/659772f33246f4dc798c9af5
   */
   const { id } = req.params;
 
@@ -179,10 +179,47 @@ const deleteProductById = async (req, res) => {
   }
 };
 
+//? 5. getProductsByStore ///////////////////////////
+
+const getProductsByStore = async (req, res) => {
+  //* postman GET http://localhost:5000/products/search?store=6597612052ee4902379efec7
+
+  console.log("req.query", req.query);
+
+  const { store } = req.query;
+
+  try {
+    const findProducts = await productsModel.find({ store });
+
+    console.log("findProducts==>", findProducts);
+    if (findProducts.length === 0) {
+      console.log(`The store => ${store} has no Products`);
+      res.status(404).json({
+        success: false,
+        message: `The store => ${store} has no Products`,
+      });
+    } else {
+      console.log(`All the Products for the store: ${store}`);
+      res.status(200).json({
+        success: true,
+        message: findProducts,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+      err,
+    });
+  }
+};
+
 module.exports = {
   addProduct,
   getAllProducts,
   getProductById,
   updateProductById,
   deleteProductById,
+  getProductsByStore,
 };
