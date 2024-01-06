@@ -20,10 +20,40 @@ productsRouter.post(
   authorization("ADD-PRODUCT"),
   addProduct
 );
-productsRouter.get("/", getAllProducts);
-productsRouter.get("/product_by_id/:id", getProductById);
-productsRouter.put("/:id", updateProductById);
-productsRouter.delete("/:id", deleteProductById);
-productsRouter.get("/products_by_store/:id", getProductsByStore);
+
+productsRouter.get(
+  "/",
+  authentication,
+  authorization("SEE-PRODUCTS"),
+  getAllProducts
+);
+
+productsRouter.get(
+  "/product_by_id/:id",
+  authentication,
+  authorization("SEE-PRODUCTS"),
+  getProductById
+);
+
+productsRouter.put(
+  "/:id",
+  authentication,
+  authorization("EDIT-PRODUCT"),
+  updateProductById
+);
+
+productsRouter.delete(
+  "/:id",
+  authentication,
+  authorization("DELETE-PRODUCT"),
+  deleteProductById
+);
+
+productsRouter.get(
+  "/products_by_store/:id",
+  authentication,
+  authorization("SEE-PRODUCTS"),
+  getProductsByStore
+);
 
 module.exports = productsRouter;

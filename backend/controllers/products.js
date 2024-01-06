@@ -12,7 +12,7 @@ const addProduct = (req, res) => {
   */
 
   const { productName, description, price } = req.body;
-  console.log("req.token", req.token);
+  // console.log("req.token", req.token);
   const store = req.token.storeId;
 
   const product = new productsModel({ productName, description, price, store });
@@ -60,7 +60,10 @@ const addProduct = (req, res) => {
 const getAllProducts = (req, res) => {
   productsModel
     .find({})
-    // .populate("store", "-_id -country -email -password -products -role -__v")
+    .populate(
+      "store",
+      "-_id -country -email -phoneNumber -password -products -role -__v"
+    )
     .then((results) => {
       console.log(`getAllProducts done`);
       res.status(200).json({
@@ -90,7 +93,10 @@ const getProductById = async (req, res) => {
   try {
     const findProduct = await productsModel
       .findOne({ _id: id })
-      .populate("store", "-_id -country -email -password -products -role -__v");
+      .populate(
+        "store",
+        "-_id -country -phoneNumber -email -password -products -role -__v"
+      );
 
     console.log("findProduct==>", findProduct);
     if (findProduct === null) {
@@ -121,7 +127,7 @@ const getProductById = async (req, res) => {
 
 //? updateProductById  /////////////////////////////////
 
-const updateProductById = async (req, res) => {
+const updateProductById = (req, res) => {
   /* 
     postman params /:id ==>
     PUT http://localhost:5000/products/659772f33246f4dc798c9af5
@@ -132,44 +138,66 @@ const updateProductById = async (req, res) => {
     "price": 999
 }
   */
+  // console.log("req.token.storeId", req.token.storeId);
 
-  const { id } = req.params;
-  const {
-    productName,
-    description,
-    price,
-    // store,
-  } = req.body;
-  try {
-    const findProduct = await productsModel.findByIdAndUpdate(id, {
-      productName,
-      description,
-      price,
-      // store,
+  const productId = req.params.id;
+
+  const { productName, description, price } = req.body;
+
+  //* check if the store is the one who post the product that we want to update.
+  productsModel
+    .findById(productId)
+    .then(async (result) => {
+      // console.log("result.store", result.store.toString());
+
+      if (
+        result.store.toString() === req.token.storeId
+        //! need to give the Admin permission to update the product also
+      ) {
+        try {
+          const findProduct = await productsModel.findByIdAndUpdate(productId, {
+            productName,
+            description,
+            price,
+          });
+
+          let updatedProduct = {
+            productName: productName ? productName : findProduct.productName,
+            description: description ? description : findProduct.description,
+            price: price ? price : findProduct.price,
+          };
+
+          console.log(`Updated product id: ${productId}`);
+
+          res.status(200).json({
+            success: true,
+            message: "product updated",
+            product: updatedProduct,
+          });
+        } catch (err) {
+          console.log(err);
+          res.status(500).json({
+            success: false,
+            message: "Server Error",
+            err,
+          });
+        }
+      } else {
+        console.log("You are not the product owner");
+        res.status(500).json({
+          success: false,
+          message: "You are not the product owner",
+        });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        success: false,
+        message: "Server Error",
+        err,
+      });
     });
-
-    let updatedProduct = {
-      productName: productName ? productName : findProduct.productName,
-      description: description ? description : findProduct.description,
-      price: price ? price : findProduct.price,
-      // store: store ? store : findProduct.store,
-    };
-
-    console.log(`Updated product id: ${id}`);
-
-    res.status(200).json({
-      success: true,
-      message: "product updated",
-      product: updatedProduct,
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({
-      success: false,
-      message: "Server Error",
-      err,
-    });
-  }
 };
 
 //? deleteProductById  /////////////////////////////////
