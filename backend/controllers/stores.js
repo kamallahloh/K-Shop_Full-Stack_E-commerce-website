@@ -159,11 +159,14 @@ const deleteStoreById = async (req, res) => {
 
 //? This function creates a new store ////////////////
 const registerStore = (req, res) => {
-  const { storeName, country, email, password, products, role } = req.body;
+  const { storeName, country, email, phoneNumber, password, products, role } =
+    req.body;
+
   const store = new storesModel({
     storeName,
     country,
     email,
+    phoneNumber,
     password,
     products,
     role,

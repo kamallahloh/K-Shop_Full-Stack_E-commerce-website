@@ -166,12 +166,23 @@ const deleteUserById = async (req, res) => {
 
 //? This function creates a new user ////////////////
 const registerUser = (req, res) => {
-  const { userName, firstName, lastName, age, country, email, password, role } =
-    req.body;
+  const {
+    userName,
+    firstName,
+    lastName,
+    phoneNumber,
+    age,
+    country,
+    email,
+    password,
+    role,
+  } = req.body;
+  
   const user = new usersModel({
     userName,
     firstName,
     lastName,
+    phoneNumber,
     age,
     country,
     email,

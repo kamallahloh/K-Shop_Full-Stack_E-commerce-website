@@ -5,6 +5,7 @@ const storeSchema = new mongoose.Schema({
   storeName: { type: String, required: true, unique: true },
   country: { type: String },
   email: { type: String, required: true, unique: true },
+  phoneNumber: { type: Number },
   password: { type: String, required: true },
   products: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
   role: { type: mongoose.Schema.Types.ObjectId, ref: "Role" },

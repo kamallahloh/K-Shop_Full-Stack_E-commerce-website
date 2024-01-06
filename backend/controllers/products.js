@@ -83,7 +83,7 @@ const getAllProducts = (req, res) => {
 const getProductById = async (req, res) => {
   /* 
     postman params /:id ==>
-    GET http://localhost:5000/products/search_2/659772f33246f4dc798c9af5
+    GET http://localhost:5000/products/product_by_id/6598c40fc2e3213f7ba2a5d4
   */
   const { id } = req.params;
 
@@ -211,7 +211,7 @@ const deleteProductById = async (req, res) => {
 //? 5. getProductsByStore ///////////////////////////
 
 const getProductsByStore = async (req, res) => {
-  //* postman GET http://localhost:5000/products/search?store=6597612052ee4902379efec7
+  //* postman GET http://localhost:5000/products/products_by_store?store=6597612052ee4902379efec7
 
   console.log("req.query", req.query);
 
