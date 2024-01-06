@@ -1,16 +1,45 @@
 const productsModel = require("../models/products");
+const storesModel = require("../models/stores");
+
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 //? This function creates a new Product ////////////////
 const addProduct = (req, res) => {
-  const { productName, description, price, store } = req.body;
+  /* 
+    postman params / ==>
+    POST http://localhost:5000/products
+  */
+
+  const { productName, description, price } = req.body;
+  console.log("req.token", req.token);
+  const store = req.token.storeId;
+
   const product = new productsModel({ productName, description, price, store });
 
   product
     .save()
-    .then((result) => {
-      //! /////////////// append the product to its store
+    .then(async (result) => {
+      //* find the store by storeId to extract old products and concat the new one with them.
+      const findStore = await storesModel.findById(store);
+
+      //* append the new created product to the related store from storesModel.
+      storesModel
+        .findByIdAndUpdate(store, {
+          products: [...findStore.products, product],
+        })
+
+        .then((updatedStoreResult) => {
+          console.log(
+            `Store #${store} appended with new product #${result._id}`
+          );
+        })
+        .catch((err) => {
+          console.log(err);
+          res.status(400).json("storesModel.findByIdAndUpdate err");
+        });
+
+      //* return the result of the addProduct POST request
       res.status(201).json({
         success: true,
         message: `Product Created Successfully`,

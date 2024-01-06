@@ -8,12 +8,20 @@ const {
   getProductsByStore,
 } = require("../controllers/products");
 
+const authentication = require("../middleware/authentication");
+const authorization = require("../middleware/authorization");
+
 // define router
 const productsRouter = express.Router();
 
-productsRouter.post("/", addProduct);
+productsRouter.post(
+  "/",
+  authentication,
+  authorization("ADD-PRODUCT"),
+  addProduct
+);
 productsRouter.get("/", getAllProducts);
-productsRouter.get("/search_2/:id", getProductById);
+productsRouter.get("/product_by_id/:id", getProductById);
 productsRouter.put("/:id", updateProductById);
 productsRouter.delete("/:id", deleteProductById);
 productsRouter.get("/search_1", getProductsByStore);

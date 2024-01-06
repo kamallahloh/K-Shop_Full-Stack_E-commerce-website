@@ -7,6 +7,11 @@ const authorization = (string) => {
         message: `Unauthorized`,
       });
     }
+    console.log(
+      "Authorized to: ",
+      string,
+      req.token.role.permissions.includes(string)
+    );
     next();
   };
 };
