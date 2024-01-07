@@ -190,13 +190,6 @@ const deleteStoreById = (req, res) => {
       ) {
         try {
           const findStore = await storesModel.findByIdAndDelete(storeId);
-          // if (findStore === null) {
-          //   console.log({ id: `store not found id: ${storeId}` });
-          //   return res.status(404).json({
-          //     success: false,
-          //     message: "store not found",
-          //   });
-          // }
 
           console.log(`store id: ${storeId}
           Deleted by: ${
