@@ -235,9 +235,46 @@ const deleteProductById = (req, res) => {
         try {
           const findProduct = await productsModel.findByIdAndDelete(productId);
 
-          console.log({
-            productId: `product deleted id: ${productId}`,
+          storesModel.findById(req.token.storeId).then(async (storeResult) => {
+            try {
+              // console.log("storeResult before", storeResult);
+              const updatedStoreProducts = await storeResult.products.filter(
+                (product) => {
+                  // console.log("product.toString()", product.toString());
+                  if (product.toString() !== productId) return product;
+                }
+              );
+              // console.log("updatedStoreProducts", updatedStoreProducts);
+              storeResult.products = updatedStoreProducts;
+              // console.log("storeResult after", storeResult);
+
+              storesModel
+                .findByIdAndUpdate(req.token.storeId, storeResult)
+                .then((finalResult) => {
+                  console.log(`The Product was deleted from its Store`);
+                })
+                .catch((err) => {
+                  console.log(err);
+                  console.log(
+                    "storesModel.findByIdAndUpdate(req.token.storeId, storeResult) Server error"
+                  );
+                });
+            } catch (err) {
+              console.log(err);
+              res.status(500).json({
+                success: false,
+                message: "storesModel.findById(req.token.storeId) Server Error",
+                err,
+              });
+            }
           });
+
+          console.log(`product id: ${productId}
+          Deleted by: ${
+            req.token.role.role === "admin"
+              ? "admin"
+              : ` the owner id: ${req.token.storeId}`
+          }`);
           res.status(200).json({
             success: true,
             message: "product deleted",
@@ -246,7 +283,8 @@ const deleteProductById = (req, res) => {
           console.log(err);
           res.status(500).json({
             success: false,
-            message: "Server Error",
+            message:
+              "productsModel.findById(productId) async (result)  Server Error",
             err,
           });
         }
@@ -262,7 +300,7 @@ const deleteProductById = (req, res) => {
       console.log(err);
       res.status(500).json({
         success: false,
-        message: "Server Error",
+        message: "productsModel.findById(productId).then Server Error",
         err,
       });
     });
