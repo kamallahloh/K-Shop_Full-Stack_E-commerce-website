@@ -1,4 +1,6 @@
 const storesModel = require("../models/stores");
+const productsModel = require("../models/products");
+
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -189,6 +191,24 @@ const deleteStoreById = (req, res) => {
         req.token.role.role === "admin"
       ) {
         try {
+
+          //! ////////////
+          //! also we need to delete the store products from productsModel.
+
+          productsModel
+            .deleteMany({ store: { $eq: req.token.storeId } })
+            .then((finalResult) => {
+              // console.log("finalResult", finalResult);
+              console.log("The Store Product/s deleted from productsModel");
+            })
+            .catch((err) => {
+              console.log(err);
+              console.log(
+                "productsModel.updateMany({}, updatedProductsList) Server error"
+              );
+            });
+          //! ////////////
+
           const findStore = await storesModel.findByIdAndDelete(storeId);
 
           console.log(`store id: ${storeId}
