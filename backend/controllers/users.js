@@ -27,40 +27,66 @@ const getAllUsers = (req, res) => {
 
 //? getUserById  /////////////////////////////////
 
-const getUserById = async (req, res) => {
+const getUserById = (req, res) => {
   /* 
     postman params /:id ==>
     GET http://localhost:5000/users/6595c80555fc1e4be12e5bcc
   */
-  const { id } = req.params;
+  const userId = req.params.id;
 
-  try {
-    const findUser = await usersModel.findOne({ _id: id });
-    console.log("findUser==>", findUser);
-    if (findUser === null) {
-      console.log(`No User found at id: ${id}`);
-      res.status(404).json({
+  //* check the user account ownership before update it.
+  usersModel
+    .findById(userId)
+    .then(async (result) => {
+      if (
+        result.id.toString() === req.token.userId ||
+        req.token.role.role === "admin"
+      ) {
+        try {
+          const foundUser = await usersModel.findOne({ _id: userId });
+          console.log("foundUser ==>", foundUser);
+          if (foundUser === null) {
+            console.log(`No User found at id: ${userId}`);
+            res.status(404).json({
+              success: false,
+              message: `No user found at id: ${userId}`,
+            });
+          } else {
+            console.log(`user id: ${userId} has been found
+            by: ${
+              req.token.role.role === "admin"
+                ? "admin"
+                : ` the owner id: ${req.token.userId}`
+            }`);
+            res.status(200).json({
+              success: true,
+              message: foundUser,
+            });
+          }
+        } catch (err) {
+          console.log(err);
+          res.status(500).json({
+            success: false,
+            message: "usersModel.findOne({ _id: userId } Server Error",
+            err,
+          });
+        }
+      } else {
+        console.log("You are not the user account owner");
+        res.status(500).json({
+          success: false,
+          message: "You are not the user account owner",
+        });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
         success: false,
-        message: `No user found at id: ${id}`,
+        message: " .findById(userId) Server Error",
+        err,
       });
-    } else {
-      console.log({
-        id: `The user id: ${id}`,
-        user: findUser.userName,
-      });
-      res.status(200).json({
-        success: true,
-        message: findUser,
-      });
-    }
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({
-      success: false,
-      message: "Server Error",
-      err,
     });
-  }
 };
 
 //? updateUserById  /////////////////////////////////
@@ -96,9 +122,6 @@ const updateUserById = (req, res) => {
   usersModel
     .findById(userId)
     .then(async (result) => {
-      // console.log("result.id.toString()", result.id.toString());
-      // console.log("req.token.role.role", req.token.role.role);
-
       if (
         result.id.toString() === req.token.userId ||
         req.token.role.role === "admin"
@@ -179,9 +202,6 @@ const deleteUserById = (req, res) => {
   usersModel
     .findById(userId)
     .then(async (result) => {
-      // console.log("result.id.toString()", result.id.toString());
-      // console.log("req.token.role.role", req.token.role.role);
-
       if (result === null) {
         console.log(`user not found id: ${userId}`);
         return res.status(404).json({
@@ -196,14 +216,6 @@ const deleteUserById = (req, res) => {
       ) {
         try {
           const findUser = await usersModel.findByIdAndDelete(userId);
-
-          // if (findUser === null) {
-          //   console.log(`user not found id: ${userId}`);
-          //   return res.status(404).json({
-          //     success: false,
-          //     message: "user not found",
-          //   });
-          // }
 
           console.log(`user id: ${userId}
           Deleted by: ${
