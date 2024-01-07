@@ -212,8 +212,6 @@ const deleteProductById = (req, res) => {
     postman params /:id ==>
     DELETE http://localhost:5000/products/659772f33246f4dc798c9af5
   */
-  //! delete the product from the store also.
-
   const productId = req.params.id;
 
   //* check if the store is the one who post the product that we want to delete.
@@ -233,21 +231,26 @@ const deleteProductById = (req, res) => {
         req.token.role.role === "admin"
       ) {
         try {
+          //! we need to delete the product from 2 places:
+          //* A. From the productsModel
+          //* A-1 productsModel.findByIdAndDelete(productId)
           const findProduct = await productsModel.findByIdAndDelete(productId);
 
+          //* ////////////////////
+          //* B. from storesModel: to delete the product from the store (follow the 3 steps mentioned down).
+
+          //* B-1. find the store that own the product
           storesModel.findById(req.token.storeId).then(async (storeResult) => {
             try {
-              // console.log("storeResult before", storeResult);
+              //* B-2. update the store products list
               const updatedStoreProducts = await storeResult.products.filter(
                 (product) => {
-                  // console.log("product.toString()", product.toString());
                   if (product.toString() !== productId) return product;
                 }
               );
-              // console.log("updatedStoreProducts", updatedStoreProducts);
               storeResult.products = updatedStoreProducts;
-              // console.log("storeResult after", storeResult);
 
+              //* B-3. update the store in the database
               storesModel
                 .findByIdAndUpdate(req.token.storeId, storeResult)
                 .then((finalResult) => {
@@ -268,7 +271,9 @@ const deleteProductById = (req, res) => {
               });
             }
           });
+          //* ////////////////////
 
+          //* A-2 return the response after deleting the product from the productsModel.
           console.log(`product id: ${productId}
           Deleted by: ${
             req.token.role.role === "admin"
