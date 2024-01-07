@@ -2,8 +2,7 @@ const RoleModel = require("../models/roles");
 
 // 1. this function return all roles
 const getAllRoles = (req, res) => {
-  RoleModel
-    .find({})
+  RoleModel.find({})
     .then((results) => {
       if (results.length === 0) {
         console.log("No roles added");
@@ -30,6 +29,7 @@ const createNewRole = (req, res) => {
   newRole
     .save()
     .then((result) => {
+      console.log(`Role created`);
       res.status(201).json({
         success: true,
         message: `Role created`,
@@ -37,6 +37,7 @@ const createNewRole = (req, res) => {
       });
     })
     .catch((err) => {
+      console.log(`Role creation Server Error`);
       res.status(500).json({
         success: false,
         message: `Server Error`,

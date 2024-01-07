@@ -64,7 +64,7 @@ const getStoreById = async (req, res) => {
 
 //? updateStoreById  /////////////////////////////////
 
-const updateStoreById = async (req, res) => {
+const updateStoreById = (req, res) => {
   /* 
     postman params /:id ==>
     PUT http://localhost:5000/stores/6597610652ee4902379efec3
@@ -76,85 +76,162 @@ const updateStoreById = async (req, res) => {
 }
   */
 
-  const { id } = req.params;
+  const storeId = req.params.id;
+  // console.log("req.token.storeId", req.token.storeId);
+
   const {
     storeName,
     country,
     email,
+    phoneNumber,
     // password,
     // products,
     // role,
   } = req.body;
-  try {
-    const findStore = await storesModel.findByIdAndUpdate(id, {
-      storeName,
-      country,
-      email,
-      // password,
-      // products,
-      // role,
-    });
 
-    let updatedStore = {
-      storeName: storeName ? storeName : findStore.storeName,
-      country: country ? country : findStore.country,
-      email: email ? email : findStore.email,
-      // password: password ? password : findStore.password,
-      // products: products ? products : findStore.products,
-      // role: role ? role : findStore.role,
-    };
+  //* check the store ownership before update.
+  storesModel
+    .findById(storeId)
+    .then(async (result) => {
+      console.log("result.id.toString()", result.id.toString());
+      // console.log("req.token.role.role", req.token.role.role);
 
-    console.log(`Updated store id: ${id}`);
+      if (
+        result.id.toString() === req.token.storeId ||
+        req.token.role.role === "admin"
+      ) {
+        try {
+          const findStore = await storesModel.findByIdAndUpdate(storeId, {
+            storeName,
+            country,
+            email,
+            phoneNumber,
+            // password,
+            // products,
+            // role,
+          });
 
-    res.status(200).json({
-      success: true,
-      message: "store updated",
-      store: updatedStore,
+          let updatedStore = {
+            storeName: storeName ? storeName : findStore.storeName,
+            country: country ? country : findStore.country,
+            email: email ? email : findStore.email,
+            phoneNumber: phoneNumber ? phoneNumber : findStore.phoneNumber,
+            // password: password ? password : findStore.password,
+            // products: products ? products : findStore.products,
+            // role: role ? role : findStore.role,
+          };
+
+          console.log(`Updated store id: ${storeId}
+          by: ${
+            req.token.role.role === "admin"
+              ? "admin"
+              : ` the owner id: ${req.token.storeId}`
+          }`);
+          res.status(200).json({
+            success: true,
+            message: "store updated",
+            // store: updatedStore,
+          });
+        } catch (err) {
+          console.log(err);
+          res.status(500).json({
+            success: false,
+            message: " storesModel.findByIdAndUpdate(storeId) Server Error",
+            err,
+          });
+        }
+      } else {
+        console.log("You are not the store owner");
+        res.status(500).json({
+          success: false,
+          message: "You are not the store owner",
+        });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        success: false,
+        message: " .findById(storeId) Server Error",
+        err,
+      });
     });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({
-      success: false,
-      message: "Server Error",
-      err,
-    });
-  }
 };
 
 //? deleteStoreById  /////////////////////////////////
 
-const deleteStoreById = async (req, res) => {
+const deleteStoreById = (req, res) => {
   /* 
     postman params /:id ==>
     DELETE http://localhost:5000/stores/6597610652ee4902379efec3
   */
 
-  const { id } = req.params;
-  try {
-    const findStore = await storesModel.findByIdAndDelete(id);
-    if (findStore === null) {
-      console.log({ id: `store not found id: ${id}` });
-      return res.status(404).json({
-        success: false,
-        message: "store not found",
-      });
-    }
-    console.log({
-      id: `store deleted id: ${id}`,
-    });
+  const storeId = req.params.id;
+  console.log("req.token.storeId", req.token.storeId);
 
-    res.status(200).json({
-      success: true,
-      message: "store deleted",
+  //* check the store ownership before update.
+  storesModel
+    .findById(storeId)
+    .then(async (result) => {
+      // console.log("result.id.toString()", result.id.toString());
+      // console.log("req.token.role.role", req.token.role.role);
+
+      if (result === null) {
+        console.log(`store not found id: ${storeId}`);
+        return res.status(404).json({
+          success: false,
+          message: "store not found",
+        });
+      }
+
+      if (
+        result.id.toString() === req.token.storeId ||
+        req.token.role.role === "admin"
+      ) {
+        try {
+          const findStore = await storesModel.findByIdAndDelete(storeId);
+          // if (findStore === null) {
+          //   console.log({ id: `store not found id: ${storeId}` });
+          //   return res.status(404).json({
+          //     success: false,
+          //     message: "store not found",
+          //   });
+          // }
+
+          console.log(`store id: ${storeId}
+          Deleted by: ${
+            req.token.role.role === "admin"
+              ? "admin"
+              : ` the owner id: ${req.token.storeId}`
+          }`);
+          res.status(200).json({
+            success: true,
+            message: "store deleted",
+          });
+        } catch (err) {
+          console.log(err);
+          res.status(500).json({
+            success: false,
+            message: "Server Error",
+            err,
+          });
+        }
+      } else {
+        console.log("You are not the store owner");
+        res.status(500).json({
+          success: false,
+          message: "You are not the store owner",
+        });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        success: false,
+        message: " .findById(storeId) Server Error",
+        err,
+      });
     });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({
-      success: false,
-      message: "Server Error",
-      err,
-    });
-  }
 };
 
 //? This function creates a new store ////////////////
@@ -175,6 +252,7 @@ const registerStore = (req, res) => {
   store
     .save()
     .then((result) => {
+      console.log(`Store Created Successfully`);
       res.status(201).json({
         success: true,
         message: `Store Created Successfully`,
@@ -184,11 +262,13 @@ const registerStore = (req, res) => {
     .catch((err) => {
       console.log(err);
       if (err.keyPattern) {
+        console.log(`Error status:409 "Conflict" The email already exists`);
         return res.status(409).json({
           success: false,
-          message: `Error status:409 "Conflict" The email already exists`,
+          message: `The email already exists`,
         });
       }
+      console.log("Server Error");
       res.status(500).json({
         success: false,
         message: `Server Error`,

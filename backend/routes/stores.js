@@ -20,9 +20,27 @@ storesRouter.get(
   getAllStores
 );
 
-storesRouter.get("/:id", getStoreById);
-storesRouter.put("/:id", updateStoreById);
-storesRouter.delete("/:id", deleteStoreById);
+storesRouter.get(
+  "/:id",
+  authentication,
+  authorization("SEE-STORES"),
+  getStoreById
+);
+
+storesRouter.put(
+  "/:id",
+  authentication,
+  authorization("EDIT-STORES"),
+  updateStoreById
+);
+
+storesRouter.delete(
+  "/:id",
+  authentication,
+  authorization("DELETE-STORES"),
+  deleteStoreById
+);
+
 storesRouter.post("/register", registerStore);
 storesRouter.post("/login", loginStore);
 

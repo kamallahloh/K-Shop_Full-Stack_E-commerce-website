@@ -138,10 +138,9 @@ const updateProductById = (req, res) => {
     "price": 999
 }
   */
+
   // console.log("req.token.storeId", req.token.storeId);
-
   const productId = req.params.id;
-
   const { productName, description, price } = req.body;
 
   //* check if the store is the one who post the product that we want to update.
@@ -170,8 +169,8 @@ const updateProductById = (req, res) => {
 
           console.log(`Updated product id: ${productId}
           by: ${
-            req.token.role.role
-              ? req.token.role.role
+            req.token.role.role === "admin"
+              ? "admin"
               : ` the owner id: ${req.token.storeId}`
           }`);
 
@@ -222,7 +221,7 @@ const deleteProductById = (req, res) => {
     .findById(productId)
     .then(async (result) => {
       if (result === null) {
-        console.log({ productId: `product not found id: ${productId}` });
+        console.log(`product not found id: ${productId}`);
         return res.status(404).json({
           success: false,
           message: "product not found",
@@ -235,10 +234,10 @@ const deleteProductById = (req, res) => {
       ) {
         try {
           const findProduct = await productsModel.findByIdAndDelete(productId);
+
           console.log({
             productId: `product deleted id: ${productId}`,
           });
-
           res.status(200).json({
             success: true,
             message: "product deleted",
