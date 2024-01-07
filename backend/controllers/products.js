@@ -12,7 +12,6 @@ const addProduct = (req, res) => {
   */
 
   const { productName, description, price } = req.body;
-  // console.log("req.token", req.token);
   const store = req.token.storeId;
 
   const product = new productsModel({ productName, description, price, store });
@@ -139,7 +138,6 @@ const updateProductById = (req, res) => {
 }
   */
 
-  // console.log("req.token.storeId", req.token.storeId);
   const productId = req.params.id;
   const { productName, description, price } = req.body;
 
@@ -147,9 +145,6 @@ const updateProductById = (req, res) => {
   productsModel
     .findById(productId)
     .then(async (result) => {
-      // console.log("result.store", result.store.toString());
-      // console.log("req.token.role.role", req.token.role.role);
-
       if (
         result.store.toString() === req.token.storeId ||
         req.token.role.role === "admin"
@@ -238,39 +233,42 @@ const deleteProductById = (req, res) => {
 
           //* ////////////////////
           //* B. from storesModel: to delete the product from the store (follow the 3 steps mentioned down).
-
           //* B-1. find the store that own the product
-          storesModel.findById(req.token.storeId).then(async (storeResult) => {
-            try {
-              //* B-2. update the store products list
-              const updatedStoreProducts = await storeResult.products.filter(
-                (product) => {
-                  if (product.toString() !== productId) return product;
-                }
-              );
-              storeResult.products = updatedStoreProducts;
+          storesModel
+            .findById(req.token.storeId)
+            .then(async (storeResult) => {
+              try {
+                //* B-2. update the store products list
+                const updatedStoreProducts = await storeResult.products.filter(
+                  (product) => {
+                    if (product.toString() !== productId) return product;
+                  }
+                );
+                storeResult.products = updatedStoreProducts;
 
-              //* B-3. update the store in the database
-              storesModel
-                .findByIdAndUpdate(req.token.storeId, storeResult)
-                .then((finalResult) => {
-                  console.log(`The Product was deleted from its Store`);
-                })
-                .catch((err) => {
-                  console.log(err);
-                  console.log(
-                    "storesModel.findByIdAndUpdate(req.token.storeId, storeResult) Server error"
-                  );
-                });
-            } catch (err) {
+                //* B-3. update the store in the database
+                storesModel
+                  .findByIdAndUpdate(req.token.storeId, storeResult)
+                  .then((finalResult) => {
+                    console.log(`The Product was deleted from its Store`);
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                    console.log(
+                      "storesModel.findByIdAndUpdate(req.token.storeId, storeResult) Server error"
+                    );
+                  });
+              } catch (err) {
+                console.log(err);
+                console.log("async (storeResult) Server Error");
+              }
+            })
+            .catch((err) => {
               console.log(err);
-              res.status(500).json({
-                success: false,
-                message: "storesModel.findById(req.token.storeId) Server Error",
-                err,
-              });
-            }
-          });
+              console.log(
+                "storesModel.findById(req.token.storeId).then Server error"
+              );
+            });
           //* ////////////////////
 
           //* A-2 return the response after deleting the product from the productsModel.

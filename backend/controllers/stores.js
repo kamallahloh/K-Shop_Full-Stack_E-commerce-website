@@ -79,7 +79,6 @@ const updateStoreById = (req, res) => {
   */
 
   const storeId = req.params.id;
-  // console.log("req.token.storeId", req.token.storeId);
 
   const {
     storeName,
@@ -87,8 +86,6 @@ const updateStoreById = (req, res) => {
     email,
     phoneNumber,
     // password,
-    // products,
-    // role,
   } = req.body;
 
   //* check the store ownership before update.
@@ -96,7 +93,6 @@ const updateStoreById = (req, res) => {
     .findById(storeId)
     .then(async (result) => {
       console.log("result.id.toString()", result.id.toString());
-      // console.log("req.token.role.role", req.token.role.role);
 
       if (
         result.id.toString() === req.token.storeId ||
@@ -109,8 +105,6 @@ const updateStoreById = (req, res) => {
             email,
             phoneNumber,
             // password,
-            // products,
-            // role,
           });
 
           let updatedStore = {
@@ -119,8 +113,6 @@ const updateStoreById = (req, res) => {
             email: email ? email : findStore.email,
             phoneNumber: phoneNumber ? phoneNumber : findStore.phoneNumber,
             // password: password ? password : findStore.password,
-            // products: products ? products : findStore.products,
-            // role: role ? role : findStore.role,
           };
 
           console.log(`Updated store id: ${storeId}
@@ -169,15 +161,11 @@ const deleteStoreById = (req, res) => {
   */
 
   const storeId = req.params.id;
-  console.log("req.token.storeId", req.token.storeId);
 
   //* check the store ownership before update.
   storesModel
     .findById(storeId)
     .then(async (result) => {
-      // console.log("result.id.toString()", result.id.toString());
-      // console.log("req.token.role.role", req.token.role.role);
-
       if (result === null) {
         console.log(`store not found id: ${storeId}`);
         return res.status(404).json({
@@ -191,14 +179,12 @@ const deleteStoreById = (req, res) => {
         req.token.role.role === "admin"
       ) {
         try {
-
           //! ////////////
           //! also we need to delete the store products from productsModel.
 
           productsModel
             .deleteMany({ store: { $eq: req.token.storeId } })
             .then((finalResult) => {
-              // console.log("finalResult", finalResult);
               console.log("The Store Product/s deleted from productsModel");
             })
             .catch((err) => {
