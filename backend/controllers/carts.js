@@ -1,10 +1,5 @@
-const productsModel = require("../models/products");
-const cartsModel = require("../models/carts");
 const usersModel = require("../models/users");
-//!
-
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+//! I managed userCart in userModel not in the new cartsModel
 
 //? getAllCartProducts ////////////////
 const getAllCartProducts = (req, res) => {

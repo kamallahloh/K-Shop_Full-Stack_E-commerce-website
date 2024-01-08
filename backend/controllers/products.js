@@ -1,8 +1,6 @@
 const productsModel = require("../models/products");
 const storesModel = require("../models/stores");
-
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const usersModel = require("../models/users");
 
 //? This function creates a new Product ////////////////
 const addProduct = (req, res) => {
@@ -140,13 +138,14 @@ const updateProductById = (req, res) => {
 
   const productId = req.params.id;
   const { productName, description, price } = req.body;
+  const storeId = req.token.storeId;
 
   //* check if the store is the one who post the product that we want to update.
   productsModel
     .findById(productId)
     .then(async (result) => {
       if (
-        result.store.toString() === req.token.storeId ||
+        result.store.toString() === storeId ||
         req.token.role.role === "admin"
       ) {
         try {
@@ -166,7 +165,7 @@ const updateProductById = (req, res) => {
           by: ${
             req.token.role.role === "admin"
               ? "admin"
-              : ` the owner id: ${req.token.storeId}`
+              : ` the owner id: ${storeId}`
           }`);
 
           res.status(200).json({
@@ -208,6 +207,7 @@ const deleteProductById = (req, res) => {
     DELETE http://localhost:5000/products/659772f33246f4dc798c9af5
   */
   const productId = req.params.id;
+  const storeId = req.token.storeId;
 
   //* check if the store is the one who post the product that we want to delete.
   productsModel
@@ -222,11 +222,11 @@ const deleteProductById = (req, res) => {
       }
 
       if (
-        result.store.toString() === req.token.storeId ||
+        result.store.toString() === storeId ||
         req.token.role.role === "admin"
       ) {
         try {
-          //! we need to delete the product from 2 places:
+          //! we need to delete the product from 4 places:
           //* A. From the productsModel
           //* A-1 productsModel.findByIdAndDelete(productId)
           const findProduct = await productsModel.findByIdAndDelete(productId);
@@ -235,7 +235,7 @@ const deleteProductById = (req, res) => {
           //* B. from storesModel: to delete the product from the store (follow the 3 steps mentioned down).
           //* B-1. find the store that own the product
           storesModel
-            .findById(req.token.storeId)
+            .findById(storeId)
             .then(async (storeResult) => {
               try {
                 //* B-2. update the store products list
@@ -248,14 +248,14 @@ const deleteProductById = (req, res) => {
 
                 //* B-3. update the store in the database
                 storesModel
-                  .findByIdAndUpdate(req.token.storeId, storeResult)
+                  .findByIdAndUpdate(storeId, storeResult)
                   .then((finalResult) => {
                     console.log(`The Product was deleted from its Store`);
                   })
                   .catch((err) => {
                     console.log(err);
                     console.log(
-                      "storesModel.findByIdAndUpdate(req.token.storeId, storeResult) Server error"
+                      "storesModel.findByIdAndUpdate(storeId, storeResult) Server error"
                     );
                   });
               } catch (err) {
@@ -265,9 +265,55 @@ const deleteProductById = (req, res) => {
             })
             .catch((err) => {
               console.log(err);
-              console.log(
-                "storesModel.findById(req.token.storeId).then Server error"
-              );
+              console.log("storesModel.findById(storeId).then Server error");
+            });
+          //* ////////////////////
+
+          //* ////////////////////
+          //* C. from userModel.userCart: to delete the product from the userCart (follow the 3 steps mentioned down).
+          //* C-1. find all users that have the store products in there userCart
+          usersModel
+            .find({})
+            .then(async (users) => {
+              try {
+                //* C-2. update the userCart list
+                const UsersWithProduct = await users.filter((user) => {
+                  if (user.userCart.includes(productId)) {
+                    log(`Product ${productId} found in userCart`);
+
+                    const newUserCart = user.userCart.filter(
+                      (productInCart) => {
+                        return productInCart.product.toString() !== productId;
+                      }
+                    );
+
+                    return newUserCart;
+                  }
+                });
+
+
+                //* C-3. update the user in the database
+
+                //! reached here
+                usersModel
+                  .findByIdAndUpdate(storeId, storeResult)
+                  .then((finalResult) => {
+                    console.log(`The Product was deleted from its Store`);
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                    console.log(
+                      "storesModel.findByIdAndUpdate(storeId, storeResult) Server error"
+                    );
+                  });
+              } catch (err) {
+                console.log(err);
+                console.log("async (storeResult) Server Error");
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+              console.log("storesModel.findById(storeId).then Server error");
             });
           //* ////////////////////
 
@@ -276,7 +322,7 @@ const deleteProductById = (req, res) => {
           Deleted by: ${
             req.token.role.role === "admin"
               ? "admin"
-              : ` the owner id: ${req.token.storeId}`
+              : ` the owner id: ${storeId}`
           }`);
           res.status(200).json({
             success: true,
