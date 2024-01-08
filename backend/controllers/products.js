@@ -309,7 +309,7 @@ const deleteProductById = (req, res) => {
     });
 };
 
-//? 5. getProductsByStore ///////////////////////////
+//? getProductsByStore ///////////////////////////
 
 const getProductsByStore = async (req, res) => {
   //* postman GET http://localhost:5000/products/products_by_store?store=65999be449aad7d6418c5166
