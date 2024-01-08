@@ -48,7 +48,7 @@ const deleteAllCartProducts = (req, res) => {
     })
     .catch((err) => {
       console.log(err);
-      res.status(400).json("usersModel..findByIdAndUpdate Server Error");
+      res.status(400).json("usersModel.findByIdAndUpdate Server Error");
     });
 };
 
@@ -175,11 +175,60 @@ const getCartProductById = (req, res) => {
     });
 };
 
+//? deleteProductFromCart ////////////////
+const deleteProductFromCart = (req, res) => {
+  /* 
+    postman params /:id ==>
+    DELETE http://localhost:5000/carts/:id
+  */
+
+  const userId = req.token.userId;
+  const productId = req.params.id;
+
+  usersModel
+    .findById(userId)
+    .then((result) => {
+      const updatedUserCart = result.userCart.filter((product) => {
+        return product.product.toString() !== productId;
+      });
+
+      //* check if the product already deleted
+      const productFound = result.userCart.some((product) => {
+        return product.product.toString() === productId;
+      });
+
+      if (!productFound) {
+        console.log("product not found in userCart or already deleted");
+        res
+          .status(400)
+          .json("product not found in userCart or already deleted");
+      } else {
+        usersModel
+          .findByIdAndUpdate(userId, { userCart: updatedUserCart })
+          .then((finalResult) => {
+            console.log(`Product #${productId} has been removed from userCart`);
+            res.status(200).json({
+              success: true,
+              msg: `Product #${productId} has been removed from userCart`,
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+            res.status(400).json("usersModel.findByIdAndUpdate Server Error");
+          });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(400).json("usersModel.findById Server Error");
+    });
+};
+
 module.exports = {
   getAllCartProducts,
   deleteAllCartProducts,
   addProductToCart,
   getCartProductById,
-  // deleteProductFromCart,
+  deleteProductFromCart,
   // moveProductToFav,
 };

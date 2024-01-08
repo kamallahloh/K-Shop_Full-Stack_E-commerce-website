@@ -4,7 +4,7 @@ const {
   deleteAllCartProducts,
   addProductToCart,
   getCartProductById,
-  // deleteProductFromCart,
+  deleteProductFromCart,
   // moveProductToFav,
 } = require("../controllers/carts");
 
@@ -42,12 +42,12 @@ cartsRouter.get(
   getCartProductById
 );
 
-// cartsRouter.delete(
-//   "/:id",
-//   authentication,
-//   authorization("MANAGE-CARTS"),
-//   deleteProductFromCart
-// );
+cartsRouter.delete(
+  "/:id",
+  authentication,
+  authorization("MANAGE-CARTS"),
+  deleteProductFromCart
+);
 
 // cartsRouter.put(
 //   "/:id",
