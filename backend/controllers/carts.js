@@ -1,9 +1,34 @@
 const productsModel = require("../models/products");
 const cartsModel = require("../models/carts");
 const usersModel = require("../models/users");
+//!
 
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+
+//? getAllCartProducts ////////////////
+
+const getAllCartProducts = (req, res) => {
+  /* 
+    postman params / ==>
+    GET http://localhost:5000/carts/
+  */
+
+  const userId = req.token.userId;
+  usersModel
+    .findById(userId)
+    .then((result) => {
+      console.log(result.userCart);
+      res.status(200).json({
+        success: true,
+        userCart: result.userCart,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(400).json("usersModel.findById(userId) Server Error");
+    });
+};
 
 //? addProductToCart ////////////////
 const addProductToCart = async (req, res) => {
@@ -15,34 +40,19 @@ const addProductToCart = async (req, res) => {
   const userId = req.token.userId;
   const addedProductId = req.params.id;
 
-  // console.log("userId=>>>>", userId);
-  // console.log("addedProductId=>>>>", addedProductId);
   try {
     //* find the user by userId to extract old userCart and add the new product to it.
     const findUser = await usersModel.findById(userId);
-
-    // console.log("findUser=>>>", findUser);
 
     const productAlreadyInCart = findUser.userCart.some(
       (product) => product.product.toString() === addedProductId
     );
 
     if (productAlreadyInCart) {
-      // console.log("productAlreadyInCart", productAlreadyInCart);
-
       //! add +1 to the product quantity
 
       usersModel
-        .findById(
-          userId
-          //   , {
-          //   userCart: [
-          //     ...findUser.userCart,
-          //     { product: addedProductId, quantity: productQuantity },
-          //   ],
-          // }
-        )
-
+        .findById(userId)
         .then((result) => {
           let productQuantity = 0;
 
@@ -115,7 +125,7 @@ const addProductToCart = async (req, res) => {
 };
 
 module.exports = {
-  // getAllCartProducts,
+  getAllCartProducts,
   // deleteAllCartProducts,
   addProductToCart,
   // getCartProductById,

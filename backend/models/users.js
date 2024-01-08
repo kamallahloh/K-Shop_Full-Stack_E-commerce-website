@@ -15,7 +15,12 @@ const userSchema = new mongoose.Schema({
       quantity: { type: Number },
     },
   ],
-  userFav: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
+  userFav: [
+    {
+      product: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
+      quantity: { type: Number },
+    },
+  ],
   password: { type: String, required: true },
   role: { type: mongoose.Schema.Types.ObjectId, ref: "Role" },
 });

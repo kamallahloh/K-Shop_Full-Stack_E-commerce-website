@@ -1,6 +1,6 @@
 const express = require("express");
 const {
-  // getAllCartProducts,
+  getAllCartProducts,
   // deleteAllCartProducts,
   addProductToCart,
   // getCartProductById,
@@ -14,12 +14,12 @@ const authorization = require("../middleware/authorization");
 // define router
 const cartsRouter = express.Router();
 
-// cartsRouter.get(
-//   "/",
-//   authentication,
-//   authorization("MANAGE-CARTS"),
-//   getAllCartProducts
-// );
+cartsRouter.get(
+  "/",
+  authentication,
+  authorization("MANAGE-CARTS"),
+  getAllCartProducts
+);
 
 // cartsRouter.delete(
 //   "/",
