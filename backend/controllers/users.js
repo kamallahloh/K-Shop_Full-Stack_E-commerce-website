@@ -114,6 +114,8 @@ const updateUserById = (req, res) => {
     age,
     country,
     email,
+    userCart,
+    userFav,
     // password,
     // role,
   } = req.body;
@@ -135,6 +137,8 @@ const updateUserById = (req, res) => {
             age,
             country,
             email,
+            userCart,
+            userFav,
             // password,
             // role,
           });
@@ -147,6 +151,9 @@ const updateUserById = (req, res) => {
             age: age ? age : findUser.age,
             country: country ? country : findUser.country,
             email: email ? email : findUser.email,
+            userCart: userCart ? userCart : findUser.userCart,
+            userFav: userFav ? userFav : findUser.userFav,
+
             // password: password ? password : findUser.password,
             // role: role ? role : findUser.role,
           };
@@ -263,6 +270,8 @@ const registerUser = (req, res) => {
     age,
     country,
     email,
+    userCart,
+    userFav,
     password,
     role,
   } = req.body;
@@ -275,6 +284,8 @@ const registerUser = (req, res) => {
     age,
     country,
     email,
+    userCart,
+    userFav,
     password,
     role,
   });

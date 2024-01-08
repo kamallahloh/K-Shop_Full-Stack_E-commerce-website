@@ -9,6 +9,8 @@ const userSchema = new mongoose.Schema({
   age: { type: Number },
   country: { type: String },
   email: { type: String, required: true, unique: true },
+  userCart: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
+  userFav: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
   password: { type: String, required: true },
   role: { type: mongoose.Schema.Types.ObjectId, ref: "Role" },
 });
