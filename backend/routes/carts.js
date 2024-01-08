@@ -1,7 +1,7 @@
 const express = require("express");
 const {
   getAllCartProducts,
-  // deleteAllCartProducts,
+  deleteAllCartProducts,
   addProductToCart,
   // getCartProductById,
   // deleteProductFromCart,
@@ -21,12 +21,12 @@ cartsRouter.get(
   getAllCartProducts
 );
 
-// cartsRouter.delete(
-//   "/",
-//   authentication,
-//   authorization("MANAGE-CARTS"),
-//   deleteAllCartProducts
-// );
+cartsRouter.delete(
+  "/",
+  authentication,
+  authorization("MANAGE-CARTS"),
+  deleteAllCartProducts
+);
 
 cartsRouter.post(
   "/:id",

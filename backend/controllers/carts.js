@@ -7,7 +7,6 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 //? getAllCartProducts ////////////////
-
 const getAllCartProducts = (req, res) => {
   /* 
     postman params / ==>
@@ -27,6 +26,29 @@ const getAllCartProducts = (req, res) => {
     .catch((err) => {
       console.log(err);
       res.status(400).json("usersModel.findById(userId) Server Error");
+    });
+};
+
+//? deleteAllCartProducts ////////////////
+const deleteAllCartProducts = (req, res) => {
+  /* 
+    postman params / ==>
+    DELETE http://localhost:5000/carts/
+  */
+
+  const userId = req.token.userId;
+  usersModel
+    .findByIdAndUpdate(userId, { userCart: [] })
+    .then((result) => {
+      console.log("userCart has been emptied");
+      res.status(200).json({
+        success: true,
+        msg: "userCart has been emptied",
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(400).json("usersModel..findByIdAndUpdate Server Error");
     });
 };
 
@@ -126,7 +148,7 @@ const addProductToCart = async (req, res) => {
 
 module.exports = {
   getAllCartProducts,
-  // deleteAllCartProducts,
+  deleteAllCartProducts,
   addProductToCart,
   // getCartProductById,
   // deleteProductFromCart,
