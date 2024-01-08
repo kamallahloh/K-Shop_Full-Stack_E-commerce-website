@@ -27,41 +27,61 @@ const addProductToCart = async (req, res) => {
       (product) => product.product.toString() === addedProductId
     );
 
-    let productQuantity = 0;
-
-    findUser.userCart.map((product) => {
-      if (product.product.toString() === addedProductId) product.quantity++;
-      productQuantity = product.quantity;
-    });
-
     if (productAlreadyInCart) {
-      console.log("productAlreadyInCart", productAlreadyInCart);
+      // console.log("productAlreadyInCart", productAlreadyInCart);
 
       //! add +1 to the product quantity
 
       usersModel
-        .findByIdAndUpdate(userId, {
-          userCart: [
-            ...findUser.userCart,
-            { product: addedProductId, quantity: productQuantity },
-          ],
-        })
-        .then((updatedUserResult) => {
-          //* return the result of the addProductToCart POST request
-          console.log(
-            `product #${addedProductId} quantity increased by 1 total ${productQuantity}`
-          );
-          res.status(200).json({
-            success: true,
-            message: `product #${addedProductId} quantity increased by 1 total ${productQuantity}`,
+        .findById(
+          userId
+          //   , {
+          //   userCart: [
+          //     ...findUser.userCart,
+          //     { product: addedProductId, quantity: productQuantity },
+          //   ],
+          // }
+        )
+
+        .then((result) => {
+          let productQuantity = 0;
+
+          const updatedUserCart = result.userCart.filter((product) => {
+            if (product.product.toString() === addedProductId) {
+              productQuantity = ++product.quantity;
+              return {
+                product: product.product.toString(),
+                quantity: productQuantity,
+              };
+            }
+            return product;
           });
+
+          usersModel
+            .findByIdAndUpdate(userId, {
+              userCart: updatedUserCart,
+            })
+            .then((finalResult) => {
+              //* return the result of updating the quantity
+              console.log(
+                `product #${addedProductId} quantity increased to ${productQuantity}`
+              );
+              res.status(200).json({
+                success: true,
+                message: `product #${addedProductId} quantity increased by 1 total ${productQuantity}`,
+              });
+            })
+            .catch((err) => {
+              console.log(err);
+              res.status(400).json("usersModel.findByIdAndUpdate Server Error");
+            });
         })
         .catch((err) => {
           console.log(err);
-          res.status(400).json("usersModel.findByIdAndUpdate Server Error");
+          res.status(400).json("usersModel.findById Server Error");
         });
     } else {
-      //* append the product to the related user from usersModel.
+      //* append the product to the related userCart from usersModel.
       usersModel
         .findByIdAndUpdate(userId, {
           userCart: [
