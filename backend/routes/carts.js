@@ -3,7 +3,7 @@ const {
   getAllCartProducts,
   deleteAllCartProducts,
   addProductToCart,
-  // getCartProductById,
+  getCartProductById,
   // deleteProductFromCart,
   // moveProductToFav,
 } = require("../controllers/carts");
@@ -35,12 +35,12 @@ cartsRouter.post(
   addProductToCart
 );
 
-// cartsRouter.get(
-//   "/:id",
-//   authentication,
-//   authorization("MANAGE-CARTS"),
-//   getCartProductById
-// );
+cartsRouter.get(
+  "/:id",
+  authentication,
+  authorization("MANAGE-CARTS"),
+  getCartProductById
+);
 
 // cartsRouter.delete(
 //   "/:id",

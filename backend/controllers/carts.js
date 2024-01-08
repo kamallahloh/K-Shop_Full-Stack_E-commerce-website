@@ -55,7 +55,7 @@ const deleteAllCartProducts = (req, res) => {
 //? addProductToCart ////////////////
 const addProductToCart = async (req, res) => {
   /* 
-    postman params / ==>
+    postman params /:id ==>
     POST http://localhost:5000/carts/:id
   */
 
@@ -146,11 +146,40 @@ const addProductToCart = async (req, res) => {
   }
 };
 
+//? getCartProductById ////////////////
+const getCartProductById = (req, res) => {
+  /* 
+    postman params / ==>
+    GET http://localhost:5000/carts/:id
+  */
+
+  const userId = req.token.userId;
+  const productId = req.params.id;
+
+  usersModel
+    .findById(userId)
+    .then((result) => {
+      const searchedProduct = result.userCart.filter((product) => {
+        return product.product.toString() === productId;
+      });
+
+      console.log(searchedProduct);
+      res.status(200).json({
+        success: true,
+        product: searchedProduct,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(400).json("usersModel.findById(userId) Server Error");
+    });
+};
+
 module.exports = {
   getAllCartProducts,
   deleteAllCartProducts,
   addProductToCart,
-  // getCartProductById,
+  getCartProductById,
   // deleteProductFromCart,
   // moveProductToFav,
 };
