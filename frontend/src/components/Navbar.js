@@ -20,14 +20,18 @@ const Navbar = () => {
     <div className="navbar">
       {isLoggedIn ? (
         <>
-          <NavLink to="/">Home </NavLink>
+          <NavLink to="/products" /* reloadDocument */> Home ||</NavLink>
+          <NavLink to="/carts"> Cart ||</NavLink>
           <button onClick={logout}>Logout</button>
         </>
       ) : (
         <>
           {/* //! switch between user and store login */}
-          <NavLink to="/users/login">Login </NavLink>
-          <NavLink to="/users/register">Register </NavLink>
+          <NavLink to="/products"> Home ||</NavLink>
+          <NavLink to="/users/login"> UserLogin ||</NavLink>
+          <NavLink to="/users/register"> UserRegister ||</NavLink>
+          <NavLink to="/stores/login"> StoreLogin ||</NavLink>
+          <NavLink to="/stores/register"> StoreRegister</NavLink>
         </>
       )}
     </div>
