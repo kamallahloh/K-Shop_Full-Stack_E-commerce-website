@@ -1,5 +1,6 @@
 const storesModel = require("../models/stores");
 const productsModel = require("../models/products");
+const usersModel = require("../models/users");
 
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -119,7 +120,7 @@ const updateStoreById = (req, res) => {
           by: ${
             req.token.role.role === "admin"
               ? "admin"
-              : ` the owner id: ${req.token.storeId}`
+              : ` the owner id: ${req.token.storeName}`
           }`);
           res.status(200).json({
             success: true,
@@ -180,9 +181,10 @@ const deleteStoreById = (req, res) => {
       ) {
         try {
           //! ////////////
-          //! also we need to delete the store products from productsModel.
+          //! we need to delete the store product/s from 2 places:
+          //* A. From the productsModel
 
-          productsModel
+          await productsModel
             .deleteMany({ store: { $eq: req.token.storeId } })
             .then((finalResult) => {
               console.log("The Store Product/s deleted from productsModel");
@@ -194,19 +196,96 @@ const deleteStoreById = (req, res) => {
               );
             });
           //! ////////////
+          //* B. From the usersModel => all userCarts
+          //* B. to delete the product/s from all userCarts(follow the 4 steps mentioned down).
 
-          const findStore = await storesModel.findByIdAndDelete(storeId);
+          //* B-1. find all users that have the store product/s in there userCart
+          usersModel
+            .find({})
+            .then((users) => {
+              //* B-2 iterate over all store products to filter them out one by one from the user.userCart
+              storesModel
+                .findById(storeId)
+                .then((store) => {
+                  // console.log("store==>>>>>", store);
+                  store.products.forEach((product) => {
+                    const productId = product.toString();
 
-          console.log(`store id: ${storeId}
-          Deleted by: ${
-            req.token.role.role === "admin"
-              ? "admin"
-              : ` the owner id: ${req.token.storeId}`
-          }`);
-          res.status(200).json({
-            success: true,
-            message: "store deleted",
-          });
+                    //* B-3. update all userCarts by filtering out each product.
+                    users.filter((user) => {
+                      // console.log("OLD user.userCart", user.userCart);
+                      if (user.userCart.length > 0) {
+                        const newUserCart = user.userCart.filter(
+                          (productsInCart) => {
+                            return (
+                              productsInCart.product.toString() !== productId
+                            );
+                          }
+                        );
+
+                        user.userCart = newUserCart;
+                        // console.log("NEW user.userCart", user.userCart);
+
+                        //* B-4. update the user in the database
+                        usersModel
+                          .findByIdAndUpdate(user._id, user)
+                          .then((finalResult) => {
+                            console.log(
+                              `The Product #${productId} was deleted from user #${user.userName} userCart`
+                            );
+                          })
+                          .catch((err) => {
+                            console.log(err);
+                            console.log(
+                              "usersModel.findByIdAndUpdate(user._id, user) Server error"
+                            );
+                          });
+                      }
+                    });
+                  });
+                })
+                .catch((err) => {
+                  console.log(err);
+                  console.log("storesModel.findById(storeId) Server error");
+                });
+            })
+            .catch((err) => {
+              console.log(err);
+              console.log("usersModel.find({}) Server error");
+            });
+          //* ////////////////////
+
+          //! ////////////
+
+          //* finally delete the store from storesModel
+          console.log(
+            `the Store #${storeId} will be permanently deleted after 10s`
+          );
+          setTimeout(() => {
+            storesModel
+              .findByIdAndDelete(storeId)
+              .then((finalResult) => {
+                console.log(`store id: ${storeId}
+  Deleted by: ${
+    req.token.role.role === "admin"
+      ? "admin"
+      : ` the owner: ${req.token.storeName}`
+  }`);
+                res.status(200).json({
+                  success: true,
+                  message: "store deleted",
+                });
+              })
+              .catch((err) => {
+                console.log(err);
+                res.status(500).json({
+                  success: false,
+                  message:
+                    "storesModel.findByIdAndDelete(storeId) Server Error",
+                  err,
+                });
+              });
+          }, 10000);
         } catch (err) {
           console.log(err);
           res.status(500).json({

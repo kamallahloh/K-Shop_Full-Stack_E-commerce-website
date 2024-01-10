@@ -28,7 +28,7 @@ const addProduct = (req, res) => {
 
         .then((updatedStoreResult) => {
           console.log(
-            `Store #${store} appended with new product #${result._id}`
+            `Store #${req.token.storeName} appended with new product #${result._id} : ${result.productName}`
           );
         })
         .catch((err) => {
@@ -301,7 +301,7 @@ const deleteProductById = (req, res) => {
             })
             .catch((err) => {
               console.log(err);
-              console.log("storesModel.findById(storeId).then Server error");
+              console.log("usersModel.find({}) Server error");
             });
           //* ////////////////////
 
