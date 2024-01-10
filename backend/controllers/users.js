@@ -339,7 +339,7 @@ const loginUser = (req, res) => {
         }
         const payload = {
           userId: result._id,
-          user: result.firstName,
+          userName: result.userName,
           role: result.role,
           country: result.country,
         };

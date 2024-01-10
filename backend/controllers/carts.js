@@ -119,11 +119,11 @@ const addProductToCart = async (req, res) => {
         .then((updatedUserResult) => {
           //* return the result of the addProductToCart POST request
           console.log(
-            `User #${userId} added the product #${addedProductId} to userCart`
+            `User #${req.token.userName} added the product #${addedProductId} to userCart`
           );
           res.status(200).json({
             success: true,
-            message: `User #${userId} added the product #${addedProductId} to userCart`,
+            message: `User #${req.token.userName} added the product #${addedProductId} to userCart`,
           });
         })
         .catch((err) => {

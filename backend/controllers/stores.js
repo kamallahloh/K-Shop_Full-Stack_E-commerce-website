@@ -300,7 +300,7 @@ const loginStore = (req, res) => {
         }
         const payload = {
           storeId: result._id,
-          store: result.storeName,
+          storeName: result.storeName,
           role: result.role,
           country: result.country,
         };
