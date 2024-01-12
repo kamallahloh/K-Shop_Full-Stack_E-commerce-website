@@ -4,7 +4,7 @@ import { createContext, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 
 import Cart from "./components/Cart";
-import Home from "./components/Home";
+import Products from "./components/Products";
 import Navbar from "./components/Navbar";
 import StoreDashboard from "./components/StoreDashboard";
 // import StoreLogin from "./components/StoreLogin";
@@ -25,22 +25,22 @@ function App() {
       <div className="App">
         <Navbar />
         <Routes>
-          {isLoggedIn ? (
-            <>
-              <Route path="/products" element={<Home />} />
+          {/* {isLoggedIn ? (
+            <> */}
+              <Route path="/products" element={<Products />} />
               <Route path="/carts" element={<Cart />} />
               <Route path="/users/:id" element={<UserDashboard />} />
-            </>
+            {/* </>
           ) : (
-            <>
-              <Route path="/products" element={<Home />} />
+            <> */}
+              <Route path="/products" element={<Products />} />
               <Route path="/users/login" element={<UserLogin />} />
               <Route path="/users/register" element={<UserRegister />} />
               <Route path="/stores/" element={<StoreDashboard />} />
               {/* <Route path="/stores/login" element={<StoreLogin />} />
               <Route path="/stores/register" element={<StoreRegister />} /> */}
-            </>
-          )}
+            {/* </>
+          )} */}
           <Route path="*" element={<UserLogin />} />
         </Routes>
       </div>
