@@ -10,8 +10,8 @@ import StoreDashboard from "./components/StoreDashboard";
 // import StoreLogin from "./components/StoreLogin";
 // import StoreRegister from "./components/StoreRegister";
 import UserDashboard from "./components/UserDashboard";
-import UserLogin from "./components/UserLogin";
-import UserRegister from "./components/UserRegister";
+import UserLogin from "./components/UserLogin/UserLogin";
+import UserRegister from "./components/UserRegister/UserRegister";
 
 export const appContext = createContext();
 
