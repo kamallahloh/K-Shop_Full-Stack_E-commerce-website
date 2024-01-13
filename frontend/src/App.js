@@ -39,8 +39,15 @@ function App() {
           <Route path="/stores/" element={<StoreDashboard />} />
           <Route path="/stores/login" element={<StoreLogin />} />
           <Route path="/stores/register" element={<StoreRegister />} />
-          {/* </>
-          )} */}
+          <Route
+            path="/stores/65a2f6a927591f2f7b7d8f84"
+            element={<StoreDashboard />}
+          />
+          {/* 
+          //! testing
+          </>
+          )}
+           */}
           <Route path="*" element={<UserLogin />} />
         </Routes>
       </div>
