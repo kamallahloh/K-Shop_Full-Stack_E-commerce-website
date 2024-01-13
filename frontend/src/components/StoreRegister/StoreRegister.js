@@ -7,11 +7,9 @@ import {
   MDBCardBody,
   MDBInput,
   MDBCheckbox,
-  // eslint-disable-next-line
-  MDBSelect,
 } from "mdb-react-ui-kit";
 
-function UserRegister() {
+function StoreRegister() {
   return (
     <MDBContainer
       fluid
@@ -30,38 +28,13 @@ function UserRegister() {
         }}
       >
         <MDBCardBody className="px-5">
-          <h2 className="text-uppercase text-center mb-5">Create an account</h2>
-
+          <h2 className="text-center mb-5">open new STORE</h2>
           <MDBInput
             wrapperClass="mb-4 col-md-6"
-            label="First Name"
+            label="Store Name"
             size="lg"
-            id="firstName"
+            id="storeName"
             type="text"
-          />
-
-          <MDBInput
-            wrapperClass="mb-4 col-md-6"
-            label="Last Name"
-            size="lg"
-            id="lastName"
-            type="text"
-          />
-
-          <MDBInput
-            wrapperClass="mb-4 col-md-6"
-            label="Phone Number"
-            size="lg"
-            id="phoneNumber"
-            type="tel"
-          />
-
-          <MDBInput
-            wrapperClass="mb-4 col-md-6"
-            label="Age"
-            size="lg"
-            id="age"
-            type="number"
           />
 
           <MDBInput
@@ -73,19 +46,19 @@ function UserRegister() {
           />
 
           <MDBInput
-            wrapperClass="mb-4 col-md-6"
-            label="User Name"
-            size="lg"
-            id="userName"
-            type="text"
-          />
-
-          <MDBInput
             wrapperClass="mb-4 col-md-12"
             label="Your Email"
             size="lg"
             id="email"
             type="email"
+          />
+
+          <MDBInput
+            wrapperClass="mb-4 col-md-6"
+            label="Phone Number"
+            size="lg"
+            id="phoneNumber"
+            type="tel"
           />
 
           <MDBInput
@@ -119,9 +92,8 @@ function UserRegister() {
           >
             Register
           </MDBBtn>
-
           <p>
-            Already have an account? <a href="/users/login">Login</a>
+            Already selling with us? <a href="/stores/login">Login</a>
           </p>
         </MDBCardBody>
       </MDBCard>
@@ -129,4 +101,4 @@ function UserRegister() {
   );
 }
 
-export default UserRegister;
+export default StoreRegister;

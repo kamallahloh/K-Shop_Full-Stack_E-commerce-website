@@ -50,7 +50,7 @@ function StoreLogin() {
             Login
           </MDBBtn>
           <p>
-            Start selling with us <a href="/users/register">Register Now</a>
+            Start selling with us <a href="/stores/register">Register Now</a>
           </p>
         </MDBCardBody>
       </MDBCard>

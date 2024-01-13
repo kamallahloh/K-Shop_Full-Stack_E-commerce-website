@@ -8,7 +8,7 @@ import Products from "./components/Products";
 import Navbar from "./components/Navbar";
 import StoreDashboard from "./components/StoreDashboard";
 import StoreLogin from "./components//StoreLogin/StoreLogin";
-import StoreRegister from "./components/StoreRegister";
+import StoreRegister from "./components/StoreRegister/StoreRegister";
 import UserDashboard from "./components/UserDashboard";
 import UserLogin from "./components/UserLogin/UserLogin";
 import UserRegister from "./components/UserRegister/UserRegister";
