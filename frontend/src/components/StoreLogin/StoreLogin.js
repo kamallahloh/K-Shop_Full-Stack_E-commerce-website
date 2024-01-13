@@ -9,7 +9,7 @@ import {
   MDBCheckbox,
 } from "mdb-react-ui-kit";
 
-function UserLogin() {
+function StoreLogin() {
   return (
     <MDBContainer
       fluid
@@ -23,17 +23,17 @@ function UserLogin() {
 
       <MDBCard className="m-5" style={{ width: "75%", maxWidth: "500px" }}>
         <MDBCardBody className="px-5">
-          <h2 className="text-uppercase text-center mb-5">user Login</h2>
+          <h2 className="text-uppercase text-center mb-5">store Login</h2>
           <MDBInput
             wrapperClass="mb-4"
-            label="Enter Your Email"
+            label="Enter Store Email"
             size="lg"
             id="email"
             type="email"
           />
           <MDBInput
             wrapperClass="mb-4"
-            label="Password"
+            label="Store Password"
             size="lg"
             id="password"
             type="password"
@@ -50,7 +50,7 @@ function UserLogin() {
             Login
           </MDBBtn>
           <p>
-            Don't have an account? <a href="/users/register">Register Now</a>
+            Start selling with us <a href="/users/register">Register Now</a>
           </p>
         </MDBCardBody>
       </MDBCard>
@@ -58,4 +58,4 @@ function UserLogin() {
   );
 }
 
-export default UserLogin;
+export default StoreLogin;

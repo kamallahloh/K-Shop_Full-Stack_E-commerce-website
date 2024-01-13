@@ -53,11 +53,10 @@ export default function Navbar() {
             />
             <MDBBtn color="primary">Search</MDBBtn>
           </form>
-          <MDBNavbarNav className="mr-auto mb-2 mb-lg-0">
-            <MDBNavbarItem>
-              <MDBNavbarLink active aria-current="page" href="/stores">
-                Sell
-              </MDBNavbarLink>
+          <MDBNavbarNav className="mr-auto mb-2 mb-lg-0 d-flex justify-content-end">
+            {/* <MDBNavbarItem className="flex-fill"> */}
+            <MDBNavbarItem className="me-auto">
+              <MDBNavbarLink href="/stores/login">Sell with us</MDBNavbarLink>
             </MDBNavbarItem>
 
             {isLoggedIn ? (
@@ -91,7 +90,12 @@ export default function Navbar() {
                 </MDBNavbarItem>
 
                 <MDBNavbarItem>
-                  <MDBNavbarLink className="d-flex gap-1" href="/carts">
+                  <MDBNavbarLink
+                    active
+                    aria-current="page"
+                    className="d-flex gap-1"
+                    href="/carts"
+                  >
                     <i className="bi bi-cart"></i>
                     <label className="d-md-block d-sm-none d-block">Cart</label>
                   </MDBNavbarLink>

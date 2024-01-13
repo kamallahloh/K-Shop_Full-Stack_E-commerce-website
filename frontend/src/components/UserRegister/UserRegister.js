@@ -1,4 +1,4 @@
-import "../UserRegister/UserRegisterStyle.css";
+import "../style.css";
 import React from "react";
 import {
   MDBBtn,
@@ -109,6 +109,9 @@ function UserRegister() {
           >
             Register
           </MDBBtn>
+          <p>
+            Already have an account? <a href="/users/login">Login</a>
+          </p>
         </MDBCardBody>
       </MDBCard>
     </MDBContainer>

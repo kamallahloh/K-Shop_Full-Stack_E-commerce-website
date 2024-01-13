@@ -7,8 +7,8 @@ import Cart from "./components/Cart";
 import Products from "./components/Products";
 import Navbar from "./components/Navbar";
 import StoreDashboard from "./components/StoreDashboard";
-// import StoreLogin from "./components/StoreLogin";
-// import StoreRegister from "./components/StoreRegister";
+import StoreLogin from "./components//StoreLogin/StoreLogin";
+import StoreRegister from "./components/StoreRegister";
 import UserDashboard from "./components/UserDashboard";
 import UserLogin from "./components/UserLogin/UserLogin";
 import UserRegister from "./components/UserRegister/UserRegister";
@@ -27,19 +27,19 @@ function App() {
         <Routes>
           {/* {isLoggedIn ? (
             <> */}
-              <Route path="/products" element={<Products />} />
-              <Route path="/carts" element={<Cart />} />
-              <Route path="/users/:id" element={<UserDashboard />} />
-            {/* </>
+          <Route path="/products" element={<Products />} />
+          <Route path="/carts" element={<Cart />} />
+          <Route path="/users/:id" element={<UserDashboard />} />
+          {/* </>
           ) : (
             <> */}
-              <Route path="/products" element={<Products />} />
-              <Route path="/users/login" element={<UserLogin />} />
-              <Route path="/users/register" element={<UserRegister />} />
-              <Route path="/stores/" element={<StoreDashboard />} />
-              {/* <Route path="/stores/login" element={<StoreLogin />} />
-              <Route path="/stores/register" element={<StoreRegister />} /> */}
-            {/* </>
+          <Route path="/products" element={<Products />} />
+          <Route path="/users/login" element={<UserLogin />} />
+          <Route path="/users/register" element={<UserRegister />} />
+          <Route path="/stores/" element={<StoreDashboard />} />
+          <Route path="/stores/login" element={<StoreLogin />} />
+          <Route path="/stores/register" element={<StoreRegister />} />
+          {/* </>
           )} */}
           <Route path="*" element={<UserLogin />} />
         </Routes>

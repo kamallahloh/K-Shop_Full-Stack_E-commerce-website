@@ -9,10 +9,17 @@ const addProduct = (req, res) => {
     POST http://localhost:5000/products
   */
 
-  const { productName, description, price } = req.body;
+  const { productName, description, images, categories, price } = req.body;
   const store = req.token.storeId;
 
-  const product = new productsModel({ productName, description, price, store });
+  const product = new productsModel({
+    productName,
+    description,
+    images,
+    categories,
+    price,
+    store,
+  });
 
   product
     .save()
@@ -137,7 +144,7 @@ const updateProductById = (req, res) => {
   */
 
   const productId = req.params.id;
-  const { productName, description, price } = req.body;
+  const { productName, description, images, categories, price } = req.body;
   const storeId = req.token.storeId;
 
   //* check if the store is the one who post the product that we want to update.
@@ -152,12 +159,16 @@ const updateProductById = (req, res) => {
           const findProduct = await productsModel.findByIdAndUpdate(productId, {
             productName,
             description,
+            images,
+            categories,
             price,
           });
 
           let updatedProduct = {
             productName: productName ? productName : findProduct.productName,
             description: description ? description : findProduct.description,
+            images: images ? images : findProduct.images,
+            categories: categories ? categories : findProduct.categories,
             price: price ? price : findProduct.price,
           };
 
