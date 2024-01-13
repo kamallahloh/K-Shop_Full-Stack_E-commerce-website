@@ -17,6 +17,8 @@
   );
 }
 
+
+
 .gradient-custom-4 {
   /* fallback for old browsers */
   background: #84fab0;
@@ -34,4 +36,8 @@
     rgba(132, 250, 176, 1),
     rgba(143, 211, 244, 1)
   );
+}
+
+#mdb-btn{
+    border: none;
 }

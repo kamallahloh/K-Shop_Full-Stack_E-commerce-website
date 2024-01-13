@@ -132,7 +132,11 @@ function UserLogin() {
           <div className="mb-4">
             <MDBCheckbox name="flexCheck" id="stay-login" label="Stay Login" />
           </div>
-          <MDBBtn className="mb-4 w-100 gradient-custom-4" size="lg">
+          <MDBBtn
+            id="mdb-btn"
+            className="mb-4 w-100 gradient-custom-4"
+            size="lg"
+          >
             Login
           </MDBBtn>
         </MDBCardBody>
