@@ -273,7 +273,7 @@ function App() {
         $oid: "65a2f6a927591f2f7b7d8f84",
       },
       productName: "Classic Blue Baseball Cap",
-      price: 86,
+      price: 86.513165,
       description:
         "Top off your casual look with our Classic Blue Baseball Cap, made from high-quality materials for lasting comfort. Featuring a timeless six-panel design with a pre-curved visor, this adjustable cap offers both style and practicality for everyday wear.",
       images: [
