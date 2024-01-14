@@ -20,13 +20,28 @@ import {
 
 export default function Navbar() {
   const [openBasic, setOpenBasic] = useState(false);
+  const {
+    isLoggedIn,
+    setToken,
+    setIsLoggedIn,
+    // eslint-disable-next-line
+    products,
+    // eslint-disable-next-line
+    setProducts,
+    query,
+    setQuery,
+  } = useContext(appContext);
 
-  const { isLoggedIn, setToken, setIsLoggedIn } = useContext(appContext);
   const logout = () => {
     setToken(null);
     localStorage.removeItem("token");
     setIsLoggedIn(false);
     localStorage.removeItem("isLoggedIn");
+  };
+
+  //* Search Bar
+  const onSubmit = (e) => {
+    e.preventDefault();
   };
 
   return (
@@ -44,14 +59,20 @@ export default function Navbar() {
         </MDBNavbarToggler>
 
         <MDBCollapse navbar open={openBasic}>
-          <form className="d-flex input-group w-auto">
+          <form className="d-flex input-group w-auto" onSubmit={onSubmit}>
             <input
               type="search"
               className="form-control"
-              placeholder="Type query"
+              placeholder="Search ..."
               aria-label="Search"
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+              }}
             />
-            <MDBBtn color="primary">Search</MDBBtn>
+            <MDBBtn color="primary" type="submit">
+              Search
+            </MDBBtn>
           </form>
           <MDBNavbarNav className="mr-auto mb-2 mb-lg-0 d-flex justify-content-end">
             {/* <MDBNavbarItem className="flex-fill"> */}

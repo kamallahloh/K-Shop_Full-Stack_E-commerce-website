@@ -21,6 +21,9 @@ function App() {
     JSON.parse(localStorage.getItem("isLoggedIn")) || true
   );
 
+  //* for the searchBar input value
+  const [query, setQuery] = useState("");
+
   const [products, setProducts] = useState([
     {
       _id: {
@@ -307,6 +310,10 @@ function App() {
     },
   ]);
 
+  const filterProducts = products.filter((product) => {
+    return product.productName.toLowerCase().includes(query.toLowerCase());
+  });
+
   return (
     <appContext.Provider
       value={{
@@ -316,6 +323,9 @@ function App() {
         setIsLoggedIn,
         products,
         setProducts,
+        filterProducts,
+        query,
+        setQuery,
       }}
     >
       <div className="App">
