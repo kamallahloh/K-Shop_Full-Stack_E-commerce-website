@@ -31,7 +31,7 @@ function UserRegister() {
     // role: "6599b50fae021f180dd74d78", //! testing user role this will be added in the backend
   });
 
-  const [successfulRegister, setSuccessfulRegister] = useState("");
+  const [successfulUserRegister, setSuccessfulUserRegister] = useState("");
 
   const submitNewUser = () => {
     console.table(userData);
@@ -40,16 +40,16 @@ function UserRegister() {
       .post("http://localhost:5000/users/register", userData)
       .then((result) => {
         console.log(result.data.message);
-        setSuccessfulRegister(result.data.message);
+        setSuccessfulUserRegister(result.data.message);
 
         setTimeout(() => {
-          navigate("/user/login");
-          console.log(successfulRegister);
+          navigate("/users/login");
+          console.log(successfulUserRegister);
         }, 2000);
       })
       .catch((error) => {
         console.log(error.response.data.message);
-        setSuccessfulRegister(error.response.data.message);
+        setSuccessfulUserRegister(error.response.data.message);
       });
   };
 
@@ -192,8 +192,8 @@ function UserRegister() {
           <p>
             Already have an account? <a href="/users/login">Login</a>
           </p>
-          {successfulRegister && (
-            <p className="text-success">{successfulRegister}</p>
+          {successfulUserRegister && (
+            <p className="text-success">{successfulUserRegister}</p>
           )}
         </MDBCardBody>
       </MDBCard>

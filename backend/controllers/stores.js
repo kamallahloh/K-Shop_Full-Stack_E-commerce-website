@@ -314,8 +314,14 @@ const deleteStoreById = (req, res) => {
 
 //? This function creates a new store ////////////////
 const registerStore = (req, res) => {
-  const { storeName, country, email, phoneNumber, password, products, role } =
-    req.body;
+  const {
+    storeName,
+    country,
+    email,
+    phoneNumber,
+    password,
+    products /* role */,
+  } = req.body;
 
   const store = new storesModel({
     storeName,
@@ -324,7 +330,7 @@ const registerStore = (req, res) => {
     phoneNumber,
     password,
     products,
-    role,
+    role: "6599b4f1ae021f180dd74d76", //! testing store role.
   });
 
   store

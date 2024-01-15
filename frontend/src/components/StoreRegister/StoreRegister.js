@@ -1,5 +1,8 @@
 import "../style.css";
-import React from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+import React, { useState } from "react";
 import {
   MDBBtn,
   MDBContainer,
@@ -10,6 +13,40 @@ import {
 } from "mdb-react-ui-kit";
 
 function StoreRegister() {
+  const navigate = useNavigate();
+
+  const [storeData, setStoreData] = useState({
+    storeName: "",
+    country: "",
+    email: "",
+    phoneNumber: 0,
+    password: "",
+    products: [],
+    // role: "6599b4f1ae021f180dd74d76", //! testing store role this will be added in the backend
+  });
+
+  const [successfulStoreRegister, setSuccessfulStoreRegister] = useState("");
+
+  const submitNewStore = () => {
+    console.table(storeData);
+
+    axios
+      .post("http://localhost:5000/stores/register", storeData)
+      .then((result) => {
+        console.log(result.data.message);
+        setSuccessfulStoreRegister(result.data.message);
+
+        setTimeout(() => {
+          navigate("/stores/login");
+          console.log(successfulStoreRegister);
+        }, 2000);
+      })
+      .catch((error) => {
+        console.log(error.response.data.message);
+        setSuccessfulStoreRegister(error.response.data.message);
+      });
+  };
+
   return (
     <MDBContainer
       fluid
@@ -35,6 +72,9 @@ function StoreRegister() {
             size="lg"
             id="storeName"
             type="text"
+            onChange={(e) => {
+              setStoreData({ ...storeData, storeName: e.target.value });
+            }}
           />
 
           <MDBInput
@@ -43,6 +83,9 @@ function StoreRegister() {
             size="lg"
             id="country"
             type="text"
+            onChange={(e) => {
+              setStoreData({ ...storeData, country: e.target.value });
+            }}
           />
 
           <MDBInput
@@ -51,6 +94,9 @@ function StoreRegister() {
             size="lg"
             id="email"
             type="email"
+            onChange={(e) => {
+              setStoreData({ ...storeData, email: e.target.value });
+            }}
           />
 
           <MDBInput
@@ -59,6 +105,9 @@ function StoreRegister() {
             size="lg"
             id="phoneNumber"
             type="tel"
+            onChange={(e) => {
+              setStoreData({ ...storeData, phoneNumber: e.target.value });
+            }}
           />
 
           <MDBInput
@@ -67,6 +116,9 @@ function StoreRegister() {
             size="lg"
             id="password"
             type="password"
+            onChange={(e) => {
+              setStoreData({ ...storeData, password: e.target.value });
+            }}
           />
 
           <MDBInput
@@ -75,6 +127,9 @@ function StoreRegister() {
             size="lg"
             id="re-password"
             type="password"
+            // onChange={(e) => {
+            //   setStoreData({ ...storeData, password: e.target.value });
+            // }}
           />
 
           <div className="d-flex flex-row justify-content-center mb-4">
@@ -89,12 +144,16 @@ function StoreRegister() {
             id="mdb-btn"
             className="mb-4 w-100 gradient-custom-4"
             size="lg"
+            onClick={submitNewStore}
           >
             Register
           </MDBBtn>
           <p>
             Already selling with us? <a href="/stores/login">Login</a>
           </p>
+          {successfulStoreRegister && (
+            <p className="text-success">{successfulStoreRegister}</p>
+          )}
         </MDBCardBody>
       </MDBCard>
     </MDBContainer>
