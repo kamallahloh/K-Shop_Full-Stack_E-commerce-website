@@ -399,7 +399,7 @@ const loginStore = (req, res) => {
           message: `Valid login credentials`,
           token: token,
           role: result.role, //! testing
-          // storeId: result._id,
+          storeId: result._id,
           // storeName: result.storeName,
         });
       } catch (error) {

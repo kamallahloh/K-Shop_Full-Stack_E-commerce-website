@@ -11,6 +11,7 @@ import {
   MDBInput,
   MDBCheckbox,
 } from "mdb-react-ui-kit";
+
 import { appContext } from "../../App";
 
 function UserLogin() {
@@ -23,19 +24,19 @@ function UserLogin() {
     password: "",
   });
 
-  const [successfulUserLogin, setSuccessfulUserLogin] = useState("");
+  const [successfulLogin, setSuccessfulLogin] = useState("");
 
   const LoginButtonOnClick = () => {
     axios
       .post("http://localhost:5000/users/login", loginData)
       .then((result) => {
         console.log(result.data.message);
-        setSuccessfulUserLogin(result.data.message);
+        setSuccessfulLogin(result.data.message);
 
         setUserLocalStorage(
           JSON.stringify({
             ...userLocalStorage,
-            token: result.data.token,
+            userToken: result.data.token,
             isUserLoggedIn: true,
           })
         );
@@ -43,21 +44,21 @@ function UserLogin() {
           "userLocalStorage",
           JSON.stringify({
             ...userLocalStorage,
-            token: result.data.token,
+            userToken: result.data.token,
             isUserLoggedIn: true,
           })
         );
 
         setTimeout(() => {
           navigate("/");
-          console.log(successfulUserLogin);
+          console.log(successfulLogin);
           window.location.reload(true);
         }, 2000);
       })
 
       .catch((error) => {
         console.log(error.response.data.message);
-        setSuccessfulUserLogin(error.response.data.message);
+        setSuccessfulLogin(error.response.data.message);
       });
   };
 
@@ -110,9 +111,7 @@ function UserLogin() {
           <p>
             Don't have an account? <a href="/users/register">Register Now</a>
           </p>
-          {successfulUserLogin && (
-            <p className="text-success">{successfulUserLogin}</p>
-          )}
+          {successfulLogin && <p className="text-success">{successfulLogin}</p>}
         </MDBCardBody>
       </MDBCard>
     </MDBContainer>

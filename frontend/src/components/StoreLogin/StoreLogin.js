@@ -1,5 +1,8 @@
 import "../style.css";
-import React from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+import React, { useContext, useState } from "react";
 import {
   MDBBtn,
   MDBContainer,
@@ -9,7 +12,56 @@ import {
   MDBCheckbox,
 } from "mdb-react-ui-kit";
 
+import { appContext } from "../../App";
+
 function StoreLogin() {
+  const navigate = useNavigate();
+
+  const { storeLocalStorage, setStoreLocalStorage } = useContext(appContext);
+
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [successfulLogin, setSuccessfulLogin] = useState("");
+
+  const LoginButtonOnClick = () => {
+    axios
+      .post("http://localhost:5000/stores/login", loginData)
+      .then((result) => {
+        console.log(result.data.message);
+        setSuccessfulLogin(result.data.message);
+
+        setStoreLocalStorage(
+          JSON.stringify({
+            ...storeLocalStorage,
+            storeToken: result.data.token,
+            isStoreLoggedIn: true,
+          })
+        );
+        localStorage.setItem(
+          "storeLocalStorage",
+          JSON.stringify({
+            ...storeLocalStorage,
+            storeToken: result.data.token,
+            isStoreLoggedIn: true,
+          })
+        );
+
+        setTimeout(() => {
+          navigate(`/stores/${result.data.storeId}`); //! testing store dashboard
+          console.log(successfulLogin);
+          window.location.reload(true);
+        }, 2000);
+      })
+
+      .catch((error) => {
+        console.log(error.response.data.message);
+        setSuccessfulLogin(error.response.data.message);
+      });
+  };
+
   return (
     <MDBContainer
       fluid
@@ -30,6 +82,9 @@ function StoreLogin() {
             size="lg"
             id="email"
             type="email"
+            onChange={(e) => {
+              setLoginData({ ...loginData, email: e.target.value });
+            }}
           />
           <MDBInput
             wrapperClass="mb-4"
@@ -37,6 +92,9 @@ function StoreLogin() {
             size="lg"
             id="password"
             type="password"
+            onChange={(e) => {
+              setLoginData({ ...loginData, password: e.target.value });
+            }}
           />
           {/* <div className="d-flex flex-row justify-content-center mb-4"> */}
           <div className="mb-4">
@@ -46,13 +104,14 @@ function StoreLogin() {
             id="mdb-btn"
             className="mb-4 w-100 gradient-custom-4"
             size="lg"
-            href="/stores/65a2f6a927591f2f7b7d8f84" //! testing
+            onClick={LoginButtonOnClick}
           >
             Login
           </MDBBtn>
           <p>
             Start selling with us <a href="/stores/register">Register Now</a>
           </p>
+          {successfulLogin && <p className="text-success">{successfulLogin}</p>}
         </MDBCardBody>
       </MDBCard>
     </MDBContainer>

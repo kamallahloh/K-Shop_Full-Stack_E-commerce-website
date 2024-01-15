@@ -18,20 +18,19 @@ export const appContext = createContext();
 function App() {
   const [userLocalStorage, setUserLocalStorage] = useState(
     JSON.parse(localStorage.getItem("userLocalStorage")) || {
-      token: null,
+      userToken: null,
       isUserLoggedIn: false,
     }
   );
+  const [storeLocalStorage, setStoreLocalStorage] = useState(
+    JSON.parse(localStorage.getItem("storeLocalStorage")) || {
+      storeToken: null,
+      isStoreLoggedIn: false,
+    }
+  );
 
-  const { token, isUserLoggedIn } = userLocalStorage;
-
-  // const setToken = setUserLocalStorage({ token });
-  // const setIsUserLoggedIn = setUserLocalStorage({ isUserLoggedIn });
-
-  // const [token, setToken] = useState(localStorage.getItem("token") || null);
-  // const [isUserLoggedIn, setIsUserLoggedIn] = useState(
-  //   JSON.parse(localStorage.getItem("isUserLoggedIn")) || true
-  // );
+  const { userToken, isUserLoggedIn } = userLocalStorage;
+  const { storeToken, isStoreLoggedIn } = storeLocalStorage;
 
   const [products, setProducts] = useState([
     {
@@ -333,12 +332,16 @@ function App() {
   return (
     <appContext.Provider
       value={{
-        token,
-        // setToken,
+        userToken,
         isUserLoggedIn,
-        // setIsUserLoggedIn,
         userLocalStorage,
         setUserLocalStorage,
+
+        storeToken,
+        isStoreLoggedIn,
+        storeLocalStorage,
+        setStoreLocalStorage,
+
         products,
         setProducts,
         searchedProducts,

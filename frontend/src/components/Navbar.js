@@ -23,25 +23,15 @@ export default function Navbar() {
   const [openBasic, setOpenBasic] = useState(false);
   const {
     isUserLoggedIn,
-    // setToken,
-    // setIsUserLoggedIn,
     userLocalStorage,
     setUserLocalStorage,
-    // eslint-disable-next-line
-    products,
-    // eslint-disable-next-line
-    setProducts,
     search,
     setSearchParams,
   } = useContext(appContext);
 
   const logout = () => {
-    // setToken(null);
-    setUserLocalStorage({ ...userLocalStorage, token: null });
-    // localStorage.removeItem("token");
-    // setIsUserLoggedIn(false);
+    setUserLocalStorage({ ...userLocalStorage, userToken: null });
     setUserLocalStorage({ ...userLocalStorage, isUserLoggedIn: false });
-    // localStorage.removeItem("isUserLoggedIn");
     localStorage.removeItem("userLocalStorage");
   };
 
