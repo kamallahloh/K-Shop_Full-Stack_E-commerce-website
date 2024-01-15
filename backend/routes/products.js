@@ -23,15 +23,16 @@ productsRouter.post(
 
 productsRouter.get(
   "/",
-  authentication,
-  authorization("SEE-PRODUCTS"),
+  //! getAllProduct is public no need to authn authz
+  // authentication,
+  // authorization("SEE-PRODUCTS"),
   getAllProducts
 );
 
 productsRouter.get(
   "/product_by_id/:id",
-  authentication,
-  authorization("SEE-PRODUCTS"),
+  // authentication,
+  // authorization("SEE-PRODUCTS"),
   getProductById
 );
 
@@ -51,8 +52,8 @@ productsRouter.delete(
 
 productsRouter.get(
   "/products_by_store/",
-  authentication,
-  authorization("SEE-PRODUCTS"),
+  // authentication,
+  // authorization("SEE-PRODUCTS"),
   getProductsByStore
 );
 

@@ -1,29 +1,30 @@
-// import axios from "axios";
-import React, { /* useEffect ,*/ useContext } from "react";
+import axios from "axios";
+import React, { useEffect, useContext } from "react";
 import { appContext } from "../App";
 import { MDBIcon } from "mdb-react-ui-kit";
 
 const Products = () => {
-  const { searchedProducts } = useContext(appContext);
+  const { setProducts, searchedProducts } = useContext(appContext);
 
-  // useEffect(() => {
-  //   axios
-  //     .get("http://localhost:5000/products", {
-  //       headers: {
-  //         authorization: `Bearer ${token}`,
-  //       },
-  //     })
-  //     .then((results) => {
-  //       setProducts(results.data.products);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error.response.data.message);
-  //       setProducts(<>{error.response.data.message}</>);
-  //       // setTimeout(() => {
-  //       //   location.href = "/users/login";
-  //       // }, 3000);
-  //     });
-  // }, []);
+  useEffect(() => {
+    axios
+      .get(
+        "http://localhost:5000/products"
+        // getAllProduct is public no need for the header
+        // {
+        //   headers: {
+        //     authorization: `Bearer ${token}`,
+        //   },
+        // }
+      )
+      .then((results) => {
+        setProducts(results.data.products);
+      })
+      .catch((error) => {
+        console.log(error.response.data.message);
+        setProducts(<>{error.response.data.message}</>);
+      });
+  }, [setProducts]);
 
   return (
     <section className="products">
@@ -43,8 +44,8 @@ const Products = () => {
                   return (
                     <div
                       className="product-card col-xl-3 col-lg-4 col-md-6 col-sm-8 col-9 m-3 p-2 border border-1 border-secondary rounded-9"
-                      key={product._id.$oid}
-                      id={product._id.$oid}
+                      key={product._id}
+                      id={product._id}
                     >
                       <div className="bg-image mb-2">
                         <img
@@ -73,9 +74,9 @@ const Products = () => {
                             {product.productName}
                           </h5>
                         </a>
-                        <a href="#!" className="text-reset">
+                        {/* <a href="#!" className="text-reset">
                           <p>{product.categories.name}</p>
-                        </a>
+                        </a> */}
                         <p className="text-truncate mx-3">
                           {product.description}
                         </p>
