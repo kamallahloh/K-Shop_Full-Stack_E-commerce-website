@@ -1,5 +1,8 @@
 import "../style.css";
-import React from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+import React, { useState } from "react";
 import {
   MDBBtn,
   MDBContainer,
@@ -12,6 +15,44 @@ import {
 } from "mdb-react-ui-kit";
 
 function UserRegister() {
+  const navigate = useNavigate();
+
+  const [userData, setUserData] = useState({
+    userName: "",
+    firstName: "",
+    lastName: "",
+    phoneNumber: 0,
+    age: 0,
+    country: "",
+    email: "",
+    userCart: [],
+    userFav: [],
+    password: "",
+    // role: "6599b50fae021f180dd74d78", //! testing user role this will be added in the backend
+  });
+
+  const [successfulRegister, setSuccessfulRegister] = useState("");
+
+  const submitNewUser = () => {
+    console.table(userData);
+
+    axios
+      .post("http://localhost:5000/users/register", userData)
+      .then((result) => {
+        console.log(result.data.message);
+        setSuccessfulRegister(result.data.message);
+
+        setTimeout(() => {
+          navigate("/user/login");
+          console.log(successfulRegister);
+        }, 2000);
+      })
+      .catch((error) => {
+        console.log(error.response.data.message);
+        setSuccessfulRegister(error.response.data.message);
+      });
+  };
+
   return (
     <MDBContainer
       fluid
@@ -38,6 +79,9 @@ function UserRegister() {
             size="lg"
             id="firstName"
             type="text"
+            onChange={(e) => {
+              setUserData({ ...userData, firstName: e.target.value });
+            }}
           />
 
           <MDBInput
@@ -46,6 +90,9 @@ function UserRegister() {
             size="lg"
             id="lastName"
             type="text"
+            onChange={(e) => {
+              setUserData({ ...userData, lastName: e.target.value });
+            }}
           />
 
           <MDBInput
@@ -54,6 +101,9 @@ function UserRegister() {
             size="lg"
             id="phoneNumber"
             type="tel"
+            onChange={(e) => {
+              setUserData({ ...userData, phoneNumber: e.target.value });
+            }}
           />
 
           <MDBInput
@@ -62,6 +112,9 @@ function UserRegister() {
             size="lg"
             id="age"
             type="number"
+            onChange={(e) => {
+              setUserData({ ...userData, age: e.target.value });
+            }}
           />
 
           <MDBInput
@@ -70,6 +123,9 @@ function UserRegister() {
             size="lg"
             id="country"
             type="text"
+            onChange={(e) => {
+              setUserData({ ...userData, country: e.target.value });
+            }}
           />
 
           <MDBInput
@@ -78,6 +134,9 @@ function UserRegister() {
             size="lg"
             id="userName"
             type="text"
+            onChange={(e) => {
+              setUserData({ ...userData, userName: e.target.value });
+            }}
           />
 
           <MDBInput
@@ -86,6 +145,9 @@ function UserRegister() {
             size="lg"
             id="email"
             type="email"
+            onChange={(e) => {
+              setUserData({ ...userData, email: e.target.value });
+            }}
           />
 
           <MDBInput
@@ -94,6 +156,9 @@ function UserRegister() {
             size="lg"
             id="password"
             type="password"
+            onChange={(e) => {
+              setUserData({ ...userData, password: e.target.value });
+            }}
           />
 
           <MDBInput
@@ -102,6 +167,9 @@ function UserRegister() {
             size="lg"
             id="re-password"
             type="password"
+            // onChange={(e) => {
+            //   setUserData({ ...userData, password: e.target.value });
+            // }}
           />
 
           <div className="d-flex flex-row justify-content-center mb-4">
@@ -116,6 +184,7 @@ function UserRegister() {
             id="mdb-btn"
             className="mb-4 w-100 gradient-custom-4"
             size="lg"
+            onClick={submitNewUser}
           >
             Register
           </MDBBtn>
@@ -123,6 +192,9 @@ function UserRegister() {
           <p>
             Already have an account? <a href="/users/login">Login</a>
           </p>
+          {successfulRegister && (
+            <p className="text-success">{successfulRegister}</p>
+          )}
         </MDBCardBody>
       </MDBCard>
     </MDBContainer>

@@ -29,36 +29,32 @@ function UserLogin() {
     axios
       .post("http://localhost:5000/users/login", loginData)
       .then((result) => {
-        // console.log(result);
+        console.log(result.data.message);
         setSuccessfulUserLogin(result.data.message);
 
+        setUserLocalStorage(
+          JSON.stringify({
+            ...userLocalStorage,
+            token: result.data.token,
+            isUserLoggedIn: true,
+          })
+        );
+        localStorage.setItem(
+          "userLocalStorage",
+          JSON.stringify({
+            ...userLocalStorage,
+            token: result.data.token,
+            isUserLoggedIn: true,
+          })
+        );
+
         setTimeout(() => {
-          setUserLocalStorage(
-            JSON.stringify({
-              ...userLocalStorage,
-              token: result.data.token,
-              isUserLoggedIn: true,
-            })
-          );
-          localStorage.setItem(
-            "userLocalStorage",
-            JSON.stringify({
-              ...userLocalStorage,
-              token: result.data.token,
-              isUserLoggedIn: true,
-            })
-          );
-
           navigate("/");
-
-          //   navigate("/", {
-          //     state: {
-          //       isLoggedIn: true,
-          //       token: result.data.token,
-          //     },
-          //   }); //! pass state to the directed path dashboard "/"
-        }, 1000);
+          console.log(successfulUserLogin);
+          window.location.reload(true);
+        }, 2000);
       })
+
       .catch((error) => {
         console.log(error.response.data.message);
         setSuccessfulUserLogin(error.response.data.message);

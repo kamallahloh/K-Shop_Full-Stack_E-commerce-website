@@ -19,7 +19,7 @@ function App() {
   const [userLocalStorage, setUserLocalStorage] = useState(
     JSON.parse(localStorage.getItem("userLocalStorage")) || {
       token: null,
-      isUserLoggedIn: true,
+      isUserLoggedIn: false,
     }
   );
 
@@ -349,30 +349,35 @@ function App() {
       <div className="App">
         <Navbar />
         <Routes>
-          {/* {isUserLoggedIn ? (
-            <> */}
-          <Route path="/" element={<Products />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/carts" element={<Cart />} />
-          <Route path="/users/:id" element={<UserDashboard />} />
-          {/* </>
+          {isUserLoggedIn ? (
+            /* all the paths allowed to the Logged in user */
+            <>
+              <Route path="/" element={<Products />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/carts" element={<Cart />} />
+              <Route path="/users/:id" element={<UserDashboard />} />
+              <Route path="/stores/login" element={<StoreLogin />} />
+              <Route path="/stores/register" element={<StoreRegister />} />
+            </>
           ) : (
-            <> */}
-          <Route path="/products" element={<Products />} />
-          <Route path="/users/login" element={<UserLogin />} />
-          <Route path="/users/register" element={<UserRegister />} />
-          <Route path="/stores/" element={<StoreDashboard />} />
-          <Route path="/stores/login" element={<StoreLogin />} />
-          <Route path="/stores/register" element={<StoreRegister />} />
-          <Route
-            path="/stores/65a2f6a927591f2f7b7d8f84"
-            element={<StoreDashboard />}
-          />
-          {/* 
-          //! testing
-          </>
-          )}
+            /* all the paths allowed to the public */
+            <>
+              <Route path="/products" element={<Products />} />
+              <Route path="/users/login" element={<UserLogin />} />
+              <Route path="/users/register" element={<UserRegister />} />
+              <Route path="/stores/" element={<StoreDashboard />} />
+              <Route path="/stores/login" element={<StoreLogin />} />
+              <Route path="/stores/register" element={<StoreRegister />} />
+              <Route
+                path="/stores/65a2f6a927591f2f7b7d8f84"
+                element={<StoreDashboard />}
+              />
+              {/* 
+          //! testing          
            */}
+            </>
+          )}
+
           <Route path="*" element={<UserLogin />} />
         </Routes>
       </div>

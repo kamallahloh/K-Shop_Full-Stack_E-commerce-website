@@ -273,7 +273,7 @@ const registerUser = (req, res) => {
     userCart,
     userFav,
     password,
-    role,
+    // role
   } = req.body;
 
   const user = new usersModel({
@@ -287,7 +287,7 @@ const registerUser = (req, res) => {
     userCart,
     userFav,
     password,
-    role,
+    role: "6599b50fae021f180dd74d78", //! testing user role.
   });
 
   user
@@ -304,7 +304,7 @@ const registerUser = (req, res) => {
       if (err.keyPattern) {
         return res.status(409).json({
           success: false,
-          message: `Error status:409 "Conflict" The email already exists`,
+          message: `The email already exists`,
         });
       }
       res.status(500).json({

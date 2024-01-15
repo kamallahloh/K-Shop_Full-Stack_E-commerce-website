@@ -340,7 +340,7 @@ const registerStore = (req, res) => {
     .catch((err) => {
       console.log(err);
       if (err.keyPattern) {
-        console.log(`Error status:409 "Conflict" The email already exists`);
+        console.log(`The email already exists`);
         return res.status(409).json({
           success: false,
           message: `The email already exists`,
