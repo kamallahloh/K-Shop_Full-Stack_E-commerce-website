@@ -50,7 +50,7 @@ function StoreLogin() {
         );
 
         setTimeout(() => {
-          navigate(`/stores/${result.data.storeId}`); //! testing store dashboard
+          navigate(`/stores/${result.data.storeId}`);
           console.log(successfulLogin);
           window.location.reload(true);
         }, 2000);

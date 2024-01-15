@@ -2,7 +2,7 @@ const productsModel = require("../models/products");
 const storesModel = require("../models/stores");
 const usersModel = require("../models/users");
 
-//? This function creates a new Product ////////////////
+//? addProduct This function creates a new Product ///////////
 const addProduct = (req, res) => {
   /* 
     postman params / ==>

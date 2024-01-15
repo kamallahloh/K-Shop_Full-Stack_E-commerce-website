@@ -1,18 +1,10 @@
 // import axios from "axios";
 import React, { /* useEffect ,*/ useContext } from "react";
 import { appContext } from "../App";
+import { MDBIcon } from "mdb-react-ui-kit";
 
 const Products = () => {
-  const {
-    // token,
-    // loggedInUserId,
-    // eslint-disable-next-line
-    products,
-    // eslint-disable-next-line
-    setProducts,
-    // eslint-disable-next-line
-    searchedProducts,
-  } = useContext(appContext);
+  const { searchedProducts } = useContext(appContext);
 
   // useEffect(() => {
   //   axios
@@ -44,7 +36,9 @@ const Products = () => {
               <h4 className="mt-2 mb-2">
                 <strong>Products</strong>
               </h4>
-              <div className="d-flex flex-wrap align-items-center justify-content-center">
+
+              {/* flex-wrap-reverse ==> new added product will be on top of the page */}
+              <div className="d-flex flex-wrap-reverse align-items-center justify-content-center">
                 {searchedProducts.map((product) => {
                   return (
                     <div
@@ -93,7 +87,7 @@ const Products = () => {
                             className="btn btn-outline-primary"
                             type="button"
                           >
-                            Add To Cart
+                            Add To Cart <MDBIcon fas icon="cart-plus" />
                           </button>
                         </div>
                       </div>

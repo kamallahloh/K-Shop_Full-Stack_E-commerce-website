@@ -352,7 +352,7 @@ const loginUser = (req, res) => {
           success: true,
           message: `Valid login credentials`,
           token: token,
-          role: result.role, //! testing
+          // role: result.role, //! testing
           // userId: result._id,
           // userName: result.firstName,
         });

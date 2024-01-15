@@ -107,18 +107,20 @@ export default function Navbar() {
                 <MDBNavbarItem>
                   <MDBNavbarLink className="d-flex gap-1" href="#">
                     <i className="bi bi-heart"></i>
+                    {/* <MDBIcon fas icon="heart" size="1x" /> */}
                     <label className="d-md-block d-sm-none d-block">Fav</label>
                   </MDBNavbarLink>
                 </MDBNavbarItem>
 
                 <MDBNavbarItem>
                   <MDBNavbarLink
-                    active
-                    aria-current="page"
+                    // active
+                    // aria-current="page"
                     className="d-flex gap-1"
                     href="/carts"
                   >
                     <i className="bi bi-cart"></i>
+                    {/* <MDBIcon fas icon="shopping-cart" size="1x" /> */}
                     <label className="d-md-block d-sm-none d-block">Cart</label>
                   </MDBNavbarLink>
                 </MDBNavbarItem>
