@@ -1,5 +1,8 @@
 import "../style.css";
-import React from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+import React, { useContext, useState } from "react";
 import {
   MDBBtn,
   MDBContainer,
@@ -8,8 +11,60 @@ import {
   MDBInput,
   MDBCheckbox,
 } from "mdb-react-ui-kit";
+import { appContext } from "../../App";
 
 function UserLogin() {
+  const navigate = useNavigate();
+
+  const { userLocalStorage, setUserLocalStorage } = useContext(appContext);
+
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [successfulUserLogin, setSuccessfulUserLogin] = useState("");
+
+  const LoginButtonOnClick = () => {
+    axios
+      .post("http://localhost:5000/users/login", loginData)
+      .then((result) => {
+        // console.log(result);
+        setSuccessfulUserLogin(result.data.message);
+
+        setTimeout(() => {
+          setUserLocalStorage(
+            JSON.stringify({
+              ...userLocalStorage,
+              token: result.data.token,
+              isUserLoggedIn: true,
+            })
+          );
+          localStorage.setItem(
+            "userLocalStorage",
+            JSON.stringify({
+              ...userLocalStorage,
+              token: result.data.token,
+              isUserLoggedIn: true,
+            })
+          );
+
+          navigate("/");
+
+          //   navigate("/", {
+          //     state: {
+          //       isLoggedIn: true,
+          //       token: result.data.token,
+          //     },
+          //   }); //! pass state to the directed path dashboard "/"
+        }, 1000);
+      })
+      .catch((error) => {
+        console.log(error.response.data.message);
+        setSuccessfulUserLogin(error.response.data.message);
+      });
+  };
+
   return (
     <MDBContainer
       fluid
@@ -30,6 +85,9 @@ function UserLogin() {
             size="lg"
             id="email"
             type="email"
+            onChange={(e) => {
+              setLoginData({ ...loginData, email: e.target.value });
+            }}
           />
           <MDBInput
             wrapperClass="mb-4"
@@ -37,6 +95,9 @@ function UserLogin() {
             size="lg"
             id="password"
             type="password"
+            onChange={(e) => {
+              setLoginData({ ...loginData, password: e.target.value });
+            }}
           />
           {/* <div className="d-flex flex-row justify-content-center mb-4"> */}
           <div className="mb-4">
@@ -46,12 +107,16 @@ function UserLogin() {
             id="mdb-btn"
             className="mb-4 w-100 gradient-custom-4"
             size="lg"
+            onClick={LoginButtonOnClick}
           >
             Login
           </MDBBtn>
           <p>
             Don't have an account? <a href="/users/register">Register Now</a>
           </p>
+          {successfulUserLogin && (
+            <p className="text-success">{successfulUserLogin}</p>
+          )}
         </MDBCardBody>
       </MDBCard>
     </MDBContainer>

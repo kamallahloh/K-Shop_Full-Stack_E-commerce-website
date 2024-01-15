@@ -22,9 +22,11 @@ import {
 export default function Navbar() {
   const [openBasic, setOpenBasic] = useState(false);
   const {
-    isLoggedIn,
-    setToken,
-    setIsLoggedIn,
+    isUserLoggedIn,
+    // setToken,
+    // setIsUserLoggedIn,
+    userLocalStorage,
+    setUserLocalStorage,
     // eslint-disable-next-line
     products,
     // eslint-disable-next-line
@@ -34,10 +36,13 @@ export default function Navbar() {
   } = useContext(appContext);
 
   const logout = () => {
-    setToken(null);
-    localStorage.removeItem("token");
-    setIsLoggedIn(false);
-    localStorage.removeItem("isLoggedIn");
+    // setToken(null);
+    setUserLocalStorage({ ...userLocalStorage, token: null });
+    // localStorage.removeItem("token");
+    // setIsUserLoggedIn(false);
+    setUserLocalStorage({ ...userLocalStorage, isUserLoggedIn: false });
+    // localStorage.removeItem("isUserLoggedIn");
+    localStorage.removeItem("userLocalStorage");
   };
 
   //* Search Bar
@@ -86,7 +91,7 @@ export default function Navbar() {
               />
               {/* <MDBBtn color="primary" type="submit">Search</MDBBtn> */}
             </form>
-            {isLoggedIn ? (
+            {isUserLoggedIn ? (
               <>
                 <MDBNavbarItem>
                   <MDBDropdown>

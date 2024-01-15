@@ -16,10 +16,22 @@ import UserRegister from "./components/UserRegister/UserRegister";
 export const appContext = createContext();
 
 function App() {
-  const [token, setToken] = useState(localStorage.getItem("token") || null);
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    JSON.parse(localStorage.getItem("isLoggedIn")) || true
+  const [userLocalStorage, setUserLocalStorage] = useState(
+    JSON.parse(localStorage.getItem("userLocalStorage")) || {
+      token: null,
+      isUserLoggedIn: true,
+    }
   );
+
+  const { token, isUserLoggedIn } = userLocalStorage;
+
+  // const setToken = setUserLocalStorage({ token });
+  // const setIsUserLoggedIn = setUserLocalStorage({ isUserLoggedIn });
+
+  // const [token, setToken] = useState(localStorage.getItem("token") || null);
+  // const [isUserLoggedIn, setIsUserLoggedIn] = useState(
+  //   JSON.parse(localStorage.getItem("isUserLoggedIn")) || true
+  // );
 
   const [products, setProducts] = useState([
     {
@@ -322,9 +334,11 @@ function App() {
     <appContext.Provider
       value={{
         token,
-        setToken,
-        isLoggedIn,
-        setIsLoggedIn,
+        // setToken,
+        isUserLoggedIn,
+        // setIsUserLoggedIn,
+        userLocalStorage,
+        setUserLocalStorage,
         products,
         setProducts,
         searchedProducts,
@@ -335,8 +349,9 @@ function App() {
       <div className="App">
         <Navbar />
         <Routes>
-          {/* {isLoggedIn ? (
+          {/* {isUserLoggedIn ? (
             <> */}
+          <Route path="/" element={<Products />} />
           <Route path="/products" element={<Products />} />
           <Route path="/carts" element={<Cart />} />
           <Route path="/users/:id" element={<UserDashboard />} />
