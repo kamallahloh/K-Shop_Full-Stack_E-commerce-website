@@ -11,16 +11,7 @@ const Products = () => {
     // eslint-disable-next-line
     setProducts,
     // eslint-disable-next-line
-    filterProducts,
-    query,
-    // eslint-disable-next-line
-    setQuery,
-    // isLoggedIn,
-    // loggedInName,
-    // setToken,
-    // setIsLoggedIn,
-    // setLoggedInUserId,
-    // setLoggedInName,
+    searchedProducts,
   } = useContext(appContext);
 
   // useEffect(() => {
@@ -46,15 +37,15 @@ const Products = () => {
     <section className="products">
       {/* {successfulDelete && <>{successfulDelete}</>}*/}
 
-      {filterProducts ? (
-        Array.isArray(filterProducts) && filterProducts.length > 0 ? (
+      {searchedProducts ? (
+        Array.isArray(searchedProducts) && searchedProducts.length > 0 ? (
           <>
             <div className="text-center container py-5">
               <h4 className="mt-2 mb-2">
                 <strong>Products</strong>
               </h4>
               <div className="d-flex flex-wrap align-items-center justify-content-center">
-                {filterProducts.map((product) => {
+                {searchedProducts.map((product) => {
                   return (
                     <div
                       className="product-card col-xl-3 col-lg-4 col-md-6 col-sm-8 col-9 m-3 p-2 border border-1 border-secondary rounded-9"
@@ -113,10 +104,10 @@ const Products = () => {
             </div>
           </>
         ) : (
-          <div>{filterProducts}</div>
+          <div>{searchedProducts}</div>
         )
       ) : (
-        <div>No filterProducts Yet</div>
+        <div>No Products Yet</div>
       )}
     </section>
   );

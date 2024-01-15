@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext /* useRef */ } from "react";
 import { appContext } from "../App";
 
 import {
@@ -10,6 +10,7 @@ import {
   MDBNavbarNav,
   MDBNavbarItem,
   MDBNavbarLink,
+  // eslint-disable-next-line
   MDBBtn,
   MDBDropdown,
   MDBDropdownToggle,
@@ -28,8 +29,8 @@ export default function Navbar() {
     products,
     // eslint-disable-next-line
     setProducts,
-    query,
-    setQuery,
+    search,
+    setSearchParams,
   } = useContext(appContext);
 
   const logout = () => {
@@ -40,8 +41,10 @@ export default function Navbar() {
   };
 
   //* Search Bar
+  // const searchRef = useRef("");
   const onSubmit = (e) => {
     e.preventDefault();
+    // const value = searchRef.current;
   };
 
   return (
@@ -59,27 +62,30 @@ export default function Navbar() {
         </MDBNavbarToggler>
 
         <MDBCollapse navbar open={openBasic}>
-          <form className="d-flex input-group w-auto" onSubmit={onSubmit}>
-            <input
-              type="search"
-              className="form-control"
-              placeholder="Search ..."
-              aria-label="Search"
-              value={query}
-              onChange={(e) => {
-                setQuery(e.target.value);
-              }}
-            />
-            <MDBBtn color="primary" type="submit">
-              Search
-            </MDBBtn>
-          </form>
-          <MDBNavbarNav className="mr-auto mb-2 mb-lg-0 d-flex justify-content-end">
+          <MDBNavbarNav className="mr-auto mb-2 mb-lg-0 d-flex justify-content-end align-items-center">
             {/* <MDBNavbarItem className="flex-fill"> */}
             <MDBNavbarItem className="me-auto">
               <MDBNavbarLink href="/stores/login">Sell with us</MDBNavbarLink>
             </MDBNavbarItem>
+            <form className="d-flex input-group w-auto" onSubmit={onSubmit}>
+              <input
+                type="search"
+                className="form-control"
+                placeholder="Search ..."
+                aria-label="Search"
+                // ref={searchRef}
 
+                value={search}
+                onChange={(e) => {
+                  //* saving in SearchParams.
+                  setSearchParams((prev) => {
+                    prev.set("search", e.target.value);
+                    return prev;
+                  });
+                }}
+              />
+              {/* <MDBBtn color="primary" type="submit">Search</MDBBtn> */}
+            </form>
             {isLoggedIn ? (
               <>
                 <MDBNavbarItem>

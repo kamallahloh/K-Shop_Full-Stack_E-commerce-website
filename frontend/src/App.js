@@ -1,7 +1,7 @@
 import "./App.css";
 
 import { createContext, useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useSearchParams } from "react-router-dom";
 
 import Cart from "./components/Cart";
 import Products from "./components/Products";
@@ -20,9 +20,6 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(
     JSON.parse(localStorage.getItem("isLoggedIn")) || true
   );
-
-  //* for the searchBar input value
-  const [query, setQuery] = useState("");
 
   const [products, setProducts] = useState([
     {
@@ -310,8 +307,15 @@ function App() {
     },
   ]);
 
-  const filterProducts = products.filter((product) => {
-    return product.productName.toLowerCase().includes(query.toLowerCase());
+  //* for the searchBar input value
+  const [searchParams, setSearchParams] = useSearchParams({ search: "" });
+  const search = searchParams.get("search");
+
+  const searchedProducts = products.filter((product) => {
+    return (
+      product.productName.toLowerCase().includes(search.toLowerCase()) ||
+      product.description.toLowerCase().includes(search.toLowerCase())
+    );
   });
 
   return (
@@ -323,9 +327,9 @@ function App() {
         setIsLoggedIn,
         products,
         setProducts,
-        filterProducts,
-        query,
-        setQuery,
+        searchedProducts,
+        search,
+        setSearchParams,
       }}
     >
       <div className="App">
