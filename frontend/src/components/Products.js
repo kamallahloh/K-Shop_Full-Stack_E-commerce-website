@@ -10,12 +10,6 @@ const Products = () => {
     axios
       .get(
         "http://localhost:5000/products"
-        // getAllProduct is public no need for the header
-        // {
-        //   headers: {
-        //     authorization: `Bearer ${token}`,
-        //   },
-        // }
       )
       .then((results) => {
         setProducts(results.data.products);

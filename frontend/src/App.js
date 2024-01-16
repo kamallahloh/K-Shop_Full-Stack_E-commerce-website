@@ -3,6 +3,8 @@ import "./App.css";
 import { createContext, useState } from "react";
 import { Routes, Route, useSearchParams } from "react-router-dom";
 
+import {Cloudinary} from "@cloudinary/url-gen";
+
 import Cart from "./components/Cart";
 import Products from "./components/Products";
 import Navbar from "./components/Navbar";
@@ -17,6 +19,7 @@ import NotFound from "./components/NotFound";
 export const appContext = createContext();
 
 function App() {
+  //*  LocalStorage //////////////////////////
   const [userLocalStorage, setUserLocalStorage] = useState(
     JSON.parse(localStorage.getItem("userLocalStorage")) || {
       userToken: null,
@@ -33,8 +36,10 @@ function App() {
   const { userToken, isUserLoggedIn } = userLocalStorage;
   const { storeToken, isStoreLoggedIn } = storeLocalStorage;
 
+  //*  Products list //////////////////////////
   const [products, setProducts] = useState([]);
-  //* for the searchBar input value
+
+  //* for the searchBar input value //////////////////////////
   const [searchParams, setSearchParams] = useSearchParams({ search: "" });
   const search = searchParams.get("search");
 
@@ -45,6 +50,11 @@ function App() {
     );
   });
 
+  //* Upload Images to Cloudinary //////////////////////////
+  const [image, setImage] = useState("");
+  const [url, setUrl] = useState("");
+  const cld = new Cloudinary({cloud: {cloudName: 'dpbh42kjy'}});
+  
   return (
     <appContext.Provider
       value={{
@@ -63,6 +73,11 @@ function App() {
         searchedProducts,
         search,
         setSearchParams,
+
+        image,
+        setImage,
+        url,
+        setUrl,
       }}
     >
       <div className="App">

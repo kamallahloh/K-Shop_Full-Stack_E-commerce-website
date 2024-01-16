@@ -3,7 +3,7 @@ import axios from "axios";
 import React, { useContext, useState } from "react";
 
 import {
-  // MDBFile,
+  MDBFile,
   MDBBtn,
   MDBContainer,
   MDBCard,
@@ -11,9 +11,10 @@ import {
   MDBInput,
 } from "mdb-react-ui-kit";
 import { appContext } from "../App";
+import Products from "./Products";
 
 const StoreDashboard = () => {
-  const { storeToken } = useContext(appContext);
+  const { storeToken, image, setImage, url, setUrl } = useContext(appContext);
 
   //? addProduct ///////////////////////////////
   const [productData, setProductData] = useState({
@@ -42,6 +43,31 @@ const StoreDashboard = () => {
       .catch((error) => {
         console.log(error.response.data.message);
         setSuccessfulAddProduct(error.response.data.message);
+      });
+  };
+
+  //* Upload Images to Cloudinary //////////////////////////
+  const [successfulImageUpload, setSuccessfulImageUpload] = useState("");
+
+  const uploadImage = () => {
+    const data = new FormData();
+    data.append("file", image);
+    data.append("upload_preset", "imageToCloud");
+    data.append("cloud_name", "dpbh42kjy");
+
+    axios
+      .post("https://api.cloudinary.com/v1_1/dpbh42kjy/image/upload", data)
+      // .then((resp) => resp.json())
+      .then((data) => {
+        // console.log("data", data);
+        setUrl(data.data.url);
+        setProductData({ ...productData, images: [data.data.url] });
+        console.log(`uploaded image url"${data.data.url}"`);
+        setSuccessfulImageUpload("Image uploaded successfully");
+      })
+      .catch((err) => {
+        console.log(err);
+        setSuccessfulImageUpload("Image failed to upload");
       });
   };
 
@@ -83,10 +109,31 @@ const StoreDashboard = () => {
               }}
             />
 
-            {/* <div>
-              <MDBFile label="Images" id="images" multiple />
+            <div>
+              <div className="d-flex align-items-center justify-content-center gap-1">
+                <MDBFile
+                  label="Image"
+                  id="image"
+                  // multiple
+                  size="sm"
+                  onChange={(e) => setImage(e.target.files[0])}
+                />
+
+                <button
+                  id="mdb-btn"
+                  className="gradient-custom-4"
+                  size="sx"
+                  onClick={uploadImage}
+                >
+                  Upload
+                </button>
+              </div>
+              {successfulImageUpload ? (
+                <p className="text-success">{successfulImageUpload}</p>
+              ) : (
+                <p>upload image first</p>
+              )}
             </div>
-            <br /> */}
 
             <MDBInput
               wrapperClass="mb-4"
@@ -125,6 +172,8 @@ const StoreDashboard = () => {
           </MDBCardBody>
         </MDBCard>
       </MDBContainer>
+
+      <Products />
     </div>
   );
 };

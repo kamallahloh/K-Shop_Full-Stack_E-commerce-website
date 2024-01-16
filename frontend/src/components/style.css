@@ -17,8 +17,6 @@
   );
 }
 
-
-
 .gradient-custom-4 {
   /* fallback for old browsers */
   background: #84fab0;
@@ -38,6 +36,9 @@
   );
 }
 
-#mdb-btn{
-    border: none;
+#mdb-btn {
+  border: none;
+  color: white;
+  font-weight: bolder;
+  font-size: large;
 }
