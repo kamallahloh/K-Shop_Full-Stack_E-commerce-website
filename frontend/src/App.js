@@ -5,7 +5,7 @@ import { Routes, Route, useSearchParams } from "react-router-dom";
 
 import {Cloudinary} from "@cloudinary/url-gen";
 
-import Cart from "./components/Cart";
+import Cart from "./components/Cart/Cart";
 import Products from "./components/Products";
 import Navbar from "./components/Navbar";
 import StoreDashboard from "./components/StoreDashboard";
@@ -53,6 +53,7 @@ function App() {
   //* Upload Images to Cloudinary //////////////////////////
   const [image, setImage] = useState("");
   const [url, setUrl] = useState("");
+  // eslint-disable-next-line
   const cld = new Cloudinary({cloud: {cloudName: 'dpbh42kjy'}});
   
   return (

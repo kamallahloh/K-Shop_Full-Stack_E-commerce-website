@@ -8,9 +8,7 @@ const Products = () => {
 
   useEffect(() => {
     axios
-      .get(
-        "http://localhost:5000/products"
-      )
+      .get("http://localhost:5000/products")
       .then((results) => {
         setProducts(results.data.products);
       })
@@ -33,11 +31,11 @@ const Products = () => {
               </h4>
 
               {/* flex-wrap-reverse ==> new added product will be on top of the page */}
-              <div className="d-flex flex-wrap-reverse align-items-center justify-content-center">
+              <div className="d-flex flex-wrap-reverse flex-row-reverse align-items-center justify-content-center">
                 {searchedProducts.map((product) => {
                   return (
                     <div
-                      className="product-card col-xl-3 col-lg-4 col-md-6 col-sm-8 col-9 m-3 p-2 border border-1 border-secondary rounded-9"
+                      className="product-card col-xl-3 col-lg-4 col-md-6 col-sm-8 col-9 m-3 p-2 border border-1 border-secondary rounded-9 "
                       key={product._id}
                       id={product._id}
                     >

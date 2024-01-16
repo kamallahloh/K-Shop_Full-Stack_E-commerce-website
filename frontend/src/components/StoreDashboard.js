@@ -14,7 +14,7 @@ import { appContext } from "../App";
 import Products from "./Products";
 
 const StoreDashboard = () => {
-  const { storeToken, image, setImage, url, setUrl } = useContext(appContext);
+  const { storeToken, image, setImage, setUrl } = useContext(appContext);
 
   //? addProduct ///////////////////////////////
   const [productData, setProductData] = useState({
