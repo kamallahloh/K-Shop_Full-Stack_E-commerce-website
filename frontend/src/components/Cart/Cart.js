@@ -37,7 +37,7 @@ const Cart = () => {
         console.log(error.response.data.message);
         setUserCart(<>{error.response.data.message}</>);
       });
-  }, [setUserCart, userToken]);
+  }, [, /* setUserCart */ userToken]);
 
   //! mappedUserCart ///////////////////////////////
   const mappedUserCart = userCart.map((cartItem) => {
@@ -45,6 +45,7 @@ const Cart = () => {
       <div
         className="row mb-2 d-flex justify-content-between align-items-center w-100 col-12"
         key={cartItem.product._id}
+        id={cartItem.product._id}
       >
         <div className="col-sm-2 col-md-2 col-lg-2 col-xl-2">
           <img
@@ -63,7 +64,7 @@ const Cart = () => {
               className="btn btn-link px-2"
               //* deleteCartItem ////////////////////
 
-              onClick={() => {
+              onClick={(e) => {
                 axios
                   .delete(
                     `http://localhost:5000/carts/${cartItem.product._id}`,
@@ -77,6 +78,12 @@ const Cart = () => {
                     console.log(
                       `item: ( ${cartItem.product.productName} ) has been deleted from the cart`
                     );
+
+                    //! delete the cartItem from the state holds all userCartItems
+                    const newUserCart = userCart.filter((item, i) => {
+                      return cartItem.product._id !== item.product._id;
+                    });
+                    setUserCart(newUserCart);
                   })
                   .catch((err) => {
                     console.log(err);
@@ -98,7 +105,8 @@ const Cart = () => {
             id="form1"
             min="0"
             name="quantity"
-            // value="1"
+            // value={cartItem.quantity}
+            placeholder={cartItem.quantity}
             type="number"
             className="form-control form-control-sm"
           />

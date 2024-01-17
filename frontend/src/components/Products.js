@@ -87,7 +87,7 @@ const Products = () => {
                               console.log(userToken);
                               axios
                                 .post(
-                                  `http://localhost:5000/carts/${product._id}`,
+                                  `http://localhost:5000/carts/${product._id}`,{},
                                   {
                                     headers: {
                                       authorization: `Bearer ${userToken}`,
