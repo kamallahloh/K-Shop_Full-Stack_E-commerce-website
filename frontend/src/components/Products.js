@@ -20,8 +20,6 @@ const Products = () => {
 
   return (
     <section className="products">
-      {/* {successfulDelete && <>{successfulDelete}</>}*/}
-
       {searchedProducts ? (
         Array.isArray(searchedProducts) && searchedProducts.length > 0 ? (
           <>

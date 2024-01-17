@@ -11,8 +11,9 @@ const getAllCartProducts = (req, res) => {
   const userId = req.token.userId;
   usersModel
     .findById(userId)
+    .populate("userCart.product")
     .then((result) => {
-      console.log(result.userCart);
+      // console.log(result.userCart);
       res.status(200).json({
         success: true,
         userCart: result.userCart,

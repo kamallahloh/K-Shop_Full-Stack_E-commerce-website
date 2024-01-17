@@ -3,7 +3,7 @@ import "./App.css";
 import { createContext, useState } from "react";
 import { Routes, Route, useSearchParams } from "react-router-dom";
 
-import {Cloudinary} from "@cloudinary/url-gen";
+import { Cloudinary } from "@cloudinary/url-gen";
 
 import Cart from "./components/Cart/Cart";
 import Products from "./components/Products";
@@ -50,12 +50,15 @@ function App() {
     );
   });
 
+  //*  userCart list //////////////////////////
+  const [userCart, setUserCart] = useState([]);
+
   //* Upload Images to Cloudinary //////////////////////////
   const [image, setImage] = useState("");
   const [url, setUrl] = useState("");
   // eslint-disable-next-line
-  const cld = new Cloudinary({cloud: {cloudName: 'dpbh42kjy'}});
-  
+  const cld = new Cloudinary({ cloud: { cloudName: "dpbh42kjy" } });
+
   return (
     <appContext.Provider
       value={{
@@ -63,18 +66,21 @@ function App() {
         isUserLoggedIn,
         userLocalStorage,
         setUserLocalStorage,
-
+        //
         storeToken,
         isStoreLoggedIn,
         storeLocalStorage,
         setStoreLocalStorage,
-
+        //
         products,
         setProducts,
         searchedProducts,
         search,
         setSearchParams,
-
+        //
+        userCart,
+        setUserCart,
+        //
         image,
         setImage,
         url,

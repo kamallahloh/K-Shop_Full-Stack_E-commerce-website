@@ -1,8 +1,42 @@
+import axios from "axios";
+import { appContext } from "../../App";
 import "./style.css";
 
-import React from "react";
+import React, { useContext, useEffect } from "react";
 
 const Cart = () => {
+  const { userToken, userCart, setUserCart } = useContext(appContext);
+  console.log(userCart);
+
+  //* total num of Items in the cart.
+  const numOfItems = userCart.reduce(
+    (acc, cartItem) => acc + cartItem.quantity,
+    0
+  );
+
+  //* total price of Items in the cart.
+  const totalPrice = userCart.reduce(
+    (acc, cartItem) => acc + cartItem.quantity * cartItem.product.price,
+    0
+  );
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/carts", {
+        headers: {
+          authorization: `Bearer ${userToken}`,
+        },
+      })
+      .then((results) => {
+        // console.log(results.data.userCart);
+        setUserCart(results.data.userCart);
+      })
+      .catch((error) => {
+        console.log(error.response.data.message);
+        setUserCart(<>{error.response.data.message}</>);
+      });
+  }, [setUserCart, userToken]);
+
   return (
     <section className="h-100 h-custom" style={{ backgroundColor: "#d2c9ff" }}>
       <div className="container py-5 h-100">
@@ -20,54 +54,65 @@ const Cart = () => {
                         <h1 className="fw-bold mb-0 text-black">
                           Shopping Cart
                         </h1>
-                        <h6 className="mb-0 text-muted">1 item/s</h6>
+                        <h6 className="mb-0 text-muted">{numOfItems} item/s</h6>
                       </div>
                       <hr className="my-4" />
 
-                      <div className="row mb-4 d-flex justify-content-between align-items-center">
-                        <div className="col-sm-2 col-lg-2 col-xl-2">
-                          <img
-                            src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-shopping-carts/img5.webp"
-                            className="img-fluid rounded-3"
-                            alt="Cotton T-shirt"
-                          />
-                        </div>
-                        <div className="col-sm-3 col-lg-3 col-xl-3">
-                          <h6 className="text-muted">Shirt</h6>
-                          <h6 className="text-black mb-0">Cotton T-shirt</h6>
-                        </div>
-                        <div className="col-sm-4 col-lg-3 col-xl-2 d-flex">
-                          <button
-                            className="btn btn-link px-2"
-                            onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
-                          >
-                            <i className="fas fa-minus"></i>
-                          </button>
-
-                          <input
-                            id="form1"
-                            min="0"
-                            name="quantity"
-                            value="1"
-                            type="number"
-                            className="form-control form-control-sm"
-                          />
-
-                          <button
-                            className="btn btn-link px-2"
-                            onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
-                          >
-                            <i className="fas fa-plus"></i>
-                          </button>
-                        </div>
-                        <div className="col-sm-2 col-lg-2 col-xl-2 offset-lg-1">
-                          <h6 className="mb-0">€ 44.00</h6>
-                        </div>
-                        <div className="col-sm-1 col-lg-1 col-xl-1 text-end">
-                          <a href="#!" className="text-muted">
-                            <i className="fas fa-times"></i>
-                          </a>
-                        </div>
+                      <div className="products">
+                        {userCart ? (
+                          Array.isArray(userCart) && userCart.length > 0 ? (
+                            userCart.map((cartItem) => {
+                              return (
+                                <div
+                                  className="row mb-4 d-flex justify-content-between align-items-center"
+                                  key={cartItem._id}
+                                >
+                                  <div className="col-sm-2 col-lg-2 col-xl-2">
+                                    <img
+                                      src={cartItem.product.images[0]}
+                                      className="img-fluid rounded-3"
+                                      alt={cartItem.product.productName}
+                                    />
+                                  </div>
+                                  <div className="col-sm-4 col-lg-3 col-xl-3">
+                                    <h6 className="text-muted">
+                                      {cartItem.product.categories?.[0]}
+                                    </h6>
+                                    <h6 className="text-black mb-0">
+                                      {cartItem.product.productName}
+                                    </h6>
+                                  </div>
+                                  <div className="col-sm-2 col-lg-3 col-xl-2">
+                                    <input
+                                      id="form1"
+                                      min="0"
+                                      name="quantity"
+                                      // value={cartItem.quantity}
+                                      type="number"
+                                      className="form-control form-control-sm"
+                                    />
+                                  </div>
+                                  <div className="col-sm-3 col-lg-2 col-xl-2 offset-lg-1">
+                                    <h6 className="mb-0">
+                                      $
+                                      {cartItem.product.price *
+                                        cartItem.quantity}
+                                    </h6>
+                                  </div>
+                                  <div className="col-sm-1 col-lg-1 col-xl-1 text-end">
+                                    <a href="#!" className="text-muted">
+                                      <i className="fas text-danger fa-times"></i>
+                                    </a>
+                                  </div>
+                                </div>
+                              );
+                            })
+                          ) : (
+                            <div>{userCart}</div>
+                          )
+                        ) : (
+                          <div>No Products Yet</div>
+                        )}
                       </div>
 
                       <hr className="my-4" />
@@ -89,24 +134,19 @@ const Cart = () => {
 
                       <div className="d-flex justify-content-between mb-4">
                         <h5 className="text-uppercase">items Total</h5>
-                        <h5>€ 132.00</h5>
+                        <h5>${totalPrice}</h5>
                       </div>
 
-                      <h5 className="text-uppercase mb-3">Shipping</h5>
-
-                      <div className="mb-4 pb-2">
-                        <select className="select">
-                          <option value="1">Standard-Delivery- €5.00</option>
-                          <option value="3">Express-Delivery- €15.00</option>
-                          <option value="4">Same Day-Delivery- €45.00</option>
-                        </select>
+                      <div className="d-flex justify-content-between mb-4">
+                        <h5 className="text-uppercase">Shipping</h5>
+                        <h6>Standard Delivery: $5.00</h6>
                       </div>
 
                       <hr className="my-4" />
 
                       <div className="d-flex justify-content-between mb-5">
                         <h5 className="text-uppercase">Total price</h5>
-                        <h5>€ 137.00</h5>
+                        <h5>${totalPrice + 5}</h5>
                       </div>
 
                       <button
