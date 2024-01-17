@@ -58,6 +58,9 @@ const addProductToCart = async (req, res) => {
   const userId = req.token.userId;
   const addedProductId = req.params.id;
 
+  console.log("addedProductId", addedProductId);
+  console.log("req.token", req.token);
+  
   try {
     //* find the user by userId to extract old userCart and add the new product to it.
     const findUser = await usersModel.findById(userId);

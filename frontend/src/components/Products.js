@@ -1,10 +1,10 @@
 import axios from "axios";
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { appContext } from "../App";
 import { MDBIcon } from "mdb-react-ui-kit";
 
 const Products = () => {
-  const { setProducts, searchedProducts } = useContext(appContext);
+  const { userToken, setProducts, searchedProducts } = useContext(appContext);
 
   useEffect(() => {
     axios
@@ -17,6 +17,10 @@ const Products = () => {
         setProducts(<>{error.response.data.message}</>);
       });
   }, [setProducts]);
+
+  //* addToCart /////////////////////
+  const [successfullyAddedToCart, setSuccessfullyAddedToCart] = useState("");
+
   return (
     <section className="products">
       {searchedProducts ? (
@@ -73,13 +77,47 @@ const Products = () => {
                           <div className="mb-1">
                             Price <h4>${~~(product.price * 100) / 100} </h4>
                           </div>
+
                           <button
                             className="btn btn-outline-primary"
                             type="button"
+                            onClick={() => {
+                              //! addToCart //////////////// not working
+                              console.log(product._id);
+                              console.log(userToken);
+                              axios
+                                .post(
+                                  `http://localhost:5000/carts/${product._id}`,
+                                  {
+                                    headers: {
+                                      authorization: `Bearer ${userToken}`,
+                                    },
+                                  }
+                                )
+                                .then((result) => {
+                                  console.log(
+                                    `item: ( ${product.productName} ) has been added to the cart`
+                                  );
+                                  setSuccessfullyAddedToCart(
+                                    result.data.message
+                                  );
+                                })
+                                .catch((error) => {
+                                  console.log(error);
+                                  setSuccessfullyAddedToCart(
+                                    error.response.data.message
+                                  );
+                                });
+                            }}
                           >
                             Add To Cart <MDBIcon fas icon="cart-plus" />
                           </button>
                         </div>
+                        {successfullyAddedToCart && (
+                          <p className="text-success">
+                            {successfullyAddedToCart}
+                          </p>
+                        )}
                       </div>
                     </div>
                   );

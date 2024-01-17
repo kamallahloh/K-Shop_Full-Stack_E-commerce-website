@@ -3,7 +3,7 @@ const authorization = (string) => {
   return (req, res, next) => {
     if (!req.token.role.permissions.includes(string)) {
       console.log(
-        "Authorized to: ",
+        "Unauthorized to: ",
         string,
         req.token.role.permissions.includes(string)
       );
