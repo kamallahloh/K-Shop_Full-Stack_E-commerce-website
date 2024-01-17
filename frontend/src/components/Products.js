@@ -108,8 +108,10 @@ const Products = () => {
                                 })
                                 .catch((error) => {
                                   console.log(error);
+                                  setAddedProductId(product._id);
                                   setSuccessfullyAddedToCart(
-                                    error.response.data.message
+                                    // error.response.data.message
+                                    "Please first "
                                   );
                                 });
                             }}
@@ -118,11 +120,16 @@ const Products = () => {
                           </button>
                         </div>
                         {product._id === addedProductId &&
-                          successfullyAddedToCart && (
-                            <p className="text-success">
-                              {successfullyAddedToCart}
-                            </p>
-                          )}
+                        successfullyAddedToCart ? (
+                          <div className="text-danger">
+                            {successfullyAddedToCart}
+                            {successfullyAddedToCart === "Please first " && (
+                              <a href="/users/login">Login</a>
+                            )}
+                          </div>
+                        ) : (
+                          <div className="m-4"></div>
+                        )}
                       </div>
                     </div>
                   );

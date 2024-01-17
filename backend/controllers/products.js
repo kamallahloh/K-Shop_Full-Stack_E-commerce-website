@@ -374,10 +374,11 @@ const getProductsByStore = async (req, res) => {
       });
     } else {
       console.log(`All the Products for the store: ${store}`);
-      res.status(200).json({
-        success: true,
-        message: findProducts,
-      });
+      // res.status(200).json({
+      //   success: true,
+      //   message: findProducts,
+      // });
+      res.status(200).json(findProducts);
     }
   } catch (err) {
     console.log(err);

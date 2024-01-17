@@ -1,6 +1,6 @@
 import "./style.css";
 import axios from "axios";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import {
   MDBFile,
@@ -12,9 +12,38 @@ import {
 } from "mdb-react-ui-kit";
 import { appContext } from "../App";
 import Products from "./Products";
+import { useParams } from "react-router-dom";
 
-const StoreDashboard = () => {
-  const { storeToken, image, setImage, setUrl } = useContext(appContext);
+const StoreDashboard =  () => {
+  const {
+    storeToken,
+    tokenStoreId,
+    image,
+    setImage,
+    setUrl,
+
+    products,
+    setProducts,
+    searchedProducts,
+  } = useContext(appContext);
+
+  const { id } = useParams();
+  console.log(id);
+
+  // //* get Products By Store Id //////////////////
+
+  const getProductsByStore = () => {
+    axios
+      .get(
+        `http://localhost:5000/products/products_by_store?store=${id}`
+      )
+      .then((result) => {
+        setProducts(result.data);
+      })
+      .catch((error) => {console.log(error)});
+  };
+
+   useEffect(getProductsByStore, []);
 
   //? addProduct ///////////////////////////////
   const [productData, setProductData] = useState({

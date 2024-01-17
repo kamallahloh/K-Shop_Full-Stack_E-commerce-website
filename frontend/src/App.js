@@ -30,11 +30,12 @@ function App() {
     JSON.parse(localStorage.getItem("storeLocalStorage")) || {
       storeToken: null,
       isStoreLoggedIn: false,
+      tokenStoreId: 0,
     }
   );
 
   const { userToken, isUserLoggedIn } = userLocalStorage;
-  const { storeToken, isStoreLoggedIn } = storeLocalStorage;
+  const { storeToken, isStoreLoggedIn, tokenStoreId } = storeLocalStorage;
 
   //*  Products list //////////////////////////
   const [products, setProducts] = useState([]);
@@ -71,6 +72,7 @@ function App() {
         setUserLocalStorage,
         //
         storeToken,
+        tokenStoreId,
         isStoreLoggedIn,
         storeLocalStorage,
         setStoreLocalStorage,

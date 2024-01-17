@@ -17,7 +17,8 @@ import { appContext } from "../../App";
 function StoreLogin() {
   const navigate = useNavigate();
 
-  const { storeLocalStorage, setStoreLocalStorage } = useContext(appContext);
+  const { storeLocalStorage, setStoreLocalStorage, setProducts } =
+    useContext(appContext);
 
   const [loginData, setLoginData] = useState({
     email: "",
@@ -29,30 +30,43 @@ function StoreLogin() {
   const LoginButtonOnClick = () => {
     axios
       .post("http://localhost:5000/stores/login", loginData)
-      .then((result) => {
+      .then( (result) => {
         console.log(result.data.message);
         setSuccessfulLogin(result.data.message);
-
         setStoreLocalStorage(
           JSON.stringify({
-            ...storeLocalStorage,
             storeToken: result.data.token,
             isStoreLoggedIn: true,
+            tokenStoreId: result.data.storeId,
           })
         );
         localStorage.setItem(
           "storeLocalStorage",
           JSON.stringify({
-            ...storeLocalStorage,
             storeToken: result.data.token,
             isStoreLoggedIn: true,
+            tokenStoreId: result.data.storeId,
           })
         );
+
+        //* get Products By Store Id //////////////////
+
+          // await axios
+          //   .get(
+          //     `http://localhost:5000/products/products_by_store?store=${result.data.storeId}`
+          //   )
+          //   .then((result) => {
+          //     setProducts(result.data);
+          //   })
+          //   .catch((error) => {
+          //     console.log(error);
+          //   });
+
 
         setTimeout(() => {
           navigate(`/stores/${result.data.storeId}`);
           console.log(successfulLogin);
-          window.location.reload(true);
+          // window.location.reload(true);
         }, 2000);
       })
 
