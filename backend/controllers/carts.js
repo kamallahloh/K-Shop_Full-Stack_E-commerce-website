@@ -195,9 +195,7 @@ const updateQuantity = (req, res) => {
         //* A-2. update the cartItems list
         const updatedCartItems = await result.userCart.map((cartItem) => {
           if (cartItem.product.toString() === productId) {
-            // console.log("A cartItem.quantity", cartItem.quantity);
             cartItem.quantity = quantity;
-            // console.log("B cartItem.quantity", cartItem.quantity);
             return cartItem;
           }
           return cartItem;
