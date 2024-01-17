@@ -2,8 +2,8 @@ import axios from "axios";
 import { appContext } from "../../App";
 import "./style.css";
 
-import React, { useContext, useEffect, useState } from "react";
-import { MDBBtn } from "mdb-react-ui-kit";
+import React, { useContext, useEffect /* useState */ } from "react";
+// import { MDBBtn } from "mdb-react-ui-kit";
 
 const Cart = () => {
   const { userToken, userCart, setUserCart } = useContext(appContext);
@@ -21,6 +21,7 @@ const Cart = () => {
     0
   );
 
+  //* get Cart Items
   useEffect(() => {
     axios
       .get("http://localhost:5000/carts", {
@@ -38,18 +39,125 @@ const Cart = () => {
       });
   }, [setUserCart, userToken]);
 
-  //! updateQuantity //////////////////// not working yet
-  const [quantity, setQuantity] = useState(1);
-  const updateQuantity = (e, cartItemId) => {
-    userCart.map((cartItem) => {
-      if (cartItem.product.toString() === cartItemId) {
-        // setQuantity(e.target.value);
-        // e.target.value = quantity;
+  //! mappedUserCart ///////////////////////////////
+  const mappedUserCart = userCart.map((cartItem) => {
+    return (
+      <div
+        className="row mb-2 d-flex justify-content-between align-items-center w-100 col-12"
+        key={cartItem.product._id}
+      >
+        <div className="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+          <img
+            src={cartItem.product.images[0]}
+            className="img-fluid rounded-3"
+            alt={cartItem.product.productName}
+          />
+        </div>
+        <div className="col-sm-3 col-md-4 col-lg-3 col-xl-3 text-center">
+          <h6 className="text-muted">{cartItem.product.categories?.[0]}</h6>
+          <h6 className="text-black mb-0">{cartItem.product.productName}</h6>
+        </div>
+        <div className="col-sm-4 col-md-3 col-lg-4 col-xl-3 text-center d-flex">
+          {cartItem.quantity === 1 ? (
+            <button
+              className="btn btn-link px-2"
+              //* deleteCartItem ////////////////////
 
-        console.log("quantity", quantity);
-      }
-    });
-  };
+              onClick={() => {
+                axios
+                  .delete(
+                    `http://localhost:5000/carts/${cartItem.product._id}`,
+                    {
+                      headers: {
+                        authorization: `Bearer ${userToken}`,
+                      },
+                    }
+                  )
+                  .then((result) => {
+                    console.log(
+                      `item: ( ${cartItem.product.productName} ) has been deleted from the cart`
+                    );
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
+              }}
+            >
+              <i className="fas fa-x text-danger"></i>
+            </button>
+          ) : (
+            <button
+              className="btn btn-link px-2"
+              // onClick="this.parentNode.querySelector('input[type=number]').stepDown()"
+            >
+              <i className="fas fa-minus"></i>
+            </button>
+          )}
+
+          <input
+            id="form1"
+            min="0"
+            name="quantity"
+            // value="1"
+            type="number"
+            className="form-control form-control-sm"
+          />
+
+          <button
+            className="btn btn-link px-2"
+            // onClick="this.parentNode.querySelector('input[type=number]').stepUp()"
+          >
+            <i className="fas fa-plus"></i>
+          </button>
+
+          {/* <input
+          id="form1"
+          min="0"
+          max="99"
+          name="quantity"
+          value={cartItem.quantity}
+          type="number"
+          className="form-control form-control-sm"
+          onChange={(e) => {
+            updateQuantity(e, cartItem._id);
+          }}
+        /> */}
+          {/* <MDBBtn
+          onClick={(e) => {
+            updateQuantity(e, cartItem._id);
+          }}
+          size="sm"
+        >
+          update
+        </MDBBtn> */}
+        </div>
+        <div className="col-sm-3 col-md-3 col-lg-2 col-xl-2 offset-lg-1 text-center">
+          <h6 className="mb-0">
+            ${cartItem.product.price * cartItem.quantity}
+          </h6>
+        </div>
+        {/* <div className="col-sm-1 col-lg-1 col-xl-1 text-end">
+        <a href="#!" className="text-muted">
+          <i className="fas text-danger fa-times"></i>
+        </a>
+      </div> */}
+        <hr className="mt-4" />
+      </div>
+    );
+  });
+
+  //! updateQuantity //////////////////// not working yet
+  // const [quantity, setQuantity] = useState(1);
+  // const updateQuantity = (e, cartItemId) => {
+  //   userCart.map((cartItem) => {
+  //     if (cartItem.product.toString() === cartItemId) {
+  //       // setQuantity(e.target.value);
+  //       // e.target.value = quantity;
+
+  //       console.log("quantity", quantity);
+  //     }
+  //   });
+  // };
 
   return (
     <section className="h-100 h-custom" style={{ backgroundColor: "#d2c9ff" }}>
@@ -75,117 +183,7 @@ const Cart = () => {
                       <div className="products d-flex flex-wrap justify-content-center">
                         {userCart ? (
                           Array.isArray(userCart) && userCart.length > 0 ? (
-                            userCart.map((cartItem) => {
-                              return (
-                                <div
-                                  className="row mb-4 d-flex justify-content-between align-items-center w-100 col-12"
-                                  key={cartItem.product._id}
-                                >
-                                  <div className="col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                                    <img
-                                      src={cartItem.product.images[0]}
-                                      className="img-fluid rounded-3"
-                                      alt={cartItem.product.productName}
-                                    />
-                                  </div>
-                                  <div className="col-sm-3 col-md-4 col-lg-3 col-xl-3 text-center">
-                                    <h6 className="text-muted">
-                                      {cartItem.product.categories?.[0]}
-                                    </h6>
-                                    <h6 className="text-black mb-0">
-                                      {cartItem.product.productName}
-                                    </h6>
-                                  </div>
-                                  <div className="col-sm-4 col-md-3 col-lg-4 col-xl-3 text-center d-flex">
-                                    {cartItem.quantity === 1 ? (
-                                      <button
-                                        className="btn btn-link px-2"
-                                        //* deleteCartItem ////////////////////
-
-                                        onClick={() => {
-                                          axios
-                                            .delete(
-                                              `http://localhost:5000/carts/${cartItem.product._id}`,
-                                              {
-                                                headers: {
-                                                  authorization: `Bearer ${userToken}`,
-                                                },
-                                              }
-                                            )
-                                            .then((result) => {
-                                              console.log(
-                                                `item: ( ${cartItem.product.productName} ) has been deleted from the cart`
-                                              );
-                                            })
-                                            .catch((err) => {
-                                              console.log(err);
-                                            });
-                                        }}
-                                      >
-                                        <i className="fas fa-x text-danger"></i>
-                                      </button>
-                                    ) : (
-                                      <button
-                                        className="btn btn-link px-2"
-                                        // onClick="this.parentNode.querySelector('input[type=number]').stepDown()"
-                                      >
-                                        <i className="fas fa-minus"></i>
-                                      </button>
-                                    )}
-
-                                    <input
-                                      id="form1"
-                                      min="0"
-                                      name="quantity"
-                                      // value="1"
-                                      type="number"
-                                      className="form-control form-control-sm"
-                                    />
-
-                                    <button
-                                      className="btn btn-link px-2"
-                                      // onClick="this.parentNode.querySelector('input[type=number]').stepUp()"
-                                    >
-                                      <i className="fas fa-plus"></i>
-                                    </button>
-
-                                    {/* <input
-                                      id="form1"
-                                      min="0"
-                                      max="99"
-                                      name="quantity"
-                                      value={cartItem.quantity}
-                                      type="number"
-                                      className="form-control form-control-sm"
-                                      onChange={(e) => {
-                                        updateQuantity(e, cartItem._id);
-                                      }}
-                                    /> */}
-                                    {/* <MDBBtn
-                                      onClick={(e) => {
-                                        updateQuantity(e, cartItem._id);
-                                      }}
-                                      size="sm"
-                                    >
-                                      update
-                                    </MDBBtn> */}
-                                  </div>
-                                  <div className="col-sm-3 col-md-3 col-lg-2 col-xl-2 offset-lg-1 text-center">
-                                    <h6 className="mb-0">
-                                      $
-                                      {cartItem.product.price *
-                                        cartItem.quantity}
-                                    </h6>
-                                  </div>
-                                  {/* <div className="col-sm-1 col-lg-1 col-xl-1 text-end">
-                                    <a href="#!" className="text-muted">
-                                      <i className="fas text-danger fa-times"></i>
-                                    </a>
-                                  </div> */}
-                                  <hr className="mt-4" />
-                                </div>
-                              );
-                            })
+                            mappedUserCart
                           ) : (
                             <div>{userCart}</div>
                           )
@@ -194,7 +192,7 @@ const Cart = () => {
                         )}
                       </div>
 
-                      <div className="pt-3">
+                      <div className="pt-1">
                         <h6 className="mb-0">
                           <a href="#!" className="text-body">
                             <i className="fas fa-long-arrow-alt-left me-2"></i>

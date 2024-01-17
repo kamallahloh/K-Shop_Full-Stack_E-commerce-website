@@ -39,11 +39,14 @@ function App() {
   //*  Products list //////////////////////////
   const [products, setProducts] = useState([]);
 
+  //! [...products] creates a shallow copy, so reverse() does not mutate the original.
+  const reversedProducts = [...products].reverse();
+
   //* for the searchBar input value //////////////////////////
   const [searchParams, setSearchParams] = useSearchParams({ search: "" });
   const search = searchParams.get("search");
 
-  const searchedProducts = products.filter((product) => {
+  const searchedProducts = reversedProducts.filter((product) => {
     return (
       product.productName.toLowerCase().includes(search.toLowerCase()) ||
       product.description.toLowerCase().includes(search.toLowerCase())

@@ -17,7 +17,6 @@ const Products = () => {
         setProducts(<>{error.response.data.message}</>);
       });
   }, [setProducts]);
-
   return (
     <section className="products">
       {searchedProducts ? (
@@ -28,8 +27,8 @@ const Products = () => {
                 <strong>Products</strong>
               </h4>
 
-              {/* flex-wrap-reverse ==> new added product will be on top of the page */}
-              <div className="d-flex flex-wrap-reverse flex-row-reverse align-items-center justify-content-center">
+              {/* flex-wrap-reverse flex-row-reverse ==> new added product will be on top of the page */}
+              <div className="d-flex flex-wrap align-items-center justify-content-center">
                 {searchedProducts.map((product) => {
                   return (
                     <div
