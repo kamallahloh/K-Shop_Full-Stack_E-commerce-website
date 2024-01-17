@@ -106,7 +106,7 @@ const updateUserById = (req, res) => {
   const userId = req.params.id;
   // console.log("req.token.userId", req.token.userId);
 
-  let {
+  const {
     userName,
     firstName,
     lastName,
@@ -143,7 +143,7 @@ const updateUserById = (req, res) => {
             // role,
           });
 
-          let updatedUser = {
+          const updatedUser = {
             userName: userName ? userName : findUser.userName,
             firstName: firstName ? firstName : findUser.firstName,
             lastName: lastName ? lastName : findUser.lastName,

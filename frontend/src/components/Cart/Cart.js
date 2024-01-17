@@ -49,8 +49,8 @@ const Cart = () => {
               <div className="card-body p-0">
                 <div className="row g-0">
                   <div className="col-lg-8">
-                    <div className="p-5">
-                      <div className="d-flex justify-content-between align-items-center mb-5">
+                    <div className=" p-md-5 p-sm-4 p-5">
+                      <div className="d-flex justify-content-between align-items-center mb-3">
                         <h1 className="fw-bold mb-0 text-black">
                           Shopping Cart
                         </h1>
@@ -58,13 +58,13 @@ const Cart = () => {
                       </div>
                       <hr className="my-4" />
 
-                      <div className="products">
+                      <div className="products d-flex flex-wrap justify-content-center">
                         {userCart ? (
                           Array.isArray(userCart) && userCart.length > 0 ? (
                             userCart.map((cartItem) => {
                               return (
                                 <div
-                                  className="row mb-4 d-flex justify-content-between align-items-center"
+                                  className="row mb-4 d-flex justify-content-between align-items-center w-100 col-12"
                                   key={cartItem._id}
                                 >
                                   <div className="col-sm-2 col-lg-2 col-xl-2">
@@ -74,7 +74,7 @@ const Cart = () => {
                                       alt={cartItem.product.productName}
                                     />
                                   </div>
-                                  <div className="col-sm-4 col-lg-3 col-xl-3">
+                                  <div className="col-sm-4 col-lg-3 col-xl-3 text-center">
                                     <h6 className="text-muted">
                                       {cartItem.product.categories?.[0]}
                                     </h6>
@@ -82,17 +82,17 @@ const Cart = () => {
                                       {cartItem.product.productName}
                                     </h6>
                                   </div>
-                                  <div className="col-sm-2 col-lg-3 col-xl-2">
+                                  <div className="col-sm-2 col-lg-3 col-xl-2 text-center">
                                     <input
                                       id="form1"
                                       min="0"
                                       name="quantity"
-                                      // value={cartItem.quantity}
+                                      value={cartItem.quantity}
                                       type="number"
                                       className="form-control form-control-sm"
                                     />
                                   </div>
-                                  <div className="col-sm-3 col-lg-2 col-xl-2 offset-lg-1">
+                                  <div className="col-sm-3 col-lg-2 col-xl-2 offset-lg-1 text-center">
                                     <h6 className="mb-0">
                                       $
                                       {cartItem.product.price *
@@ -104,6 +104,7 @@ const Cart = () => {
                                       <i className="fas text-danger fa-times"></i>
                                     </a>
                                   </div>
+                                  <hr className="mt-4" />
                                 </div>
                               );
                             })
@@ -115,9 +116,7 @@ const Cart = () => {
                         )}
                       </div>
 
-                      <hr className="my-4" />
-
-                      <div className="pt-5">
+                      <div className="pt-3">
                         <h6 className="mb-0">
                           <a href="#!" className="text-body">
                             <i className="fas fa-long-arrow-alt-left me-2"></i>
@@ -128,7 +127,7 @@ const Cart = () => {
                     </div>
                   </div>
                   <div className="col-lg-4 bg-grey">
-                    <div className="p-5">
+                    <div className="p-5 sticky-top">
                       <h3 className="fw-bold mb-5 mt-2 pt-1">Summary</h3>
                       <hr className="my-4" />
 
@@ -141,6 +140,15 @@ const Cart = () => {
                         <h5 className="text-uppercase">Shipping</h5>
                         <h6>Standard Delivery: $5.00</h6>
                       </div>
+
+                      {/* <div className="d-flex justify-content-between mb-4">
+                        <h5 className="text-uppercase text-success">
+                          Discount: 99%
+                        </h5>
+                        <h5 className="text-success">
+                          <s>${totalPrice * 0.99}</s>
+                        </h5>
+                      </div> */}
 
                       <hr className="my-4" />
 

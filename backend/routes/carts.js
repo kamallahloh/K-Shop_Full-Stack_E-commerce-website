@@ -4,6 +4,7 @@ const {
   deleteAllCartProducts,
   addProductToCart,
   getCartProductById,
+  updateQuantity,
   deleteProductFromCart,
   // moveProductToFav,
 } = require("../controllers/carts");
@@ -40,6 +41,13 @@ cartsRouter.get(
   authentication,
   authorization("MANAGE-CARTS"),
   getCartProductById
+);
+
+cartsRouter.put(
+  "/:id",
+  authentication,
+  authorization("MANAGE-CARTS"),
+  updateQuantity
 );
 
 cartsRouter.delete(

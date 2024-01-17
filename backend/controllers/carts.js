@@ -171,6 +171,70 @@ const getCartProductById = (req, res) => {
     });
 };
 
+//? updateQuantity ////////////////
+const updateQuantity = (req, res) => {
+  /* 
+    postman params /:id ==>
+    PUT http://localhost:5000/carts/65a6f73aa6742ee15e4613b9
+
+    req.body:
+{
+    "quantity": 5
+}
+  */
+
+  const { quantity } = req.body;
+  const userId = req.token.userId;
+  const productId = req.params.id;
+
+  //* A-1. find the user that own the cart
+  usersModel
+    .findById(userId)
+    .then(async (result) => {
+      try {
+        //* A-2. update the cartItems list
+        const updatedCartItems = await result.userCart.map((cartItem) => {
+          if (cartItem.product.toString() === productId) {
+            // console.log("A cartItem.quantity", cartItem.quantity);
+            cartItem.quantity = quantity;
+            // console.log("B cartItem.quantity", cartItem.quantity);
+            return cartItem;
+          }
+          return cartItem;
+        });
+
+        console.log("updatedCartItems", updatedCartItems);
+        //* A-3. update the cart in the usersModel database
+        usersModel
+          .findByIdAndUpdate(userId, { userCart: updatedCartItems })
+          .then((finalResult) => {
+            console.log(`The userCart was updated`);
+          })
+          .catch((err) => {
+            console.log(err);
+            console.log("usersModel.findByIdAndUpdate() Server error");
+          });
+
+        // console.log("updatedCartItems", updatedCartItems);
+        res.status(200).json({
+          success: true,
+          product: updatedCartItems,
+        });
+      } catch (err) {
+        console.log(err);
+        res.status(500).json({
+          success: false,
+          message: ".then(async  Server Error",
+          err,
+        });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(400).json("usersModel.findById(userId) Server Error");
+    });
+};
+
 //? deleteProductFromCart ////////////////
 const deleteProductFromCart = (req, res) => {
   /* 
@@ -225,6 +289,7 @@ module.exports = {
   deleteAllCartProducts,
   addProductToCart,
   getCartProductById,
+  updateQuantity,
   deleteProductFromCart,
   // moveProductToFav,
 };
