@@ -37,7 +37,7 @@ const Cart = () => {
         console.log(error.response.data.message);
         setUserCart(<>{error.response.data.message}</>);
       });
-  }, [, /* setUserCart */ userToken]);
+  }, [setUserCart, userToken]);
 
   //! mappedUserCart ///////////////////////////////
   const mappedUserCart = userCart.map((cartItem) => {
@@ -54,11 +54,11 @@ const Cart = () => {
             alt={cartItem.product.productName}
           />
         </div>
-        <div className="col-sm-3 col-md-4 col-lg-3 col-xl-3 text-center">
+        <div className="col-sm-5 col-md-5 col-lg-4 col-xl-3 text-center">
           <h6 className="text-muted">{cartItem.product.categories?.[0]}</h6>
           <h6 className="text-black mb-0">{cartItem.product.productName}</h6>
         </div>
-        <div className="col-sm-4 col-md-3 col-lg-4 col-xl-3 text-center d-flex">
+        <div className="col-sm-2 col-md-2 col-lg-3 col-xl-3 text-center d-flex justify-content-between align-items-center">
           {cartItem.quantity === 1 ? (
             <button
               className="btn btn-link px-2"
@@ -79,7 +79,7 @@ const Cart = () => {
                       `item: ( ${cartItem.product.productName} ) has been deleted from the cart`
                     );
 
-                    //! delete the cartItem from the state holds all userCartItems
+                    //* delete the cartItem from the state holds all userCartItems
                     const newUserCart = userCart.filter((item, i) => {
                       return cartItem.product._id !== item.product._id;
                     });
@@ -95,60 +95,74 @@ const Cart = () => {
           ) : (
             <button
               className="btn btn-link px-2"
-              // onClick="this.parentNode.querySelector('input[type=number]').stepDown()"
+              onClick={(e) => {
+                //* decrement cartItem quantity--  ////////////////////
+                cartItem.quantity--;
+                axios
+                  .put(
+                    `http://localhost:5000/carts/${cartItem.product._id}`,
+                    { quantity: cartItem.quantity },
+                    {
+                      headers: {
+                        authorization: `Bearer ${userToken}`,
+                      },
+                    }
+                  )
+                  .then((result) => {
+                    //* update the cartItem from the state holds all userCartItems
+                    setUserCart(userCart.map((item, i) => item));
+
+                    console.log(
+                      `item: ( ${cartItem.product.productName} ) quantity decreased to ${cartItem.quantity}`
+                    );
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
+              }}
             >
               <i className="fas fa-minus"></i>
             </button>
           )}
 
-          <input
-            id="form1"
-            min="0"
-            name="quantity"
-            // value={cartItem.quantity}
-            placeholder={cartItem.quantity}
-            type="number"
-            className="form-control form-control-sm"
-          />
+          <span className="cartItem-quantity">{cartItem.quantity}</span>
 
           <button
             className="btn btn-link px-2"
-            // onClick="this.parentNode.querySelector('input[type=number]').stepUp()"
+            onClick={(e) => {
+              //* increment cartItem quantity++  ////////////////////
+              cartItem.quantity++;
+              axios
+                .put(
+                  `http://localhost:5000/carts/${cartItem.product._id}`,
+                  { quantity: cartItem.quantity },
+                  {
+                    headers: {
+                      authorization: `Bearer ${userToken}`,
+                    },
+                  }
+                )
+                .then((result) => {
+                  //* update the cartItem from the state holds all userCartItems
+                  setUserCart(userCart.map((item, i) => item));
+
+                  console.log(
+                    `item: ( ${cartItem.product.productName} ) quantity increased to ${cartItem.quantity}`
+                  );
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+            }}
           >
             <i className="fas fa-plus"></i>
           </button>
-
-          {/* <input
-          id="form1"
-          min="0"
-          max="99"
-          name="quantity"
-          value={cartItem.quantity}
-          type="number"
-          className="form-control form-control-sm"
-          onChange={(e) => {
-            updateQuantity(e, cartItem._id);
-          }}
-        /> */}
-          {/* <MDBBtn
-          onClick={(e) => {
-            updateQuantity(e, cartItem._id);
-          }}
-          size="sm"
-        >
-          update
-        </MDBBtn> */}
         </div>
         <div className="col-sm-3 col-md-3 col-lg-2 col-xl-2 offset-lg-1 text-center">
           <h6 className="mb-0">
             ${cartItem.product.price * cartItem.quantity}
           </h6>
         </div>
-        {/* <div className="col-sm-1 col-lg-1 col-xl-1 text-end">
-        <a href="#!" className="text-muted">
-          <i className="fas text-danger fa-times"></i>
-        </a>
-      </div> */}
         <hr className="mt-4" />
       </div>
     );
@@ -211,8 +225,10 @@ const Cart = () => {
                     </div>
                   </div>
                   <div className="col-lg-4 bg-grey">
-                    <div className="p-5 sticky-top">
-                      <h3 className="fw-bold mb-5 mt-2 pt-1">Summary</h3>
+                    <div className="p-5 sticky-top ">
+                      <h3 className="fw-bold mb-5 mt-2 mt-lg-5 pt-1">
+                        Summary
+                      </h3>
                       <hr className="my-4" />
 
                       <div className="d-flex justify-content-between mb-4">
@@ -224,15 +240,6 @@ const Cart = () => {
                         <h5 className="text-uppercase">Shipping</h5>
                         <h6>Standard Delivery: $5.00</h6>
                       </div>
-
-                      {/* <div className="d-flex justify-content-between mb-4">
-                        <h5 className="text-uppercase text-success">
-                          Discount: 99%
-                        </h5>
-                        <h5 className="text-success">
-                          <s>${totalPrice * 0.99}</s>
-                        </h5>
-                      </div> */}
 
                       <hr className="my-4" />
 

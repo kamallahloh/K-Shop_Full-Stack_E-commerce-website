@@ -98,4 +98,4 @@ Your trello board link
 
 ## ⚠️ Guided By <a name = "guided_by"></a>
 
-This project is guided by ©️ **[MERAKI Academy](https://www.meraki-academy.org)**
+This project is guided by ©️ **[MERAKI Academy](https://www.meraki-academy.org)** 

@@ -20,6 +20,7 @@ const Products = () => {
 
   //* addToCart /////////////////////
   const [successfullyAddedToCart, setSuccessfullyAddedToCart] = useState("");
+  const [addedProductId, setAddedProductId] = useState(0);
 
   return (
     <section className="products">
@@ -82,12 +83,11 @@ const Products = () => {
                             className="btn btn-outline-primary"
                             type="button"
                             onClick={() => {
-                              //! addToCart //////////////// not working
-                              console.log(product._id);
-                              console.log(userToken);
+                              //* addToCart ///////////////////////
                               axios
                                 .post(
-                                  `http://localhost:5000/carts/${product._id}`,{},
+                                  `http://localhost:5000/carts/${product._id}`,
+                                  {},
                                   {
                                     headers: {
                                       authorization: `Bearer ${userToken}`,
@@ -98,9 +98,13 @@ const Products = () => {
                                   console.log(
                                     `item: ( ${product.productName} ) has been added to the cart`
                                   );
+                                  setAddedProductId(product._id);
                                   setSuccessfullyAddedToCart(
-                                    result.data.message
+                                    "Successfully Added to Cart"
                                   );
+                                  setTimeout(() => {
+                                    setSuccessfullyAddedToCart("");
+                                  }, 3000);
                                 })
                                 .catch((error) => {
                                   console.log(error);
@@ -113,11 +117,12 @@ const Products = () => {
                             Add To Cart <MDBIcon fas icon="cart-plus" />
                           </button>
                         </div>
-                        {successfullyAddedToCart && (
-                          <p className="text-success">
-                            {successfullyAddedToCart}
-                          </p>
-                        )}
+                        {product._id === addedProductId &&
+                          successfullyAddedToCart && (
+                            <p className="text-success">
+                              {successfullyAddedToCart}
+                            </p>
+                          )}
                       </div>
                     </div>
                   );

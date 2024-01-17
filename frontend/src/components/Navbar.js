@@ -43,7 +43,7 @@ export default function Navbar() {
   };
 
   return (
-    <MDBNavbar expand="sm" light bgColor="light">
+    <MDBNavbar expand="sm" light bgColor="light" className="sticky-top">
       <MDBContainer fluid>
         <MDBNavbarBrand href="/products">K-shop</MDBNavbarBrand>
 
