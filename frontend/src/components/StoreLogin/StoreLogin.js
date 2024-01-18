@@ -17,7 +17,7 @@ import { appContext } from "../../App";
 function StoreLogin() {
   const navigate = useNavigate();
 
-  const { storeLocalStorage, setStoreLocalStorage, setProducts } =
+  const {setStoreLocalStorage } =
     useContext(appContext);
 
   const [loginData, setLoginData] = useState({

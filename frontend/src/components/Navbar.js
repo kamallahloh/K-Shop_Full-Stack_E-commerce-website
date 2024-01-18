@@ -18,8 +18,11 @@ import {
   MDBDropdownItem,
   MDBCollapse,
 } from "mdb-react-ui-kit";
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
+  const navigate = useNavigate();
+
   const [openBasic, setOpenBasic] = useState(false);
   const {
     isUserLoggedIn,
@@ -33,6 +36,7 @@ export default function Navbar() {
     setUserLocalStorage({ ...userLocalStorage, userToken: null });
     setUserLocalStorage({ ...userLocalStorage, isUserLoggedIn: false });
     localStorage.removeItem("userLocalStorage");
+    navigate("/");
   };
 
   //* Search Bar

@@ -14,17 +14,18 @@ import { appContext } from "../App";
 import Products from "./Products";
 import { useParams } from "react-router-dom";
 
-const StoreDashboard =  () => {
+const StoreDashboard = () => {
   const {
     storeToken,
-    tokenStoreId,
+    // tokenStoreId,
     image,
     setImage,
     setUrl,
 
     products,
     setProducts,
-    searchedProducts,
+
+    // searchedProducts,
   } = useContext(appContext);
 
   const { id } = useParams();
@@ -34,16 +35,16 @@ const StoreDashboard =  () => {
 
   const getProductsByStore = () => {
     axios
-      .get(
-        `http://localhost:5000/products/products_by_store?store=${id}`
-      )
+      .get(`http://localhost:5000/products/products_by_store?store=${id}`)
       .then((result) => {
         setProducts(result.data);
       })
-      .catch((error) => {console.log(error)});
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
-   useEffect(getProductsByStore, []);
+  useEffect(getProductsByStore, []);
 
   //? addProduct ///////////////////////////////
   const [productData, setProductData] = useState({
