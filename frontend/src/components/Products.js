@@ -4,7 +4,15 @@ import { appContext } from "../App";
 import { MDBIcon } from "mdb-react-ui-kit";
 
 const Products = () => {
-  const { userToken, setProducts, searchedProducts } = useContext(appContext);
+  const {
+    userToken,
+    setProducts,
+    searchedProducts,
+    successfullyAddedToCart,
+    setSuccessfullyAddedToCart,
+    addedProductId,
+    setAddedProductId,
+  } = useContext(appContext);
 
   useEffect(() => {
     axios
@@ -17,10 +25,6 @@ const Products = () => {
         setProducts(<>{error.response.data.message}</>);
       });
   }, [setProducts]);
-
-  //* addToCart /////////////////////
-  const [successfullyAddedToCart, setSuccessfullyAddedToCart] = useState("");
-  const [addedProductId, setAddedProductId] = useState(0);
 
   return (
     <section className="products">

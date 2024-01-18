@@ -64,10 +64,10 @@ const addProduct = (req, res) => {
 const getAllProducts = (req, res) => {
   productsModel
     .find({})
-    .populate(
-      "store",
-      "-_id -country -email -phoneNumber -password -products -role -__v"
-    )
+    // .populate(
+    //   "store",
+    //   "-country -email -phoneNumber -password -products -role -__v"
+    // )
     .then((results) => {
       console.log(`getAllProducts done`);
       res.status(200).json({
