@@ -15,10 +15,13 @@ import UserDashboard from "./components/UserDashboard";
 import UserLogin from "./components/UserLogin/UserLogin";
 import UserRegister from "./components/UserRegister/UserRegister";
 import NotFound from "./components/NotFound";
+import Footer from "./components/Footer";
 
 export const appContext = createContext();
 
 function App() {
+  const [buttonToggler, setButtonToggler] = useState(true);
+
   //*  LocalStorage //////////////////////////
   const [userLocalStorage, setUserLocalStorage] = useState(
     JSON.parse(localStorage.getItem("userLocalStorage")) || {
@@ -74,6 +77,9 @@ function App() {
   return (
     <appContext.Provider
       value={{
+        buttonToggler,
+        setButtonToggler,
+        //
         userToken,
         isUserLoggedIn,
         userLocalStorage,
@@ -145,6 +151,7 @@ function App() {
           }
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <Footer />
       </div>
     </appContext.Provider>
   );

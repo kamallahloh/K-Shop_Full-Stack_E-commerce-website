@@ -238,7 +238,7 @@ const Cart = () => {
 
                       <div className="d-flex justify-content-between mb-4">
                         <h5 className="text-uppercase">Shipping</h5>
-                        <h6>Standard Delivery: $5.00</h6>
+                        <h6>Delivery: $5.00</h6>
                       </div>
 
                       <hr className="my-4" />
