@@ -35,6 +35,9 @@ const StoreDashboard = () => {
     // search,
     // setSearchParams,
     //
+    successfullyDeleteProductById,
+    setSuccessfullyDeleteProductById,
+    //
     // userCart,
     // setUserCart,
     successfullyAddedToCart,
@@ -97,7 +100,6 @@ const StoreDashboard = () => {
   const [successfulAddProduct, setSuccessfulAddProduct] = useState("");
 
   const addProductButtonOnClick = () => {
-    // console.table(productData);
     axios
       .post("http://localhost:5000/products", productData, {
         headers: {
@@ -105,10 +107,20 @@ const StoreDashboard = () => {
         },
       })
       .then((result) => {
+        //* add the product to the state holds it in store page
+        // console.table(searchedProducts);
+        productData.store = id;
+        productData.key = id;
+        searchedProducts.unshift(productData);
+        const reversedSearchedProducts = [...searchedProducts].reverse();
+        setProducts(reversedSearchedProducts);
+
+        //
         console.log(result.data.message);
         setSuccessfulAddProduct(result.data.message);
       })
       .catch((error) => {
+        // console.log(error);
         console.log(error.response.data.message);
         setSuccessfulAddProduct(error.response.data.message);
       });
@@ -136,6 +148,37 @@ const StoreDashboard = () => {
       .catch((err) => {
         console.log(err);
         setSuccessfulImageUpload("Image failed to upload");
+      });
+  };
+
+  //? deleteProductById ///////////////////////////////
+
+  const deleteProductByIdOnClick = (e, ProductId) => {
+    axios
+      .delete(`http://localhost:5000/products/${ProductId}`, {
+        headers: {
+          authorization: `Bearer ${storeToken}`,
+        },
+      })
+      .then((result) => {
+        console.log(
+          `Product: (${result.data.product.productName}) has been deleted permanently`
+        );
+        setSuccessfullyDeleteProductById(
+          `Product: (${result.data.product.productName}) has been deleted permanently`
+        );
+
+        //* delete the product from the state holds it in store page
+        const newProducts = searchedProducts.reverse().filter((item, i) => {
+          // console.log("ProductId", ProductId);
+          // console.log("item._id", item._id);
+          return ProductId !== item._id;
+        });
+        setProducts(newProducts);
+      })
+      .catch((error) => {
+        console.log(error.response.data.message);
+        setSuccessfullyDeleteProductById(error.response.data.message);
       });
   };
 
@@ -256,6 +299,14 @@ const StoreDashboard = () => {
                   <strong>Products</strong>
                 </h4>
 
+                <div className="notifications">
+                  {successfullyDeleteProductById && (
+                    <p className="text-danger">
+                      {successfullyDeleteProductById}
+                    </p>
+                  )}
+                </div>
+
                 {/* flex-wrap-reverse flex-row-reverse ==> new added product will be on top of the page */}
                 <div className="d-flex flex-wrap align-items-center justify-content-center">
                   {newProductsByStore.map((product) => {
@@ -279,6 +330,23 @@ const StoreDashboard = () => {
                                     <i className="bi bi-heart"></i>
                                   </span>
                                 </h5>
+                              </div>
+                            </div>
+                            <div className="mask">
+                              <div
+                                className="d-flex justify-content-end align-items-start m-2"
+                                style={{ position: "relative", zIndex: "1" }}
+                              >
+                                {/* deleteProductByIdOnClick ////// */}
+                                <h6
+                                  onClick={(e) => {
+                                    deleteProductByIdOnClick(e, product._id);
+                                  }}
+                                >
+                                  <span className="badge bg-white text-danger">
+                                    <i className="fas fa-x"></i>
+                                  </span>
+                                </h6>
                               </div>
                             </div>
                             <div className="hover-overlay">

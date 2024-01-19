@@ -85,8 +85,8 @@ const Cart = () => {
                     });
                     setUserCart(newUserCart);
                   })
-                  .catch((err) => {
-                    console.log(err);
+                  .catch((error) => {
+                    console.log(error.response.data.message);
                   });
               }}
             >

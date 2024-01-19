@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useContext, useState } from "react";
+import React, { useEffect, useContext /* useState */ } from "react";
 import { appContext } from "../App";
 import { MDBIcon } from "mdb-react-ui-kit";
 
@@ -61,6 +61,7 @@ const Products = () => {
                               </h5>
                             </div>
                           </div>
+
                           <div className="hover-overlay">
                             <div className="mask"></div>
                           </div>

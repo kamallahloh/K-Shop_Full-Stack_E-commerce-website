@@ -240,7 +240,9 @@ const deleteProductById = (req, res) => {
           //! we need to delete the product from 3 places:
           //* A. From the productsModel
           //* A-1 productsModel.findByIdAndDelete(productId)
-          await productsModel.findByIdAndDelete(productId);
+          const deleteProduct = await productsModel.findByIdAndDelete(
+            productId
+          );
 
           //* ////////////////////
           //* B. from storesModel: to delete the product from the store (follow the 3 steps mentioned down).
@@ -326,6 +328,7 @@ const deleteProductById = (req, res) => {
           res.status(200).json({
             success: true,
             message: "product deleted",
+            product: deleteProduct,
           });
         } catch (err) {
           console.log(err);

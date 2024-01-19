@@ -42,7 +42,6 @@ function App() {
 
   //! [...products] creates a shallow copy, so reverse() does not mutate the original.
   const reversedProducts = [...products].reverse();
-  // console.log('reversedProducts', reversedProducts)
 
   //* for the searchBar input value //////////////////////////
   const [searchParams, setSearchParams] = useSearchParams({ search: "" });
@@ -54,8 +53,14 @@ function App() {
       product.description.toLowerCase().includes(search.toLowerCase())
     );
   });
+
+  //* deleteProductById //////////////////////////
+  const [successfullyDeleteProductById, setSuccessfullyDeleteProductById] =
+    useState("NOTIFICATIONS");
+
   //*  userCart list //////////////////////////
   const [userCart, setUserCart] = useState([]);
+
   //* addToCart /////////////////////
   const [successfullyAddedToCart, setSuccessfullyAddedToCart] = useState("");
   const [addedProductId, setAddedProductId] = useState(0);
@@ -85,6 +90,9 @@ function App() {
         searchedProducts,
         search,
         setSearchParams,
+        //
+        successfullyDeleteProductById,
+        setSuccessfullyDeleteProductById,
         //
         userCart,
         setUserCart,
