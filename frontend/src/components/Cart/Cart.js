@@ -224,7 +224,7 @@ const Cart = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-lg-4 bg-grey">
+                  <div className="col-lg-4 bg-grey z-0">
                     <div className="p-5 sticky-top ">
                       <h3 className="fw-bold mb-5 mt-2 mt-lg-5 pt-1">
                         Summary

@@ -97,7 +97,6 @@ export default function Navbar() {
                       My Account
                     </MDBDropdownToggle>
                     <MDBDropdownMenu>
-                      <MDBDropdownItem link>Orders</MDBDropdownItem>
                       <MDBDropdownItem link href="/users/:id">
                         Profile
                       </MDBDropdownItem>
