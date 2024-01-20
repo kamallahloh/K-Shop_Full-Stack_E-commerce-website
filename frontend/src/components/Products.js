@@ -1,7 +1,18 @@
 import axios from "axios";
-import React, { useEffect, useContext /* useState */ } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { appContext } from "../App";
-import { MDBIcon } from "mdb-react-ui-kit";
+
+import {
+  MDBIcon,
+  MDBBtn,
+  MDBModal,
+  MDBModalDialog,
+  MDBModalContent,
+  MDBModalHeader,
+  MDBModalTitle,
+  MDBModalBody,
+  MDBModalFooter,
+} from "mdb-react-ui-kit";
 
 const Products = () => {
   const {
@@ -96,6 +107,12 @@ const Products = () => {
       });
   };
 
+  //* Product details MODAL ///////////////////////////////
+
+  const [fullscreenXlModal, setFullscreenXlModal] = useState(false);
+
+  const toggleOpen = () => setFullscreenXlModal(!fullscreenXlModal);
+
   return (
     <section className="products">
       {searchedProducts ? (
@@ -138,13 +155,145 @@ const Products = () => {
                         </a>
                       </div>
                       <div className="card-body">
-                        <a href="#!">
+                        <div className="product-details">
+                          <MDBModal
+                            tabIndex="-1"
+                            open={fullscreenXlModal}
+                            setOpen={setFullscreenXlModal}
+                          >
+                            <MDBModalDialog size="fullscreen">
+                              <MDBModalContent>
+                                <MDBModalHeader>
+                                  <MDBModalTitle>
+                                    {product.productName}
+                                  </MDBModalTitle>
+                                  <MDBBtn
+                                    className="btn-close"
+                                    color="none"
+                                    onClick={toggleOpen}
+                                  ></MDBBtn>
+                                </MDBModalHeader>
+                                <MDBModalBody>
+                                  <div>
+                                    <aside>
+                                      <div className="border rounded-4 mb-3 d-flex justify-content-center">
+                                        <img
+                                          // style={{
+                                          //   maxWidth: "100%",
+                                          //   maxHeight: "100vh",
+                                          //   margin: "auto",
+                                          // }}
+                                          width="200"
+                                          height="200"
+                                          className="rounded-4"
+                                          src={product.images[0]}
+                                          alt={product.productName}
+                                        />
+                                      </div>
+                                      <div className="d-flex justify-content-center mb-3 gap-2">
+                                        {product.images.map((image, i) => {
+                                          if (i > 0) {
+                                            return (
+                                              <img
+                                                key={image}
+                                                width="60"
+                                                height="60"
+                                                className="rounded-2"
+                                                src={image}
+                                                alt={product.productName}
+                                              />
+                                            );
+                                          }
+                                        })}
+                                      </div>
+                                    </aside>
+                                    <main>
+                                      <div className="ps-lg-3">
+                                        <div className="d-flex flex-row my-3">
+                                          <span className="text-muted">
+                                            <i className="fas fa-shopping-basket fa-sm mx-1"></i>
+                                            {Math.ceil(Math.random() * 1000)}{" "}
+                                            orders
+                                          </span>
+                                          <span className="text-success ms-2">
+                                            In stock
+                                          </span>
+                                        </div>
+
+                                        <div className="mb-3">
+                                          <span className="h5">
+                                            ${~~(product.price * 100) / 100}
+                                          </span>
+                                          <span className="text-muted">
+                                            /per Item
+                                          </span>
+                                        </div>
+
+                                        <p>{product.description}</p>
+
+                                        <div className="row">
+                                          <dt className="col-3">Type:</dt>
+                                          <dd className="col-9">Regular</dd>
+
+                                          <dt className="col-3">Color</dt>
+                                          <dd className="col-9">Black</dd>
+
+                                          <dt className="col-3">Category</dt>
+                                          <dd className="col-9">Clothes</dd>
+                                        </div>
+                                      </div>
+                                    </main>
+                                  </div>
+                                </MDBModalBody>
+                                <MDBModalFooter>
+                                  <div className="d-flex flex-column text-danger mx-auto h6 small ">
+                                    <div>
+                                      {successfullyAddedToCart}
+                                      {successfullyAddedToCart ===
+                                        "Please first " && (
+                                        <a href="/users/login">Login</a>
+                                      )}
+                                    </div>
+
+                                    <div>
+                                      {successfullyAddedToFav}
+                                      {successfullyAddedToFav ===
+                                        "Please first " && (
+                                        <a href="/users/login">Login</a>
+                                      )}
+                                    </div>
+                                  </div>
+                                  <MDBBtn
+                                    color="danger"
+                                    onClick={(e) => {
+                                      addToFavOnClick(e, product._id);
+                                    }}
+                                    className="gap-1"
+                                  >
+                                    add to Fav{" "}
+                                    <i className="bi bi-heart z-1"></i>
+                                  </MDBBtn>
+                                  <button
+                                    className="btn btn-outline-primary"
+                                    type="button"
+                                    onClick={(e) => {
+                                      addToCartOnClick(e, product._id);
+                                    }}
+                                  >
+                                    Add To Cart <MDBIcon fas icon="cart-plus" />
+                                  </button>
+                                </MDBModalFooter>
+                              </MDBModalContent>
+                            </MDBModalDialog>
+                          </MDBModal>
+                        </div>
+                        <a href="#!" onClick={toggleOpen}>
                           <h5 className="card-title mb-3">
                             {product.productName}
                           </h5>
                         </a>
                         {/* <a href="#!" className="text-reset">
-                          <p>{product.categories.name}</p>
+                          <p>{product.categories?.name}</p>
                         </a> */}
                         <p className="text-truncate mx-3">
                           {product.description}

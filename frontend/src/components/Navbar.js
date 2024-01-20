@@ -145,15 +145,6 @@ export default function Navbar() {
                     <label className="d-md-block d-sm-none d-block">Cart</label>
                   </MDBNavbarLink>
                 </MDBNavbarItem>
-
-
-
-
-
-
-
-
-                
               </>
             ) : (
               <>

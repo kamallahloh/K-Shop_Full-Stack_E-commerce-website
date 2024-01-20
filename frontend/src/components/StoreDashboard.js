@@ -83,15 +83,13 @@ const StoreDashboard = () => {
 
   // useEffect(getProductsByStore, []);
 
-  //! addProduct MODAL start ///////////////////////////////
+  //* addProduct MODAL ///////////////////////////////
 
-  const [basicModal, setBasicModal] = useState(false);
+  const [addNewProductModal, setAddNewProductModal] = useState(false);
 
-  const toggleOpen = () => setBasicModal(!basicModal);
+  const toggleOpen = () => setAddNewProductModal(!addNewProductModal);
 
-  //! addProduct MODAL end ///////////////////////////////
-
-  //! addProduct ///////////////////////////////
+  //* addProduct ///////////////////////////////
 
   const [productData, setProductData] = useState({
     productName: "",
@@ -271,7 +269,7 @@ const StoreDashboard = () => {
           fluid
           className="d-flex align-items-center justify-content-center bg-image"
         >
-          <MDBModal open={basicModal} setOpen={setBasicModal} tabIndex="-1">
+          <MDBModal open={addNewProductModal} setOpen={setAddNewProductModal} tabIndex="-1">
             <MDBModalDialog>
               <MDBModalContent>
                 <MDBModalHeader>
