@@ -215,9 +215,7 @@ const StoreDashboard = () => {
         }
       )
       .then((result) => {
-        console.log(
-          `item: ( ${result.data.product.productName} ) has been added to the Fav`
-        );
+        console.log(`item: ( ${productId} ) has been added to the Fav`);
         setAddedFavProductId(productId);
         setSuccessfullyAddedToFav("Successfully Added to Fav");
         setTimeout(() => {
@@ -350,14 +348,6 @@ const StoreDashboard = () => {
                   <strong>Products</strong>
                 </h4>
 
-                <div className="notifications">
-                  {successfullyDeleteProductById && (
-                    <p className="text-danger">
-                      {successfullyDeleteProductById}
-                    </p>
-                  )}
-                </div>
-
                 {/* flex-wrap-reverse flex-row-reverse ==> new added product will be on top of the page */}
                 <div className="d-flex flex-wrap align-items-center justify-content-center">
                   {newProductsByStore.map((product) => {
@@ -370,15 +360,22 @@ const StoreDashboard = () => {
                         <div className="bg-image mb-2">
                           <img
                             src={product.images[0]}
-                            className="w-100 rounded-7"
+                            className="w-100 rounded-7 z-n1"
                             alt={product.productName}
                           />
                           <a href="#!" className="rounded-9">
                             <div className="mask">
-                              <div className="d-flex justify-content-start align-items-end h-100">
-                                <h5>
+                              <div
+                                className="d-flex justify-content-start align-items-end h-100"
+                                style={{ position: "relative", zIndex: "1" }}
+                              >
+                                <h5
+                                  onClick={(e) => {
+                                    addToFavOnClick(e, product._id);
+                                  }}
+                                >
                                   <span className="badge bg-danger ms-2 rounded-3">
-                                    <i className="bi bi-heart"></i>
+                                    <i className="bi bi-heart z-1"></i>
                                   </span>
                                 </h5>
                               </div>
@@ -432,29 +429,23 @@ const StoreDashboard = () => {
                               Add To Cart <MDBIcon fas icon="cart-plus" />
                             </button>
                           </div>
-                          {product._id === addedCartProductId &&
-                          successfullyAddedToCart ? (
-                            <div className="text-danger">
-                              {successfullyAddedToCart}
-                              {successfullyAddedToCart === "Please first " && (
-                                <a href="/users/login">Login</a>
-                              )}
-                            </div>
-                          ) : (
-                            <div className="m-4"></div>
-                          )}
+                          {product._id === addedCartProductId && (
+                          <div className="text-danger position-fixed top-0 end-0 mt-5 pt-3 me-3">
+                            {successfullyAddedToCart}
+                            {successfullyAddedToCart === "Please first " && (
+                              <a href="/users/login">Login</a>
+                            )}
+                          </div>
+                        )}
 
-                          {product._id === addedFavProductId &&
-                          successfullyAddedToFav ? (
-                            <div className="text-danger">
-                              {successfullyAddedToFav}
-                              {successfullyAddedToFav === "Please first " && (
-                                <a href="/users/login">Login</a>
-                              )}
-                            </div>
-                          ) : (
-                            <div className="m-4"></div>
-                          )}
+                        {product._id === addedFavProductId && (
+                          <div className="text-danger position-fixed top-0 end-0 mt-5 pt-5 me-3">
+                            {successfullyAddedToFav}
+                            {successfullyAddedToFav === "Please first " && (
+                              <a href="/users/login">Login</a>
+                            )}
+                          </div>
+                        )}
                         </div>
                       </div>
                     );
