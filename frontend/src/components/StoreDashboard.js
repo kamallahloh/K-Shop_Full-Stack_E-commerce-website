@@ -12,6 +12,13 @@ import {
   MDBCardBody,
   MDBInput,
   MDBIcon,
+  MDBModal,
+  MDBModalDialog,
+  MDBModalContent,
+  MDBModalHeader,
+  MDBModalTitle,
+  MDBModalBody,
+  MDBModalFooter,
 } from "mdb-react-ui-kit";
 
 const StoreDashboard = () => {
@@ -23,7 +30,7 @@ const StoreDashboard = () => {
     setProducts,
     searchedProducts,
     //
-    successfullyDeleteProductById,
+    // successfullyDeleteProductById,
     setSuccessfullyDeleteProductById,
     //
     successfullyAddedToCart,
@@ -76,7 +83,16 @@ const StoreDashboard = () => {
 
   // useEffect(getProductsByStore, []);
 
-  //? addProduct ///////////////////////////////
+  //! addProduct MODAL start ///////////////////////////////
+
+  const [basicModal, setBasicModal] = useState(false);
+
+  const toggleOpen = () => setBasicModal(!basicModal);
+
+  //! addProduct MODAL end ///////////////////////////////
+
+  //! addProduct ///////////////////////////////
+
   const [productData, setProductData] = useState({
     productName: "",
     description: "",
@@ -182,7 +198,8 @@ const StoreDashboard = () => {
       )
       .then((result) => {
         console.log(
-          `item: ( ${result.data.product.productName} ) has been added to the Cart`
+          // `item: ( ${result.data.product.productName} ) has been added to the Cart`
+          `item: ( ${productId} ) has been added to the Cart`
         );
         setAddedCartProductId(productId);
         setSuccessfullyAddedToCart("Successfully Added to Cart");
@@ -197,6 +214,9 @@ const StoreDashboard = () => {
           // error.response.data.message
           "Please first "
         );
+        setTimeout(() => {
+          setSuccessfullyAddedToCart("");
+        }, 6000);
       });
   };
 
@@ -229,115 +249,165 @@ const StoreDashboard = () => {
           // error.response.data.message
           "Please first "
         );
+        setTimeout(() => {
+          setSuccessfullyAddedToFav("");
+        }, 6000);
       });
   };
 
   return (
-    <div className="StoreDashboard">
-      <MDBContainer
-        fluid
-        className="d-flex align-items-center justify-content-center bg-image"
-        style={{
-          backgroundImage:
-            "url(https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.webp)",
-        }}
-      >
-        <div className="mask gradient-custom-3"></div>
+    <div className="StoreDashboard position-relative">
+      <>
+        <div className="m-4 position-fixed sticky-top">
+          <MDBBtn
+            onClick={toggleOpen}
+            className="mt-5  gradient-custom-4 "
+            size="lg"
+          >
+            Add New Product
+          </MDBBtn>
+        </div>
+        <MDBContainer
+          fluid
+          className="d-flex align-items-center justify-content-center bg-image"
+        >
+          <MDBModal open={basicModal} setOpen={setBasicModal} tabIndex="-1">
+            <MDBModalDialog>
+              <MDBModalContent>
+                <MDBModalHeader>
+                  <MDBModalTitle className="text-uppercase">
+                    Add Product
+                  </MDBModalTitle>
+                  {successfulAddProduct && (
+                    <p className="text-success mx-auto pt-3">
+                      {successfulAddProduct}
+                    </p>
+                  )}
+                  <MDBBtn
+                    className="btn-close"
+                    color="none"
+                    onClick={toggleOpen}
+                  ></MDBBtn>
+                </MDBModalHeader>
 
-        <MDBCard className="m-5" style={{ width: "75%", maxWidth: "500px" }}>
-          <MDBCardBody className="px-5">
-            <h2 className="text-uppercase text-center mb-3">Add Product</h2>
+                <MDBModalBody>
+                  <div className="mask gradient-custom-3"></div>
 
-            <MDBInput
-              wrapperClass="mb-4"
-              label="Product Name"
-              size="lg"
-              id="productName"
-              type="productName"
-              onChange={(e) => {
-                setProductData({ ...productData, productName: e.target.value });
-              }}
-            />
+                  <MDBCard>
+                    <MDBCardBody className="px-3">
+                      <MDBInput
+                        wrapperClass="mb-4"
+                        label="Product Name"
+                        size="lg"
+                        id="productName"
+                        type="productName"
+                        onChange={(e) => {
+                          setProductData({
+                            ...productData,
+                            productName: e.target.value,
+                          });
+                        }}
+                      />
 
-            <MDBInput
-              wrapperClass="mb-4"
-              label="Description"
-              size="lg"
-              id="description"
-              type="description"
-              onChange={(e) => {
-                setProductData({ ...productData, description: e.target.value });
-              }}
-            />
+                      <MDBInput
+                        wrapperClass="mb-4"
+                        label="Description"
+                        size="lg"
+                        id="description"
+                        type="description"
+                        onChange={(e) => {
+                          setProductData({
+                            ...productData,
+                            description: e.target.value,
+                          });
+                        }}
+                      />
 
-            <div>
-              <div className="d-flex align-items-center justify-content-center gap-1">
-                <MDBFile
-                  label="Image"
-                  id="image"
-                  // multiple
-                  size="sm"
-                  onChange={(e) => setImage(e.target.files[0])}
-                />
+                      <div>
+                        <div className="d-flex align-items-center justify-content-center gap-1">
+                          <MDBFile
+                            label="Image"
+                            id="image"
+                            // multiple
+                            size="sm"
+                            onChange={(e) => setImage(e.target.files[0])}
+                          />
 
-                <button
-                  id="mdb-btn"
-                  className="gradient-custom-4"
-                  size="sx"
-                  onClick={uploadImage}
-                >
-                  Upload
-                </button>
-              </div>
-              {successfulImageUpload ? (
-                <p className="text-success">{successfulImageUpload}</p>
-              ) : (
-                <p>upload image first</p>
-              )}
-            </div>
+                          <button
+                            id="mdb-btn"
+                            className="gradient-custom-4"
+                            size="sx"
+                            onClick={uploadImage}
+                          >
+                            Upload
+                          </button>
+                        </div>
+                        {successfulImageUpload ? (
+                          <p className="text-success">
+                            {successfulImageUpload}
+                          </p>
+                        ) : (
+                          <p>upload image first</p>
+                        )}
+                      </div>
 
-            <MDBInput
-              wrapperClass="mb-4"
-              label="Categories"
-              size="lg"
-              id="categories"
-              type="categories"
-              onChange={(e) => {
-                setProductData({ ...productData, categories: e.target.value });
-              }}
-            />
+                      <MDBInput
+                        wrapperClass="mb-4"
+                        label="Categories"
+                        size="lg"
+                        id="categories"
+                        type="categories"
+                        onChange={(e) => {
+                          setProductData({
+                            ...productData,
+                            categories: e.target.value,
+                          });
+                        }}
+                      />
 
-            <MDBInput
-              wrapperClass="mb-4"
-              label="Price"
-              size="lg"
-              id="price"
-              type="price"
-              onChange={(e) => {
-                setProductData({ ...productData, price: e.target.value });
-              }}
-            />
+                      <MDBInput
+                        wrapperClass="mb-4"
+                        label="Price"
+                        size="lg"
+                        id="price"
+                        type="price"
+                        onChange={(e) => {
+                          setProductData({
+                            ...productData,
+                            price: e.target.value,
+                          });
+                        }}
+                      />
+                    </MDBCardBody>
+                  </MDBCard>
+                </MDBModalBody>
 
-            <MDBBtn
-              id="mdb-btn"
-              className="mb-4 w-100 gradient-custom-4"
-              size="lg"
-              onClick={addProductButtonOnClick}
-            >
-              Add Product
-            </MDBBtn>
+                <MDBModalFooter>
+                  <MDBBtn
+                    id="mdb-btn"
+                    className="mb-4 w-100 gradient-custom-4"
+                    size="lg"
+                    onClick={(e) => {
+                      addProductButtonOnClick(e);
 
-            {successfulAddProduct && (
-              <p className="text-success">{successfulAddProduct}</p>
-            )}
-          </MDBCardBody>
-        </MDBCard>
-      </MDBContainer>
+                      setTimeout(() => {
+                        toggleOpen(e);
+                      }, 2000);
+                    }}
+                  >
+                    Add Product
+                  </MDBBtn>
+                </MDBModalFooter>
+              </MDBModalContent>
+            </MDBModalDialog>
+          </MDBModal>
+        </MDBContainer>
+      </>
 
-      {/* //////////////////////////////////////////////////////// */}
-      {/* //////////////////////////////////////////////////////// */}
-      {/* //////////////////////////////////////////////////////// */}
-      {/* //////////////////////////////////////////////////////// */}
+      {/* //////////////////////////////////////////////// */}
+      {/* //////////////////////////////////////////////// */}
+      {/* //////////////////////////////////////////////// */}
+      {/* //////////////////////////////////////////////// */}
 
       <section className="products">
         {newProductsByStore ? (
@@ -430,22 +500,22 @@ const StoreDashboard = () => {
                             </button>
                           </div>
                           {product._id === addedCartProductId && (
-                          <div className="text-danger position-fixed top-0 end-0 mt-5 pt-3 me-3">
-                            {successfullyAddedToCart}
-                            {successfullyAddedToCart === "Please first " && (
-                              <a href="/users/login">Login</a>
-                            )}
-                          </div>
-                        )}
+                            <div className="text-danger position-fixed top-0 end-0 mt-5 pt-3 me-3">
+                              {successfullyAddedToCart}
+                              {successfullyAddedToCart === "Please first " && (
+                                <a href="/users/login">Login</a>
+                              )}
+                            </div>
+                          )}
 
-                        {product._id === addedFavProductId && (
-                          <div className="text-danger position-fixed top-0 end-0 mt-5 pt-5 me-3">
-                            {successfullyAddedToFav}
-                            {successfullyAddedToFav === "Please first " && (
-                              <a href="/users/login">Login</a>
-                            )}
-                          </div>
-                        )}
+                          {product._id === addedFavProductId && (
+                            <div className="text-danger position-fixed top-0 end-0 mt-5 pt-5 me-3">
+                              {successfullyAddedToFav}
+                              {successfullyAddedToFav === "Please first " && (
+                                <a href="/users/login">Login</a>
+                              )}
+                            </div>
+                          )}
                         </div>
                       </div>
                     );

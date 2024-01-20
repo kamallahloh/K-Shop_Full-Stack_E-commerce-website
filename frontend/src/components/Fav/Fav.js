@@ -14,11 +14,7 @@ const Fav = () => {
     0
   );
 
-  //* total price of Items in the fav.
-  const totalPrice = userFav.reduce(
-    (acc, favItem) => acc + favItem.quantity * favItem.product.price,
-    0
-  );
+
 
   //* get Fav Items
   useEffect(() => {
