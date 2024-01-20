@@ -6,16 +6,17 @@ import { Routes, Route, useSearchParams } from "react-router-dom";
 import { Cloudinary } from "@cloudinary/url-gen";
 
 import Cart from "./components/Cart/Cart";
-import Products from "./components/Products";
+import Fav from "./components/Fav/Fav";
+import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
+import NotFound from "./components/NotFound";
+import Products from "./components/Products";
 import StoreDashboard from "./components/StoreDashboard";
 import StoreLogin from "./components//StoreLogin/StoreLogin";
 import StoreRegister from "./components/StoreRegister/StoreRegister";
 import UserDashboard from "./components/UserDashboard";
 import UserLogin from "./components/UserLogin/UserLogin";
 import UserRegister from "./components/UserRegister/UserRegister";
-import NotFound from "./components/NotFound";
-import Footer from "./components/Footer";
 
 export const appContext = createContext();
 
@@ -64,9 +65,16 @@ function App() {
   //*  userCart list //////////////////////////
   const [userCart, setUserCart] = useState([]);
 
+  //*  userFav list //////////////////////////
+  const [userFav, setUserFav] = useState([]);
+
   //* addToCart /////////////////////
   const [successfullyAddedToCart, setSuccessfullyAddedToCart] = useState("");
-  const [addedProductId, setAddedProductId] = useState(0);
+  const [addedCartProductId, setAddedCartProductId] = useState(0);
+
+  //* addToFav /////////////////////
+  const [successfullyAddedToFav, setSuccessfullyAddedToFav] = useState("");
+  const [addedFavProductId, setAddedFavProductId] = useState(0);
 
   //* Upload Images to Cloudinary //////////////////////////
   const [image, setImage] = useState("");
@@ -104,8 +112,15 @@ function App() {
         setUserCart,
         successfullyAddedToCart,
         setSuccessfullyAddedToCart,
-        addedProductId,
-        setAddedProductId,
+        addedCartProductId,
+        setAddedCartProductId,
+        //
+        userFav,
+        setUserFav,
+        successfullyAddedToFav,
+        setSuccessfullyAddedToFav,
+        addedFavProductId,
+        setAddedFavProductId,
         //
         image,
         setImage,
@@ -123,6 +138,7 @@ function App() {
             //! all the paths allowed to the Logged in user
             <>
               <Route path="/carts" element={<Cart />} />
+              <Route path="/favs" element={<Fav />} />
               <Route path="/users/:id" element={<UserDashboard />} />
               <Route path="/stores/login" element={<StoreLogin />} />
               <Route path="/stores/register" element={<StoreRegister />} />

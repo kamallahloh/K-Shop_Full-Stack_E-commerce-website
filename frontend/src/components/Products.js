@@ -10,8 +10,14 @@ const Products = () => {
     searchedProducts,
     successfullyAddedToCart,
     setSuccessfullyAddedToCart,
-    addedProductId,
-    setAddedProductId,
+    addedCartProductId,
+    setAddedCartProductId,
+    //
+    successfullyAddedToFav,
+    setSuccessfullyAddedToFav,
+    addedFavProductId,
+    setAddedFavProductId,
+    //
   } = useContext(appContext);
 
   useEffect(() => {
@@ -25,6 +31,70 @@ const Products = () => {
         setProducts(<>{error.response.data.message}</>);
       });
   }, [setProducts]);
+
+  //* addToCartOnClick ////////////////////////////
+
+  const addToCartOnClick = (e, productId) => {
+    //* addToCart ///////////////////////
+    axios
+      .post(
+        `http://localhost:5000/carts/${productId}`,
+        {},
+        {
+          headers: {
+            authorization: `Bearer ${userToken}`,
+          },
+        }
+      )
+      .then((result) => {
+        console.log(`item: ( ${productId} ) has been added to the Cart`);
+        setAddedCartProductId(productId);
+        setSuccessfullyAddedToCart("Successfully Added to Cart");
+        setTimeout(() => {
+          setSuccessfullyAddedToCart("");
+        }, 3000);
+      })
+      .catch((error) => {
+        console.log(error);
+        setAddedCartProductId(productId);
+        setSuccessfullyAddedToCart(
+          // error.response.data.message
+          "Please first "
+        );
+      });
+  };
+
+  //* addToFavOnClick ////////////////////////////
+
+  const addToFavOnClick = (e, productId) => {
+    //* addToFav ///////////////////////
+    axios
+      .post(
+        `http://localhost:5000/favs/${productId}`,
+        {},
+        {
+          headers: {
+            authorization: `Bearer ${userToken}`,
+          },
+        }
+      )
+      .then((result) => {
+        console.log(`item: ( ${productId} ) has been added to the Fav`);
+        setAddedFavProductId(productId);
+        setSuccessfullyAddedToFav("Successfully Added to Fav");
+        setTimeout(() => {
+          setSuccessfullyAddedToFav("");
+        }, 3000);
+      })
+      .catch((error) => {
+        console.log(error);
+        setAddedFavProductId(productId);
+        setSuccessfullyAddedToFav(
+          // error.response.data.message
+          "Please first "
+        );
+      });
+  };
 
   return (
     <section className="products">
@@ -48,22 +118,22 @@ const Products = () => {
                       <div className="bg-image mb-2">
                         <img
                           src={product.images[0]}
-                          className="w-100 rounded-7"
+                          className="w-100 rounded-7 z-n1"
                           alt={product.productName}
                         />
                         <a href="#!" className="rounded-9">
                           <div className="mask">
                             <div className="d-flex justify-content-start align-items-end h-100">
-                              <h5>
+                              <h5
+                                onClick={(e) => {
+                                  addToFavOnClick(e, product._id);
+                                }}
+                              >
                                 <span className="badge bg-danger ms-2 rounded-3">
-                                  <i className="bi bi-heart"></i>
+                                  <i className="bi bi-heart z-1"></i>
                                 </span>
                               </h5>
                             </div>
-                          </div>
-
-                          <div className="hover-overlay">
-                            <div className="mask"></div>
                           </div>
                         </a>
                       </div>
@@ -87,48 +157,31 @@ const Products = () => {
                           <button
                             className="btn btn-outline-primary"
                             type="button"
-                            onClick={() => {
-                              //* addToCart ///////////////////////
-                              axios
-                                .post(
-                                  `http://localhost:5000/carts/${product._id}`,
-                                  {},
-                                  {
-                                    headers: {
-                                      authorization: `Bearer ${userToken}`,
-                                    },
-                                  }
-                                )
-                                .then((result) => {
-                                  console.log(
-                                    `item: ( ${product.productName} ) has been added to the cart`
-                                  );
-                                  setAddedProductId(product._id);
-                                  setSuccessfullyAddedToCart(
-                                    "Successfully Added to Cart"
-                                  );
-                                  setTimeout(() => {
-                                    setSuccessfullyAddedToCart("");
-                                  }, 3000);
-                                })
-                                .catch((error) => {
-                                  console.log(error);
-                                  setAddedProductId(product._id);
-                                  setSuccessfullyAddedToCart(
-                                    // error.response.data.message
-                                    "Please first "
-                                  );
-                                });
+                            onClick={(e) => {
+                              addToCartOnClick(e, product._id);
                             }}
                           >
                             Add To Cart <MDBIcon fas icon="cart-plus" />
                           </button>
                         </div>
-                        {product._id === addedProductId &&
+
+                        {product._id === addedCartProductId &&
                         successfullyAddedToCart ? (
                           <div className="text-danger">
                             {successfullyAddedToCart}
                             {successfullyAddedToCart === "Please first " && (
+                              <a href="/users/login">Login</a>
+                            )}
+                          </div>
+                        ) : (
+                          <div className="m-4"></div>
+                        )}
+
+                        {product._id === addedFavProductId &&
+                        successfullyAddedToFav ? (
+                          <div className="text-danger">
+                            {successfullyAddedToFav}
+                            {successfullyAddedToFav === "Please first " && (
                               <a href="/users/login">Login</a>
                             )}
                           </div>

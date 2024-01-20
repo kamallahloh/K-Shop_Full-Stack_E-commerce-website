@@ -1,7 +1,8 @@
 import "./style.css";
 import axios from "axios";
-// eslint-disable-next-line
 import React, { useContext, useEffect, useState } from "react";
+import { appContext } from "../App";
+import { useParams } from "react-router-dom";
 
 import {
   MDBFile,
@@ -12,49 +13,37 @@ import {
   MDBInput,
   MDBIcon,
 } from "mdb-react-ui-kit";
-import { appContext } from "../App";
-// import Products from "./Products";
-import { useParams } from "react-router-dom";
 
 const StoreDashboard = () => {
   const {
     userToken,
-    // isUserLoggedIn,
-    // userLocalStorage,
-    // setUserLocalStorage,
     //
     storeToken,
-    // tokenStoreId,
-    // isStoreLoggedIn,
-    // storeLocalStorage,
-    // setStoreLocalStorage,
     //
-    // products,
     setProducts,
     searchedProducts,
-    // search,
-    // setSearchParams,
     //
     successfullyDeleteProductById,
     setSuccessfullyDeleteProductById,
     //
-    // userCart,
-    // setUserCart,
     successfullyAddedToCart,
     setSuccessfullyAddedToCart,
-    addedProductId,
-    setAddedProductId,
+    addedCartProductId,
+    setAddedCartProductId,
+    //
+    successfullyAddedToFav,
+    setSuccessfullyAddedToFav,
+    addedFavProductId,
+    setAddedFavProductId,
     //
     image,
     setImage,
-    // url,
     setUrl,
   } = useContext(appContext);
 
-  // eslint-disable-next-line
   const { id } = useParams();
 
-  // //* get Products By Store Id //////////////////
+  //* get Products By Store Id //////////////////
 
   useEffect(() => {
     axios
@@ -120,7 +109,6 @@ const StoreDashboard = () => {
         setSuccessfulAddProduct(result.data.message);
       })
       .catch((error) => {
-        // console.log(error);
         console.log(error.response.data.message);
         setSuccessfulAddProduct(error.response.data.message);
       });
@@ -137,9 +125,7 @@ const StoreDashboard = () => {
 
     axios
       .post("https://api.cloudinary.com/v1_1/dpbh42kjy/image/upload", data)
-      // .then((resp) => resp.json())
       .then((data) => {
-        // console.log("data", data);
         setUrl(data.data.url);
         setProductData({ ...productData, images: [data.data.url] });
         console.log(`uploaded image url"${data.data.url}"`);
@@ -170,8 +156,6 @@ const StoreDashboard = () => {
 
         //* delete the product from the state holds it in store page
         const newProducts = searchedProducts.reverse().filter((item, i) => {
-          // console.log("ProductId", ProductId);
-          // console.log("item._id", item._id);
           return ProductId !== item._id;
         });
         setProducts(newProducts);
@@ -179,6 +163,74 @@ const StoreDashboard = () => {
       .catch((error) => {
         console.log(error.response.data.message);
         setSuccessfullyDeleteProductById(error.response.data.message);
+      });
+  };
+
+  //* addToCartOnClick ////////////////////////////
+
+  const addToCartOnClick = (e, productId) => {
+    //* addToCart ///////////////////////
+    axios
+      .post(
+        `http://localhost:5000/carts/${productId}`,
+        {},
+        {
+          headers: {
+            authorization: `Bearer ${userToken}`,
+          },
+        }
+      )
+      .then((result) => {
+        console.log(
+          `item: ( ${result.data.product.productName} ) has been added to the Cart`
+        );
+        setAddedCartProductId(productId);
+        setSuccessfullyAddedToCart("Successfully Added to Cart");
+        setTimeout(() => {
+          setSuccessfullyAddedToCart("");
+        }, 3000);
+      })
+      .catch((error) => {
+        console.log(error);
+        setAddedCartProductId(productId);
+        setSuccessfullyAddedToCart(
+          // error.response.data.message
+          "Please first "
+        );
+      });
+  };
+
+  //* addToFavOnClick ////////////////////////////
+
+  const addToFavOnClick = (e, productId) => {
+    //* addToFav ///////////////////////
+    axios
+      .post(
+        `http://localhost:5000/favs/${productId}`,
+        {},
+        {
+          headers: {
+            authorization: `Bearer ${userToken}`,
+          },
+        }
+      )
+      .then((result) => {
+        console.log(
+          `item: ( ${result.data.product.productName} ) has been added to the Fav`
+        );
+        setAddedFavProductId(productId);
+        setSuccessfullyAddedToFav("Successfully Added to Fav");
+        setTimeout(() => {
+          setSuccessfullyAddedToFav("");
+        }, 3000);
+      })
+      .catch((error) => {
+        console.log(error);
+        setAddedFavProductId(productId);
+        setSuccessfullyAddedToFav(
+          // error.response.data.message
+          "Please first "
+        );
       });
   };
 
@@ -286,7 +338,6 @@ const StoreDashboard = () => {
 
       {/* //////////////////////////////////////////////////////// */}
       {/* //////////////////////////////////////////////////////// */}
-      {/* <Products /> */}
       {/* //////////////////////////////////////////////////////// */}
       {/* //////////////////////////////////////////////////////// */}
 
@@ -374,48 +425,30 @@ const StoreDashboard = () => {
                             <button
                               className="btn btn-outline-primary"
                               type="button"
-                              onClick={() => {
-                                //* addToCart ///////////////////////
-                                axios
-                                  .post(
-                                    `http://localhost:5000/carts/${product._id}`,
-                                    {},
-                                    {
-                                      headers: {
-                                        authorization: `Bearer ${userToken}`,
-                                      },
-                                    }
-                                  )
-                                  .then((result) => {
-                                    console.log(
-                                      `item: ( ${product.productName} ) has been added to the cart`
-                                    );
-                                    setAddedProductId(product._id);
-                                    setSuccessfullyAddedToCart(
-                                      "Successfully Added to Cart"
-                                    );
-                                    setTimeout(() => {
-                                      setSuccessfullyAddedToCart("");
-                                    }, 3000);
-                                  })
-                                  .catch((error) => {
-                                    console.log(error);
-                                    setAddedProductId(product._id);
-                                    setSuccessfullyAddedToCart(
-                                      // error.response.data.message
-                                      "Please first "
-                                    );
-                                  });
+                              onClick={(e) => {
+                                addToCartOnClick(e, product._id);
                               }}
                             >
                               Add To Cart <MDBIcon fas icon="cart-plus" />
                             </button>
                           </div>
-                          {product._id === addedProductId &&
+                          {product._id === addedCartProductId &&
                           successfullyAddedToCart ? (
                             <div className="text-danger">
                               {successfullyAddedToCart}
                               {successfullyAddedToCart === "Please first " && (
+                                <a href="/users/login">Login</a>
+                              )}
+                            </div>
+                          ) : (
+                            <div className="m-4"></div>
+                          )}
+
+                          {product._id === addedFavProductId &&
+                          successfullyAddedToFav ? (
+                            <div className="text-danger">
+                              {successfullyAddedToFav}
+                              {successfullyAddedToFav === "Please first " && (
                                 <a href="/users/login">Login</a>
                               )}
                             </div>

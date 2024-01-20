@@ -1,4 +1,4 @@
-import React, { useState, useContext /* useRef */ } from "react";
+import React, { useState, useContext } from "react";
 import { appContext } from "../App";
 
 import {
@@ -10,8 +10,6 @@ import {
   MDBNavbarNav,
   MDBNavbarItem,
   MDBNavbarLink,
-  // eslint-disable-next-line
-  MDBBtn,
   MDBDropdown,
   MDBDropdownToggle,
   MDBDropdownMenu,
@@ -40,10 +38,8 @@ export default function Navbar() {
   };
 
   //* Search Bar
-  // const searchRef = useRef("");
   const onSubmit = (e) => {
     e.preventDefault();
-    // const value = searchRef.current;
   };
 
   return (
@@ -62,7 +58,6 @@ export default function Navbar() {
 
         <MDBCollapse navbar open={openBasic}>
           <MDBNavbarNav className="mr-auto mb-2 mb-lg-0 d-flex justify-content-end align-items-center">
-            {/* <MDBNavbarItem className="flex-fill"> */}
             <MDBNavbarItem className="me-auto">
               <MDBNavbarLink href="/stores/login">Sell with us</MDBNavbarLink>
             </MDBNavbarItem>
@@ -72,8 +67,6 @@ export default function Navbar() {
                 className="form-control"
                 placeholder="Search ..."
                 aria-label="Search"
-                // ref={searchRef}
-
                 value={search}
                 onChange={(e) => {
                   //* saving in SearchParams.
@@ -83,7 +76,6 @@ export default function Navbar() {
                   });
                 }}
               />
-              {/* <MDBBtn color="primary" type="submit">Search</MDBBtn> */}
             </form>
             {isUserLoggedIn ? (
               <>
@@ -100,7 +92,7 @@ export default function Navbar() {
                       <MDBDropdownItem link href="/users/:id">
                         Profile
                       </MDBDropdownItem>
-                      <MDBDropdownItem link /* href="/users/login" */>
+                      <MDBDropdownItem link>
                         <div onClick={logout}>Logout</div>
                       </MDBDropdownItem>
                     </MDBDropdownMenu>
@@ -108,36 +100,18 @@ export default function Navbar() {
                 </MDBNavbarItem>
 
                 <MDBNavbarItem>
-                  <MDBNavbarLink className="d-flex gap-1" href="#">
+                  <MDBNavbarLink className="d-flex gap-1" href="/favs">
                     <i className="bi bi-heart"></i>
-                    {/* <MDBIcon fas icon="heart" size="1x" /> */}
                     <label className="d-md-block d-sm-none d-block">Fav</label>
                   </MDBNavbarLink>
                 </MDBNavbarItem>
 
                 <MDBNavbarItem>
-                  <MDBNavbarLink
-                    // active
-                    // aria-current="page"
-                    className="d-flex gap-1"
-                    href="/carts"
-                  >
+                  <MDBNavbarLink className="d-flex gap-1" href="/carts">
                     <i className="bi bi-cart"></i>
-                    {/* <MDBIcon fas icon="shopping-cart" size="1x" /> */}
                     <label className="d-md-block d-sm-none d-block">Cart</label>
                   </MDBNavbarLink>
                 </MDBNavbarItem>
-
-                {/* <MDBNavbarItem>
-                  <MDBNavbarLink
-                    disabled
-                    href="#"
-                    tabIndex={-1}
-                    aria-disabled="true"
-                  >
-                    Disabled
-                  </MDBNavbarLink>
-                </MDBNavbarItem> */}
               </>
             ) : (
               <>

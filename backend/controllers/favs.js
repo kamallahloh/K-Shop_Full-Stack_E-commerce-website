@@ -13,7 +13,6 @@ const getAllFavProducts = (req, res) => {
     .findById(userId)
     .populate("userFav.product")
     .then((result) => {
-      // console.log(result.userFav);
       res.status(200).json({
         success: true,
         userFav: result.userFav,

@@ -181,7 +181,7 @@ const deleteStoreById = (req, res) => {
       ) {
         try {
           //! ////////////
-          //! we need to delete the store product/s from 2 places:
+          //! we need to delete the store product/s from 3 places:
           //* A. From the productsModel
 
           await productsModel
@@ -256,6 +256,68 @@ const deleteStoreById = (req, res) => {
           //* ////////////////////
 
           //! ////////////
+
+          //! ////////////
+          //* C. From the usersModel => all userFavs
+          //* C. to delete the product/s from all userFavs(follow the 4 steps mentioned down).
+
+          //* C-1. find all users that have the store product/s in there userFav
+          usersModel
+            .find({})
+            .then((users) => {
+              //* C-2 iterate over all store products to filter them out one by one from the user.userFav
+              storesModel
+                .findById(storeId)
+                .then((store) => {
+                  // console.log("store==>>>>>", store);
+                  store.products.forEach((product) => {
+                    const productId = product.toString();
+
+                    //* C-3. update all userFavs by filtering out each product.
+                    users.filter((user) => {
+                      // console.log("OLD user.userFav", user.userFav);
+                      if (user.userFav.length > 0) {
+                        const newUserFav = user.userFav.filter(
+                          (productsInFav) => {
+                            return (
+                              productsInFav.product.toString() !== productId
+                            );
+                          }
+                        );
+
+                        user.userFav = newUserFav;
+                        // console.log("NEW user.userFav", user.userFav);
+
+                        //* C-4. update the user in the database
+                        usersModel
+                          .findByIdAndUpdate(user._id, user)
+                          .then((finalResult) => {
+                            console.log(
+                              `The Product #${productId} was deleted from user #${user.userName} userFav`
+                            );
+                          })
+                          .catch((err) => {
+                            console.log(err);
+                            console.log(
+                              "usersModel.findByIdAndUpdate(user._id, user) Server error"
+                            );
+                          });
+                      }
+                    });
+                  });
+                })
+                .catch((err) => {
+                  console.log(err);
+                  console.log("storesModel.findById(storeId) Server error");
+                });
+            })
+            .catch((err) => {
+              console.log(err);
+              console.log("usersModel.find({}) Server error");
+            });
+          //* ////////////////////
+
+          //! ////////////          
 
           //* finally delete the store from storesModel
           console.log(

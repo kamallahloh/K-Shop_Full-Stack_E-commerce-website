@@ -33,6 +33,11 @@ const Footer = () => {
                   </a>
                 </p>
                 <p>
+                  <a className="text-white" href="/favs">
+                    Fav
+                  </a>
+                </p>
+                <p>
                   <a className="text-white" href="/users/register">
                     Sign Up Now
                   </a>
@@ -40,11 +45,6 @@ const Footer = () => {
                 <p>
                   <a className="text-white" href="/stores/register">
                     Sell with us
-                  </a>
-                </p>
-                <p>
-                  <a className="text-white" href="#!">
-                    Help
                   </a>
                 </p>
               </div>

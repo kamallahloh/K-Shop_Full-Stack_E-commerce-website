@@ -5,85 +5,82 @@ import "./style.css";
 import React, { useContext, useEffect /* useState */ } from "react";
 // import { MDBBtn } from "mdb-react-ui-kit";
 
-const Cart = () => {
-  const { userToken, userCart, setUserCart } = useContext(appContext);
-  console.log(userCart);
+const Fav = () => {
+  const { userToken, userFav, setUserFav } = useContext(appContext);
+  console.log(userFav);
 
-  //* total num of Items in the cart.
-  const numOfItems = userCart.reduce(
-    (acc, cartItem) => acc + cartItem.quantity,
+  //* total num of Items in the fav.
+  const numOfItems = userFav.reduce(
+    (acc, favItem) => acc + favItem.quantity,
     0
   );
 
-  //* total price of Items in the cart.
-  const totalPrice = userCart.reduce(
-    (acc, cartItem) => acc + cartItem.quantity * cartItem.product.price,
+  //* total price of Items in the fav.
+  const totalPrice = userFav.reduce(
+    (acc, favItem) => acc + favItem.quantity * favItem.product.price,
     0
   );
 
-  //* get Cart Items
+  //* get Fav Items
   useEffect(() => {
     axios
-      .get("http://localhost:5000/carts", {
+      .get("http://localhost:5000/favs", {
         headers: {
           authorization: `Bearer ${userToken}`,
         },
       })
       .then((results) => {
-        // console.log(results.data.userCart);
-        setUserCart(results.data.userCart);
+        // console.log(results.data.userFav);
+        setUserFav(results.data.userFav);
       })
       .catch((error) => {
         console.log(error.response.data.message);
-        setUserCart(<>{error.response.data.message}</>);
+        setUserFav(<>{error.response.data.message}</>);
       });
-  }, [setUserCart, userToken]);
+  }, [setUserFav, userToken]);
 
-  //! mappedUserCart ///////////////////////////////
-  const mappedUserCart = userCart.map((cartItem) => {
+  //! mappedUserFav ///////////////////////////////
+  const mappedUserFav = userFav.map((favItem) => {
     return (
       <div
         className="row mb-2 d-flex justify-content-between align-items-center w-100 col-12"
-        key={cartItem.product._id}
-        id={cartItem.product._id}
+        key={favItem.product._id}
+        id={favItem.product._id}
       >
         <div className="col-sm-2 col-md-2 col-lg-2 col-xl-2">
           <img
-            src={cartItem.product.images[0]}
+            src={favItem.product.images[0]}
             className="img-fluid rounded-3"
-            alt={cartItem.product.productName}
+            alt={favItem.product.productName}
           />
         </div>
         <div className="col-sm-5 col-md-5 col-lg-4 col-xl-3 text-center">
-          <h6 className="text-muted">{cartItem.product.categories?.[0]}</h6>
-          <h6 className="text-black mb-0">{cartItem.product.productName}</h6>
+          <h6 className="text-muted">{favItem.product.categories?.[0]}</h6>
+          <h6 className="text-black mb-0">{favItem.product.productName}</h6>
         </div>
         <div className="col-sm-2 col-md-2 col-lg-3 col-xl-3 text-center d-flex justify-content-between align-items-center">
-          {cartItem.quantity === 1 ? (
+          {favItem.quantity === 1 ? (
             <button
               className="btn btn-link px-2"
-              //* deleteCartItem ////////////////////
+              //* deleteFavItem ////////////////////
 
               onClick={(e) => {
                 axios
-                  .delete(
-                    `http://localhost:5000/carts/${cartItem.product._id}`,
-                    {
-                      headers: {
-                        authorization: `Bearer ${userToken}`,
-                      },
-                    }
-                  )
+                  .delete(`http://localhost:5000/favs/${favItem.product._id}`, {
+                    headers: {
+                      authorization: `Bearer ${userToken}`,
+                    },
+                  })
                   .then((result) => {
                     console.log(
-                      `item: ( ${cartItem.product.productName} ) has been deleted from the cart`
+                      `item: ( ${favItem.product.productName} ) has been deleted from the fav`
                     );
 
-                    //* delete the cartItem from the state holds all userCartItems
-                    const newUserCart = userCart.filter((item, i) => {
-                      return cartItem.product._id !== item.product._id;
+                    //* delete the favItem from the state holds all userFavItems
+                    const newUserFav = userFav.filter((item, i) => {
+                      return favItem.product._id !== item.product._id;
                     });
-                    setUserCart(newUserCart);
+                    setUserFav(newUserFav);
                   })
                   .catch((error) => {
                     console.log(error.response.data.message);
@@ -96,12 +93,12 @@ const Cart = () => {
             <button
               className="btn btn-link px-2"
               onClick={(e) => {
-                //* decrement cartItem quantity--  ////////////////////
-                cartItem.quantity--;
+                //* decrement favItem quantity--  ////////////////////
+                favItem.quantity--;
                 axios
                   .put(
-                    `http://localhost:5000/carts/${cartItem.product._id}`,
-                    { quantity: cartItem.quantity },
+                    `http://localhost:5000/favs/${favItem.product._id}`,
+                    { quantity: favItem.quantity },
                     {
                       headers: {
                         authorization: `Bearer ${userToken}`,
@@ -109,11 +106,11 @@ const Cart = () => {
                     }
                   )
                   .then((result) => {
-                    //* update the cartItem from the state holds all userCartItems
-                    setUserCart(userCart.map((item, i) => item));
+                    //* update the favItem from the state holds all userFavItems
+                    setUserFav(userFav.map((item, i) => item));
 
                     console.log(
-                      `item: ( ${cartItem.product.productName} ) quantity decreased to ${cartItem.quantity}`
+                      `item: ( ${favItem.product.productName} ) quantity decreased to ${favItem.quantity}`
                     );
                   })
                   .catch((error) => {
@@ -125,17 +122,17 @@ const Cart = () => {
             </button>
           )}
 
-          <span className="cartItem-quantity">{cartItem.quantity}</span>
+          <span className="favItem-quantity">{favItem.quantity}</span>
 
           <button
             className="btn btn-link px-2"
             onClick={(e) => {
-              //* increment cartItem quantity++  ////////////////////
-              cartItem.quantity++;
+              //* increment favItem quantity++  ////////////////////
+              favItem.quantity++;
               axios
                 .put(
-                  `http://localhost:5000/carts/${cartItem.product._id}`,
-                  { quantity: cartItem.quantity },
+                  `http://localhost:5000/favs/${favItem.product._id}`,
+                  { quantity: favItem.quantity },
                   {
                     headers: {
                       authorization: `Bearer ${userToken}`,
@@ -143,11 +140,11 @@ const Cart = () => {
                   }
                 )
                 .then((result) => {
-                  //* update the cartItem from the state holds all userCartItems
-                  setUserCart(userCart.map((item, i) => item));
+                  //* update the favItem from the state holds all userFavItems
+                  setUserFav(userFav.map((item, i) => item));
 
                   console.log(
-                    `item: ( ${cartItem.product.productName} ) quantity increased to ${cartItem.quantity}`
+                    `item: ( ${favItem.product.productName} ) quantity increased to ${favItem.quantity}`
                   );
                 })
                 .catch((error) => {
@@ -159,9 +156,7 @@ const Cart = () => {
           </button>
         </div>
         <div className="col-sm-3 col-md-3 col-lg-2 col-xl-2 offset-lg-1 text-center">
-          <h6 className="mb-0">
-            ${cartItem.product.price * cartItem.quantity}
-          </h6>
+          <h6 className="mb-0">${favItem.product.price * favItem.quantity}</h6>
         </div>
         <hr className="mt-4" />
       </div>
@@ -170,9 +165,9 @@ const Cart = () => {
 
   //! updateQuantity //////////////////// not working yet
   // const [quantity, setQuantity] = useState(1);
-  // const updateQuantity = (e, cartItemId) => {
-  //   userCart.map((cartItem) => {
-  //     if (cartItem.product.toString() === cartItemId) {
+  // const updateQuantity = (e, favItemId) => {
+  //   userFav.map((favItem) => {
+  //     if (favItem.product.toString() === favItemId) {
   //       // setQuantity(e.target.value);
   //       // e.target.value = quantity;
 
@@ -195,19 +190,17 @@ const Cart = () => {
                   <div className="col-lg-8">
                     <div className=" p-md-5 p-sm-4 p-5">
                       <div className="d-flex justify-content-between align-items-center mb-3">
-                        <h1 className="fw-bold mb-0 text-black">
-                          Shopping Cart
-                        </h1>
+                        <h1 className="fw-bold mb-0 text-black">Fav</h1>
                         <h6 className="mb-0 text-muted">{numOfItems} item/s</h6>
                       </div>
                       <hr className="my-4" />
 
                       <div className="products d-flex flex-wrap justify-content-center">
-                        {userCart ? (
-                          Array.isArray(userCart) && userCart.length > 0 ? (
-                            mappedUserCart
+                        {userFav ? (
+                          Array.isArray(userFav) && userFav.length > 0 ? (
+                            mappedUserFav
                           ) : (
-                            <div>{userCart}</div>
+                            <div>{userFav}</div>
                           )
                         ) : (
                           <div>No Products Yet</div>
@@ -267,4 +260,4 @@ const Cart = () => {
   );
 };
 
-export default Cart;
+export default Fav;

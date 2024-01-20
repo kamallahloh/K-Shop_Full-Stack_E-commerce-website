@@ -237,7 +237,7 @@ const deleteProductById = (req, res) => {
         req.token.role.role === "admin"
       ) {
         try {
-          //! we need to delete the product from 3 places:
+          //! we need to delete the product from 4 places:
           //* A. From the productsModel
           //* A-1 productsModel.findByIdAndDelete(productId)
           const deleteProduct = await productsModel.findByIdAndDelete(
@@ -301,6 +301,47 @@ const deleteProductById = (req, res) => {
                     .then((finalResult) => {
                       console.log(
                         `The Product was deleted from user #${user.userName} userCart`
+                      );
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                      console.log(
+                        "usersModel.findByIdAndUpdate(user._id, user) Server error"
+                      );
+                    });
+                }
+              });
+            })
+            .catch((err) => {
+              console.log(err);
+              console.log("usersModel.find({}) Server error");
+            });
+          //* ////////////////////
+
+          //* ////////////////////
+          //* D. from userModel.userFav: to delete the product from the userFav (follow the 3 steps mentioned down).
+          //* D-1. find all users that have the store products in there userFav
+          usersModel
+            .find({})
+            .then((users) => {
+              //* D-2. update the userFav list by filtering out the deleted product.
+              users.filter((user) => {
+                // console.log("OLD user.userFav", user.userFav);
+
+                if (user.userFav.length > 0) {
+                  const newUserFav = user.userFav.filter((productsInFav) => {
+                    return productsInFav.product.toString() !== productId;
+                  });
+
+                  user.userFav = newUserFav;
+                  // console.log("NEW user.userFav", user.userFav);
+
+                  //* D-3. update the user in the database
+                  usersModel
+                    .findByIdAndUpdate(user._id, user)
+                    .then((finalResult) => {
+                      console.log(
+                        `The Product was deleted from user #${user.userName} userFav`
                       );
                     })
                     .catch((err) => {
