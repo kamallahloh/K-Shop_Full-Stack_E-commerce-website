@@ -26,10 +26,17 @@ export default function Navbar() {
     isUserLoggedIn,
     userLocalStorage,
     setUserLocalStorage,
+    //
+    tokenStoreId,
+    isStoreLoggedIn,
+    storeLocalStorage,
+    setStoreLocalStorage,
+    //
     search,
     setSearchParams,
   } = useContext(appContext);
 
+  //* Logout ///////////////////////////////
   const logout = () => {
     setUserLocalStorage({ ...userLocalStorage, userToken: null });
     setUserLocalStorage({ ...userLocalStorage, isUserLoggedIn: false });
@@ -37,7 +44,15 @@ export default function Navbar() {
     navigate("/");
   };
 
-  //* Search Bar
+  //* Logout ///////////////////////////////
+  const logoutStore = () => {
+    setStoreLocalStorage({ ...storeLocalStorage, storeToken: null });
+    setStoreLocalStorage({ ...storeLocalStorage, isStoreLoggedIn: false });
+    localStorage.removeItem("storeLocalStorage");
+    navigate("/");
+  };
+
+  //* Search Bar ///////////////////////////////
   const onSubmit = (e) => {
     e.preventDefault();
   };
@@ -58,9 +73,27 @@ export default function Navbar() {
 
         <MDBCollapse navbar open={openBasic}>
           <MDBNavbarNav className="mr-auto mb-2 mb-lg-0 d-flex justify-content-end align-items-center">
-            <MDBNavbarItem className="me-auto">
-              <MDBNavbarLink href="/stores/login">Sell with us</MDBNavbarLink>
-            </MDBNavbarItem>
+            {isStoreLoggedIn ? (
+              <div className="me-auto d-flex align-items-center gap-2">
+                <MDBNavbarItem>
+                  <MDBNavbarLink href={`/stores/${tokenStoreId}`}>
+                    Sell with us
+                  </MDBNavbarLink>
+                </MDBNavbarItem>
+                <MDBNavbarItem>
+                  <div onClick={logoutStore}>Store Logout</div>
+                </MDBNavbarItem>
+              </div>
+            ) : (
+              <>
+                <MDBNavbarItem className="me-auto">
+                  <MDBNavbarLink href="/stores/login">
+                    Sell with us
+                  </MDBNavbarLink>
+                </MDBNavbarItem>
+              </>
+            )}
+
             <form className="d-flex input-group w-auto" onSubmit={onSubmit}>
               <input
                 type="search"

@@ -111,7 +111,7 @@ const Products = () => {
                 {searchedProducts.map((product) => {
                   return (
                     <div
-                      className="product-card col-xl-3 col-lg-4 col-md-6 col-sm-8 col-9 m-3 p-2 border border-1 border-secondary rounded-9 "
+                      className="product-card col-xl-3 col-lg-4 col-md-6 col-sm-8 col-9 m-3 p-2 border border-1 border-secondary rounded-9"
                       key={product._id}
                       id={product._id}
                     >
@@ -150,7 +150,7 @@ const Products = () => {
                           {product.description}
                         </p>
                         <div className="d-flex justify-content-between align-items-center px-3 text-success">
-                          <div className="mb-1">
+                          <div>
                             Price <h4>${~~(product.price * 100) / 100} </h4>
                           </div>
 
@@ -165,28 +165,22 @@ const Products = () => {
                           </button>
                         </div>
 
-                        {product._id === addedCartProductId &&
-                        successfullyAddedToCart ? (
-                          <div className="text-danger">
+                        {product._id === addedCartProductId && (
+                          <div className="text-danger position-fixed top-0 end-0 mt-5 pt-3 me-3">
                             {successfullyAddedToCart}
                             {successfullyAddedToCart === "Please first " && (
                               <a href="/users/login">Login</a>
                             )}
                           </div>
-                        ) : (
-                          <div className="m-4"></div>
                         )}
 
-                        {product._id === addedFavProductId &&
-                        successfullyAddedToFav ? (
-                          <div className="text-danger">
+                        {product._id === addedFavProductId && (
+                          <div className="text-danger position-fixed top-0 end-0 mt-5 pt-5 me-3">
                             {successfullyAddedToFav}
                             {successfullyAddedToFav === "Please first " && (
                               <a href="/users/login">Login</a>
                             )}
                           </div>
-                        ) : (
-                          <div className="m-4"></div>
                         )}
                       </div>
                     </div>

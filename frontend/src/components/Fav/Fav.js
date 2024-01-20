@@ -7,7 +7,6 @@ import React, { useContext, useEffect /* useState */ } from "react";
 
 const Fav = () => {
   const { userToken, userFav, setUserFav } = useContext(appContext);
-  console.log(userFav);
 
   //* total num of Items in the fav.
   const numOfItems = userFav.reduce(
@@ -187,7 +186,7 @@ const Fav = () => {
             >
               <div className="card-body p-0">
                 <div className="row g-0">
-                  <div className="col-lg-8">
+                  
                     <div className=" p-md-5 p-sm-4 p-5">
                       <div className="d-flex justify-content-between align-items-center mb-3">
                         <h1 className="fw-bold mb-0 text-black">Fav</h1>
@@ -216,40 +215,8 @@ const Fav = () => {
                         </h6>
                       </div>
                     </div>
-                  </div>
-                  <div className="col-lg-4 bg-grey z-0">
-                    <div className="p-5 sticky-top ">
-                      <h3 className="fw-bold mb-5 mt-2 mt-lg-5 pt-1">
-                        Summary
-                      </h3>
-                      <hr className="my-4" />
-
-                      <div className="d-flex justify-content-between mb-4">
-                        <h5 className="text-uppercase">items Total</h5>
-                        <h5>${totalPrice}</h5>
-                      </div>
-
-                      <div className="d-flex justify-content-between mb-4">
-                        <h5 className="text-uppercase">Shipping</h5>
-                        <h6>Delivery: $5.00</h6>
-                      </div>
-
-                      <hr className="my-4" />
-
-                      <div className="d-flex justify-content-between mb-5">
-                        <h5 className="text-uppercase">Total price</h5>
-                        <h5>${totalPrice + 5}</h5>
-                      </div>
-
-                      <button
-                        type="button"
-                        className="btn btn-dark btn-block btn-lg"
-                        data-mdb-ripple-color="dark"
-                      >
-                        Place Order
-                      </button>
-                    </div>
-                  </div>
+                  
+                  
                 </div>
               </div>
             </div>

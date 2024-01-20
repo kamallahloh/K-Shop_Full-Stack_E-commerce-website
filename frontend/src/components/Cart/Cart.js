@@ -7,7 +7,6 @@ import React, { useContext, useEffect /* useState */ } from "react";
 
 const Cart = () => {
   const { userToken, userCart, setUserCart } = useContext(appContext);
-  console.log(userCart);
 
   //* total num of Items in the cart.
   const numOfItems = userCart.reduce(
