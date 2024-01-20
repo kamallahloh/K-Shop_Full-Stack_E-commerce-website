@@ -203,6 +203,8 @@ const Products = () => {
                                                 alt={product.productName}
                                               />
                                             );
+                                          } else {
+                                            return <></>;
                                           }
                                         })}
                                       </div>

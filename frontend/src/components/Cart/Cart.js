@@ -181,7 +181,7 @@ const Cart = () => {
   // };
 
   return (
-    <section className="h-100 h-custom" style={{ backgroundColor: "#d2c9ff" }}>
+    <section className="h-100 h-custom gradient-custom-3">
       <div className="container py-5 h-100">
         <div className="row d-flex justify-content-center align-items-center h-100">
           <div className="col-12">

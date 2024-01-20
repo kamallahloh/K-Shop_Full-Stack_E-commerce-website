@@ -14,8 +14,6 @@ const Fav = () => {
     0
   );
 
-
-
   //* get Fav Items
   useEffect(() => {
     axios
@@ -172,7 +170,7 @@ const Fav = () => {
   // };
 
   return (
-    <section className="h-100 h-custom" style={{ backgroundColor: "#d2c9ff" }}>
+    <section className="h-100 h-custom gradient-custom-3">
       <div className="container py-5 h-100">
         <div className="row d-flex justify-content-center align-items-center h-100">
           <div className="col-12">
@@ -182,37 +180,34 @@ const Fav = () => {
             >
               <div className="card-body p-0">
                 <div className="row g-0">
-                  
-                    <div className=" p-md-5 p-sm-4 p-5">
-                      <div className="d-flex justify-content-between align-items-center mb-3">
-                        <h1 className="fw-bold mb-0 text-black">Fav</h1>
-                        <h6 className="mb-0 text-muted">{numOfItems} item/s</h6>
-                      </div>
-                      <hr className="my-4" />
-
-                      <div className="products d-flex flex-wrap justify-content-center">
-                        {userFav ? (
-                          Array.isArray(userFav) && userFav.length > 0 ? (
-                            mappedUserFav
-                          ) : (
-                            <div>{userFav}</div>
-                          )
-                        ) : (
-                          <div>No Products Yet</div>
-                        )}
-                      </div>
-
-                      <div className="pt-1">
-                        <h6 className="mb-0">
-                          <a href="/products" className="text-body">
-                            <i className="fas fa-long-arrow-alt-left me-2"></i>
-                            Back to shop
-                          </a>
-                        </h6>
-                      </div>
+                  <div className=" p-md-5 p-sm-4 p-5">
+                    <div className="d-flex justify-content-between align-items-center mb-3">
+                      <h1 className="fw-bold mb-0 text-black">Fav</h1>
+                      <h6 className="mb-0 text-muted">{numOfItems} item/s</h6>
                     </div>
-                  
-                  
+                    <hr className="my-4" />
+
+                    <div className="products d-flex flex-wrap justify-content-center">
+                      {userFav ? (
+                        Array.isArray(userFav) && userFav.length > 0 ? (
+                          mappedUserFav
+                        ) : (
+                          <div>{userFav}</div>
+                        )
+                      ) : (
+                        <div>No Products Yet</div>
+                      )}
+                    </div>
+
+                    <div className="pt-1">
+                      <h6 className="mb-0">
+                        <a href="/products" className="text-body">
+                          <i className="fas fa-long-arrow-alt-left me-2"></i>
+                          Back to shop
+                        </a>
+                      </h6>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

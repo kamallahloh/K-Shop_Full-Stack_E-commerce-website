@@ -2,8 +2,10 @@ const Footer = () => {
   return (
     <div>
       <footer
-        className="text-center text-lg-start text-white"
-        style={{ backgroundColor: "#929fba" }}
+        className="text-center text-lg-start bg-grey"
+
+        // className="text-center text-lg-start text-white "
+        // style={{ backgroundColor: "#929fba" }}
       >
         <div className="container pt-4 pb-0 ">
           <section className="">
@@ -28,22 +30,22 @@ const Footer = () => {
                   USEFUL LINKS
                 </h6>
                 <p>
-                  <a className="text-white" href="/carts">
+                  <a className="text-black" href="/carts">
                     Cart
                   </a>
                 </p>
                 <p>
-                  <a className="text-white" href="/favs">
+                  <a className="text-black" href="/favs">
                     Fav
                   </a>
                 </p>
                 <p>
-                  <a className="text-white" href="/users/register">
+                  <a className="text-black" href="/users/register">
                     Sign Up Now
                   </a>
                 </p>
                 <p>
-                  <a className="text-white" href="/stores/register">
+                  <a className="text-black" href="/stores/register">
                     Sell with us
                   </a>
                 </p>
