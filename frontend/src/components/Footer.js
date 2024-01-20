@@ -1,10 +1,4 @@
-import React, { useContext, useState } from "react";
-import { appContext } from "../App";
-
 const Footer = () => {
-  const { buttonToggler, setButtonToggler } = useContext(appContext);
-  const [textTruncate, setTextTruncate] = useState("text-truncate");
-
   return (
     <div>
       <footer
@@ -49,7 +43,9 @@ const Footer = () => {
                   </a>
                 </p>
                 <p>
-                  <a className="text-white">Help</a>
+                  <a className="text-white" href="#!">
+                    Help
+                  </a>
                 </p>
               </div>
 
@@ -135,6 +131,7 @@ const Footer = () => {
                   href="https://github.com/C9-kamallahloh/"
                   role="button"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   <i className="fab fa-github"></i>
                 </a>
