@@ -23,7 +23,7 @@ const Cart = () => {
   //* get Cart Items
   useEffect(() => {
     axios
-      .get("http://localhost:5000/carts", {
+      .get("https://k-shop-full-stack-e-commerce-website.onrender.com/carts", {
         headers: {
           authorization: `Bearer ${userToken}`,
         },
@@ -66,7 +66,7 @@ const Cart = () => {
               onClick={(e) => {
                 axios
                   .delete(
-                    `http://localhost:5000/carts/${cartItem.product._id}`,
+                    `https://k-shop-full-stack-e-commerce-website.onrender.com/carts/${cartItem.product._id}`,
                     {
                       headers: {
                         authorization: `Bearer ${userToken}`,
@@ -99,7 +99,7 @@ const Cart = () => {
                 cartItem.quantity--;
                 axios
                   .put(
-                    `http://localhost:5000/carts/${cartItem.product._id}`,
+                    `https://k-shop-full-stack-e-commerce-website.onrender.com/carts/${cartItem.product._id}`,
                     { quantity: cartItem.quantity },
                     {
                       headers: {
@@ -133,7 +133,7 @@ const Cart = () => {
               cartItem.quantity++;
               axios
                 .put(
-                  `http://localhost:5000/carts/${cartItem.product._id}`,
+                  `https://k-shop-full-stack-e-commerce-website.onrender.com/carts/${cartItem.product._id}`,
                   { quantity: cartItem.quantity },
                   {
                     headers: {

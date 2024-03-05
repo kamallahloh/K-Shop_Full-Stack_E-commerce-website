@@ -5,7 +5,7 @@ const usersModel = require("../models/users");
 const getAllFavProducts = (req, res) => {
   /* 
     postman params / ==>
-    GET http://localhost:5000/favs/
+    GET https://k-shop-full-stack-e-commerce-website.onrender.com/favs/
   */
 
   const userId = req.token.userId;
@@ -28,7 +28,7 @@ const getAllFavProducts = (req, res) => {
 const deleteAllFavProducts = (req, res) => {
   /* 
     postman params / ==>
-    DELETE http://localhost:5000/favs/
+    DELETE https://k-shop-full-stack-e-commerce-website.onrender.com/favs/
   */
 
   const userId = req.token.userId;
@@ -51,7 +51,7 @@ const deleteAllFavProducts = (req, res) => {
 const addProductToFav = async (req, res) => {
   /* 
     postman params /:id ==>
-    POST http://localhost:5000/favs/:id
+    POST https://k-shop-full-stack-e-commerce-website.onrender.com/favs/:id
   */
 
   const userId = req.token.userId;
@@ -148,7 +148,7 @@ const addProductToFav = async (req, res) => {
 const getFavProductById = (req, res) => {
   /* 
     postman params / ==>
-    GET http://localhost:5000/favs/:id
+    GET https://k-shop-full-stack-e-commerce-website.onrender.com/favs/:id
   */
 
   const userId = req.token.userId;
@@ -177,7 +177,7 @@ const getFavProductById = (req, res) => {
 const updateQuantity = (req, res) => {
   /* 
     postman params /:id ==>
-    PUT http://localhost:5000/favs/65a6f73aa6742ee15e4613b9
+    PUT https://k-shop-full-stack-e-commerce-website.onrender.com/favs/65a6f73aa6742ee15e4613b9
 
     req.body:
 {
@@ -239,7 +239,7 @@ const updateQuantity = (req, res) => {
 const deleteProductFromFav = (req, res) => {
   /* 
     postman params /:id ==>
-    DELETE http://localhost:5000/favs/:id
+    DELETE https://k-shop-full-stack-e-commerce-website.onrender.com/favs/:id
   */
 
   const userId = req.token.userId;

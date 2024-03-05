@@ -37,7 +37,7 @@ function UserRegister() {
     console.table(userData);
 
     axios
-      .post("http://localhost:5000/users/register", userData)
+      .post("https://k-shop-full-stack-e-commerce-website.onrender.com/users/register", userData)
       .then((result) => {
         console.log(result.data.message);
         setSuccessfulUserRegister(result.data.message);

@@ -54,7 +54,7 @@ const StoreDashboard = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/products")
+      .get("https://k-shop-full-stack-e-commerce-website.onrender.com/products")
       .then((results) => {
         setProducts(results.data.products);
       })
@@ -72,7 +72,7 @@ const StoreDashboard = () => {
 
   // const getProductsByStore = () => {
   //   axios
-  //     .get(`http://localhost:5000/products/products_by_store?store=${id}`)
+  //     .get(`https://k-shop-full-stack-e-commerce-website.onrender.com/products/products_by_store?store=${id}`)
   //     .then((result) => {
   //       setProducts(result.data);
   //     })
@@ -104,7 +104,7 @@ const StoreDashboard = () => {
 
   const addProductButtonOnClick = () => {
     axios
-      .post("http://localhost:5000/products", productData, {
+      .post("https://k-shop-full-stack-e-commerce-website.onrender.com/products", productData, {
         headers: {
           authorization: `Bearer ${storeToken}`,
         },
@@ -155,7 +155,7 @@ const StoreDashboard = () => {
 
   const deleteProductByIdOnClick = (e, ProductId) => {
     axios
-      .delete(`http://localhost:5000/products/${ProductId}`, {
+      .delete(`https://k-shop-full-stack-e-commerce-website.onrender.com/products/${ProductId}`, {
         headers: {
           authorization: `Bearer ${storeToken}`,
         },
@@ -186,7 +186,7 @@ const StoreDashboard = () => {
     //* addToCart ///////////////////////
     axios
       .post(
-        `http://localhost:5000/carts/${productId}`,
+        `https://k-shop-full-stack-e-commerce-website.onrender.com/carts/${productId}`,
         {},
         {
           headers: {
@@ -224,7 +224,7 @@ const StoreDashboard = () => {
     //* addToFav ///////////////////////
     axios
       .post(
-        `http://localhost:5000/favs/${productId}`,
+        `https://k-shop-full-stack-e-commerce-website.onrender.com/favs/${productId}`,
         {},
         {
           headers: {

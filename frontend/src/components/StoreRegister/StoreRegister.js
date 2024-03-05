@@ -31,7 +31,7 @@ function StoreRegister() {
     console.table(storeData);
 
     axios
-      .post("http://localhost:5000/stores/register", storeData)
+      .post("https://k-shop-full-stack-e-commerce-website.onrender.com/stores/register", storeData)
       .then((result) => {
         console.log(result.data.message);
         setSuccessfulStoreRegister(result.data.message);

@@ -33,7 +33,7 @@ const Products = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/products")
+      .get("https://k-shop-full-stack-e-commerce-website.onrender.com/products")
       .then((results) => {
         setProducts(results.data.products);
       })
@@ -49,7 +49,7 @@ const Products = () => {
     //* addToCart ///////////////////////
     axios
       .post(
-        `http://localhost:5000/carts/${productId}`,
+        `https://k-shop-full-stack-e-commerce-website.onrender.com/carts/${productId}`,
         {},
         {
           headers: {
@@ -81,7 +81,7 @@ const Products = () => {
     //* addToFav ///////////////////////
     axios
       .post(
-        `http://localhost:5000/favs/${productId}`,
+        `https://k-shop-full-stack-e-commerce-website.onrender.com/favs/${productId}`,
         {},
         {
           headers: {

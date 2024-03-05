@@ -29,7 +29,7 @@ function StoreLogin() {
 
   const LoginButtonOnClick = () => {
     axios
-      .post("http://localhost:5000/stores/login", loginData)
+      .post("https://k-shop-full-stack-e-commerce-website.onrender.com/stores/login", loginData)
       .then( (result) => {
         console.log(result.data.message);
         setSuccessfulLogin(result.data.message);
@@ -53,7 +53,7 @@ function StoreLogin() {
 
           // await axios
           //   .get(
-          //     `http://localhost:5000/products/products_by_store?store=${result.data.storeId}`
+          //     `https://k-shop-full-stack-e-commerce-website.onrender.com/products/products_by_store?store=${result.data.storeId}`
           //   )
           //   .then((result) => {
           //     setProducts(result.data);

@@ -5,7 +5,7 @@ const usersModel = require("../models/users");
 const getAllCartProducts = (req, res) => {
   /* 
     postman params / ==>
-    GET http://localhost:5000/carts/
+    GET https://k-shop-full-stack-e-commerce-website.onrender.com/carts/
   */
 
   const userId = req.token.userId;
@@ -29,7 +29,7 @@ const getAllCartProducts = (req, res) => {
 const deleteAllCartProducts = (req, res) => {
   /* 
     postman params / ==>
-    DELETE http://localhost:5000/carts/
+    DELETE https://k-shop-full-stack-e-commerce-website.onrender.com/carts/
   */
 
   const userId = req.token.userId;
@@ -52,7 +52,7 @@ const deleteAllCartProducts = (req, res) => {
 const addProductToCart = async (req, res) => {
   /* 
     postman params /:id ==>
-    POST http://localhost:5000/carts/:id
+    POST https://k-shop-full-stack-e-commerce-website.onrender.com/carts/:id
   */
 
   const userId = req.token.userId;
@@ -149,7 +149,7 @@ const addProductToCart = async (req, res) => {
 const getCartProductById = (req, res) => {
   /* 
     postman params / ==>
-    GET http://localhost:5000/carts/:id
+    GET https://k-shop-full-stack-e-commerce-website.onrender.com/carts/:id
   */
 
   const userId = req.token.userId;
@@ -178,7 +178,7 @@ const getCartProductById = (req, res) => {
 const updateQuantity = (req, res) => {
   /* 
     postman params /:id ==>
-    PUT http://localhost:5000/carts/65a6f73aa6742ee15e4613b9
+    PUT https://k-shop-full-stack-e-commerce-website.onrender.com/carts/65a6f73aa6742ee15e4613b9
 
     req.body:
 {
@@ -240,7 +240,7 @@ const updateQuantity = (req, res) => {
 const deleteProductFromCart = (req, res) => {
   /* 
     postman params /:id ==>
-    DELETE http://localhost:5000/carts/:id
+    DELETE https://k-shop-full-stack-e-commerce-website.onrender.com/carts/:id
   */
 
   const userId = req.token.userId;

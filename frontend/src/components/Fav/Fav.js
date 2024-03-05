@@ -17,7 +17,7 @@ const Fav = () => {
   //* get Fav Items
   useEffect(() => {
     axios
-      .get("http://localhost:5000/favs", {
+      .get("https://k-shop-full-stack-e-commerce-website.onrender.com/favs", {
         headers: {
           authorization: `Bearer ${userToken}`,
         },
@@ -59,7 +59,7 @@ const Fav = () => {
 
               onClick={(e) => {
                 axios
-                  .delete(`http://localhost:5000/favs/${favItem.product._id}`, {
+                  .delete(`https://k-shop-full-stack-e-commerce-website.onrender.com/favs/${favItem.product._id}`, {
                     headers: {
                       authorization: `Bearer ${userToken}`,
                     },
@@ -90,7 +90,7 @@ const Fav = () => {
                 favItem.quantity--;
                 axios
                   .put(
-                    `http://localhost:5000/favs/${favItem.product._id}`,
+                    `https://k-shop-full-stack-e-commerce-website.onrender.com/favs/${favItem.product._id}`,
                     { quantity: favItem.quantity },
                     {
                       headers: {
@@ -124,7 +124,7 @@ const Fav = () => {
               favItem.quantity++;
               axios
                 .put(
-                  `http://localhost:5000/favs/${favItem.product._id}`,
+                  `https://k-shop-full-stack-e-commerce-website.onrender.com/favs/${favItem.product._id}`,
                   { quantity: favItem.quantity },
                   {
                     headers: {

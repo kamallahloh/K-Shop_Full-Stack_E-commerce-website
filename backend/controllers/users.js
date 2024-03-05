@@ -30,7 +30,7 @@ const getAllUsers = (req, res) => {
 const getUserById = (req, res) => {
   /* 
     postman params /:id ==>
-    GET http://localhost:5000/users/6595c80555fc1e4be12e5bcc
+    GET https://k-shop-full-stack-e-commerce-website.onrender.com/users/6595c80555fc1e4be12e5bcc
   */
   const userId = req.params.id;
 
@@ -94,7 +94,7 @@ const getUserById = (req, res) => {
 const updateUserById = (req, res) => {
   /* 
     postman params /:id ==>
-    PUT http://localhost:5000/users/6595c80555fc1e4be12e5bcc
+    PUT https://k-shop-full-stack-e-commerce-website.onrender.com/users/6595c80555fc1e4be12e5bcc
 
     req.body:
 {
@@ -200,7 +200,7 @@ const updateUserById = (req, res) => {
 const deleteUserById = (req, res) => {
   /* 
     postman params /:id ==>
-    DELETE http://localhost:5000/users/65975437a31cc98f9b7c61e2
+    DELETE https://k-shop-full-stack-e-commerce-website.onrender.com/users/65975437a31cc98f9b7c61e2
   */
 
   const userId = req.params.id;

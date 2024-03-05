@@ -6,7 +6,7 @@ const usersModel = require("../models/users");
 const addProduct = (req, res) => {
   /* 
     postman params / ==>
-    POST http://localhost:5000/products
+    POST https://k-shop-full-stack-e-commerce-website.onrender.com/products
   */
 
   const { productName, description, images, categories, price } = req.body;
@@ -90,7 +90,7 @@ const getAllProducts = (req, res) => {
 const getProductById = async (req, res) => {
   /* 
     postman params /:id ==>
-    GET http://localhost:5000/products/product_by_id/6598c40fc2e3213f7ba2a5d4
+    GET https://k-shop-full-stack-e-commerce-website.onrender.com/products/product_by_id/6598c40fc2e3213f7ba2a5d4
   */
   const { id } = req.params;
 
@@ -134,7 +134,7 @@ const getProductById = async (req, res) => {
 const updateProductById = (req, res) => {
   /* 
     postman params /:id ==>
-    PUT http://localhost:5000/products/659772f33246f4dc798c9af5
+    PUT https://k-shop-full-stack-e-commerce-website.onrender.com/products/659772f33246f4dc798c9af5
 
     req.body:
 {
@@ -215,7 +215,7 @@ const updateProductById = (req, res) => {
 const deleteProductById = (req, res) => {
   /* 
     postman params /:id ==>
-    DELETE http://localhost:5000/products/659772f33246f4dc798c9af5
+    DELETE https://k-shop-full-stack-e-commerce-website.onrender.com/products/659772f33246f4dc798c9af5
   */
   const productId = req.params.id;
   const storeId = req.token.storeId;
@@ -401,7 +401,7 @@ const deleteProductById = (req, res) => {
 //? getProductsByStore ///////////////////////////
 
 const getProductsByStore = async (req, res) => {
-  //* postman GET http://localhost:5000/products/products_by_store?store=65999be449aad7d6418c5166
+  //* postman GET https://k-shop-full-stack-e-commerce-website.onrender.com/products/products_by_store?store=65999be449aad7d6418c5166
 
   const { store } = req.query;
 

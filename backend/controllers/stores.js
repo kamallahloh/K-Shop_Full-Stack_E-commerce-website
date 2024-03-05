@@ -32,7 +32,7 @@ const getAllStores = (req, res) => {
 const getStoreById = async (req, res) => {
   /* 
     postman params /:id ==>
-    GET http://localhost:5000/stores/6597610652ee4902379efec3
+    GET https://k-shop-full-stack-e-commerce-website.onrender.com/stores/6597610652ee4902379efec3
   */
   const { id } = req.params;
 
@@ -70,7 +70,7 @@ const getStoreById = async (req, res) => {
 const updateStoreById = (req, res) => {
   /* 
     postman params /:id ==>
-    PUT http://localhost:5000/stores/6597610652ee4902379efec3
+    PUT https://k-shop-full-stack-e-commerce-website.onrender.com/stores/6597610652ee4902379efec3
 
     req.body:
 {
@@ -158,7 +158,7 @@ const updateStoreById = (req, res) => {
 const deleteStoreById = (req, res) => {
   /* 
     postman params /:id ==>
-    DELETE http://localhost:5000/stores/6597610652ee4902379efec3
+    DELETE https://k-shop-full-stack-e-commerce-website.onrender.com/stores/6597610652ee4902379efec3
   */
 
   const storeId = req.params.id;
